@@ -1,4 +1,4 @@
-package com.epam.JavaWeb.filter;
+package com.epam.JavaWeb.controller.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

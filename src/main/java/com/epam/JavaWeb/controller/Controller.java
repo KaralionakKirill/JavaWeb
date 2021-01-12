@@ -1,8 +1,7 @@
 package com.epam.JavaWeb.controller;
 
-import com.epam.JavaWeb.command.Command;
-import com.epam.JavaWeb.command.CommandProvider;
-import com.epam.JavaWeb.filter.EncodingFilter;
+import com.epam.JavaWeb.command.*;
+import com.epam.JavaWeb.util.UrlUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -33,12 +31,20 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Optional<Command> commandOptional = CommandProvider.defineCommand(request.getParameter("action"));
+        RequestContext content = new RequestContext(request);
+
+        Optional<Command> commandOptional = CommandProvider.defineCommand(request.getParameter(RequestParameter.COMMAND));
         Command command = commandOptional.orElseThrow(IllegalArgumentException::new);
-        String page = command.execute(request);
-        if (page != null) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(page);
+        CommandResult commandResult = command.execute(content);
+
+        commandResult.getAttributes().forEach(request::setAttribute);
+        commandResult.getSessionAttributes().forEach(request.getSession()::setAttribute);
+
+        if (commandResult.getResponseType().equals(ResponseType.FORWARD)) {
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(commandResult.getPage());
             requestDispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(UrlUtil.getRedirectURL(request));
         }
     }
 

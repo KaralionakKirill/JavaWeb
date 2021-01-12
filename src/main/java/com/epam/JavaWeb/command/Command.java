@@ -1,7 +1,5 @@
 package com.epam.JavaWeb.command;
 
-import javax.servlet.http.HttpServletRequest;
-
 public interface Command {
-    String execute(HttpServletRequest request);
+    CommandResult execute(RequestContext requestContext);
 }

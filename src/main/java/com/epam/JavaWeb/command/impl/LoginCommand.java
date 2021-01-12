@@ -1,26 +1,22 @@
 package com.epam.JavaWeb.command.impl;
 
-import com.epam.JavaWeb.command.Command;
-import com.epam.JavaWeb.constant.PagePath;
+import com.epam.JavaWeb.command.*;
 import com.epam.JavaWeb.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 public class LoginCommand implements Command {
-    private UserService service;
+    private static final Logger logger = LogManager.getLogger(LoginCommand.class);
+    private final UserService service;
 
     public LoginCommand(UserService service) {
         this.service = service;
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
-        String page;
-        String loginValue = request.getParameter("uname");
-        String passwordValue = request.getParameter("password");
-
-        page = PagePath.LOGIN;
-
-        return page;
+    public CommandResult execute(RequestContext requestContext) {
+        return new CommandResult(ResponseType.FORWARD, PagePath.LOGIN, new HashMap<>());
     }
 }

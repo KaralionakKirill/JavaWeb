@@ -1,13 +1,12 @@
 package com.epam.JavaWeb.command.impl;
 
-import com.epam.JavaWeb.command.Command;
-import com.epam.JavaWeb.constant.PagePath;
+import com.epam.JavaWeb.command.*;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 public class RegistrationCommand implements Command {
     @Override
-    public String execute(HttpServletRequest request) {
-        return PagePath.REGISTRATION;
+    public CommandResult execute(RequestContext requestContext) {
+        return new CommandResult(ResponseType.FORWARD, PagePath.REGISTRATION, new HashMap<>());
     }
 }

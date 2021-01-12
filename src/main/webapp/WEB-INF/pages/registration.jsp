@@ -11,47 +11,71 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
               crossorigin="anonymous">
-        <title><fmt:message key="loginTitle"/></title>
+        <title><fmt:message key="registration"/></title>
     </head>
     <body>
         <div class="card-body">
             <div class="panel panel-default">
                 <div class="panel-body" style="width:18rem">
-                    <form action="${pageContext.request.contextPath}/controller" method="post">
+                    <form action="${pageContext.request.contextPath}/controller" method="post" class="needs-validation" novalidate>
                         <div>
-                            <label class="form-label">First name</label>
-                            <input type="text" class="form-control" required>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
+                            <label for="inputLogin"><fmt:message key="username"/></label>
+                            <input type="text" class="form-control" id="inputLogin"
+                                   name="login"
+                                   pattern="^[(\w)-]{4,20}" required="" placeholder="<fmt:message key="placeholder.username"/>"/>
                         </div>
                         <div>
-                            <label class="form-label">Last name</label>
-                            <input type="text" class="form-control" required>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
+                            <label for="inputPassword"><fmt:message key="password"/></label>
+                            <input type="password" class="form-control" id="inputPassword" name="password"
+                                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={};:><.,/?`~±§-])(?=[^\r\n\t\f\v]+$).{8,20}$"
+                                   required=""/>
                         </div>
                         <div>
-                            <label class="form-label"><fmt:message key="email"/></label>
-                            <div class="input-group has-validation">
-                                <input type="text" class="form-control" required>
-                                <div class="invalid-feedback">
-                                    Please choose a username.
-                                </div>
-                            </div>
+                            <label for="inputBirthDate">Birthday</label>
+                            <input type="date" name="birthdate" required="required" value="2000-01-01" min="1900-01-01"
+                                   class="form-control"
+                                   id="inputBirthDate"/>
                         </div>
                         <div>
-                            <label><fmt:message key="password"/></label>
-                            <input type="password" name="password" class="form-control"
-                                   required pattern="[a-zA-Z\d][a-zA-Z\d_]{3,16}">
+                            <label for="inputGender">Gender</label>
+                            <select name="gender" id="inputGender" class="form-control">
+                                <option value="male">male</option>
+                                <option value="female">female</option>
+                            </select>
                         </div>
                         <div>
-                            <button class="btn btn-primary" type="submit"><fmt:message key="registration"/></button>
+                            <label for="inputFirstname"><fmt:message key="firstname"/></label>
+                            <input id="inputFirstname" class="form-control" type="text" name="firstname"
+                                   pattern="[A-Za-zА-Яа-яЁё]{2,30}" required=""/>
+                        </div>
+                        <div>
+                            <label for="inputLastname"><fmt:message key="lastname"/></label>
+                            <input id="inputLastname" class="form-control" type="text" name="lastname"
+                                   pattern="[A-Za-zА-Яа-яЁё]{2,30}" required=""/>
+                        </div>
+                        <div>
+                            <label for="inputEmail"><fmt:message key="email"/></label>
+                            <input id="inputEmail" class="form-control" type="email" name="email" required=""
+                                   placeholder="name@example.com"/>
+                        </div>
+                        <div>
+                            <input type="submit" name="submit" class="btn btn-outline-dark"
+                                   value="<fmt:message key="registration"/>">
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+        <script src="js/validator.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+                integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+                crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
     </body>
 </html>

@@ -17,6 +17,11 @@ public class LoginCommand implements Command {
 
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(ResponseType.FORWARD, PagePath.LOGIN, new HashMap<>());
+        String email = requestContext.getRequestParameters().get(RequestParameter.EMAIL);
+        String password = requestContext.getRequestParameters().get(RequestParameter.PASSWORD);
+        if (service.login(email, password)) {
+            return new CommandResult(ResponseType.FORWARD, PagePath.LOGIN, new HashMap<>());
+        }
+        return new CommandResult(ResponseType.FORWARD, PagePath.REGISTRATION, new HashMap<>());
     }
 }

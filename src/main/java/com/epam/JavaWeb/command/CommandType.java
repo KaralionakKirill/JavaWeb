@@ -8,7 +8,7 @@ import com.epam.JavaWeb.service.UserService;
 public enum CommandType {
     LOGIN(new LoginCommand(new UserService())),
     SET_LOCALE(new SetLocaleCommand()),
-    REGISTRATION(new RegistrationCommand());
+    REGISTRATION(new RegistrationCommand(new UserService()));
 
     private Command command;
 

@@ -21,6 +21,7 @@
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-api:2.14.0" />
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.14.0" />
           <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.18.16" />
+          <element id="library" level="project" name="Maven: org.jetbrains:annotations:20.1.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">

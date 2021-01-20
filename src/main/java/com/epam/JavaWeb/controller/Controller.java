@@ -1,7 +1,6 @@
 package com.epam.JavaWeb.controller;
 
 import com.epam.JavaWeb.command.*;
-import com.epam.JavaWeb.util.UrlUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +43,7 @@ public class Controller extends HttpServlet {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(commandResult.getPage());
             requestDispatcher.forward(request, response);
         } else {
-            response.sendRedirect(UrlUtil.getRedirectURL(request));
+            response.sendRedirect(request.getContextPath() + commandResult.getPage());
         }
     }
 

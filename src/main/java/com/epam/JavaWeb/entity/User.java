@@ -1,31 +1,32 @@
 package com.epam.JavaWeb.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+import java.util.Date;
+
 @Data
 public class User extends Entity {
+    private String login;
     private String email;
-    private String password;
-    private boolean admin;
     private String firstName;
     private String lastName;
+    private boolean gender;
+    private Date dateOfBirth;
 
     public static class Builder {
-        private User user;
+        private final User user;
 
         public Builder() {
             user = new User();
         }
 
-        public Builder setUserEmail(String email) {
-            this.user.setEmail(email);
+        public Builder setUserLogin(String login) {
+            this.user.setLogin(login);
             return this;
         }
 
-        public Builder setUserPassword(String password) {
-            this.user.setPassword(password);
+        public Builder setUserEmail(String email) {
+            this.user.setEmail(email);
             return this;
         }
 
@@ -39,13 +40,35 @@ public class User extends Entity {
             return this;
         }
 
-        public Builder setUserAdmin(boolean admin) {
-            this.user.setAdmin(admin);
+        public Builder setUserGender(boolean gender) {
+            this.user.setGender(gender);
+            return this;
+        }
+
+        public Builder setUserDateOfBirth(Date dateOfBirth) {
+            this.user.setDateOfBirth(dateOfBirth);
             return this;
         }
 
         public User build() {
             return this.user;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return getLogin().equals(user.getLogin()) && getEmail().equals(user.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 31;
+        result = getLogin().hashCode() * result + result;
+        result = getEmail().hashCode() * result + result;
+        return result;
     }
 }

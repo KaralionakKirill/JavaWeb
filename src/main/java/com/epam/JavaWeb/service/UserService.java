@@ -20,7 +20,7 @@ public class UserService {
         } catch (DaoException e) {
             e.printStackTrace();
         }
-        return users.map(userList -> userList.stream().anyMatch(user1 -> user1.getEmail().equals(email))).orElse(false);
+        return users.map(userList -> userList.stream().anyMatch(user -> user.getEmail().equals(email))).orElse(false);
     }
 
     public boolean register(User user, String password) {

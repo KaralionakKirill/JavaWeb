@@ -1,6 +1,7 @@
 package com.epam.JavaWeb.controller;
 
 import com.epam.JavaWeb.command.*;
+import com.epam.JavaWeb.db.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,5 +49,7 @@ public class Controller extends HttpServlet {
     }
 
     public void destroy() {
+        ConnectionPool.INSTANCE.destroyPool();
+        super.destroy();
     }
 }

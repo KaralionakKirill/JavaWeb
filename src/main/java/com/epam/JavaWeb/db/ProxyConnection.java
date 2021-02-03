@@ -1,17 +1,20 @@
 package com.epam.JavaWeb.db;
 
 import com.epam.JavaWeb.exception.ConnectionException;
-import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+@Log4j2
 public class ProxyConnection implements Connection {
-    private Connection connection;
+    private final Connection connection;
 
-    ProxyConnection(Connection connection) {
+    protected ProxyConnection(Connection connection) {
         this.connection = connection;
     }
 
@@ -68,7 +71,7 @@ public class ProxyConnection implements Connection {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 

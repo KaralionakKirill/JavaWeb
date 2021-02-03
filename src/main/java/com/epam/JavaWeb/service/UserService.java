@@ -3,38 +3,36 @@ package com.epam.JavaWeb.service;
 import com.epam.JavaWeb.dao.impl.UserDaoImpl;
 import com.epam.JavaWeb.entity.User;
 import com.epam.JavaWeb.exception.DaoException;
+import com.epam.JavaWeb.exception.ServiceException;
+import com.epam.JavaWeb.util.PasswordEncoder;
 import com.epam.JavaWeb.validator.UserValidator;
-
-import java.util.List;
-import java.util.Optional;
 
 public class UserService {
 
-    public boolean login(String email, String password) {
-        UserValidator validator = UserValidator.getInstance();
-
-        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
-        Optional<List<User>> users = Optional.empty();
-        try {
-            users = userDaoImpl.findAll();
-        } catch (DaoException e) {
-            e.printStackTrace();
+    public boolean login(String email, String password) throws ServiceException {
+        if(!UserValidator.isValidEmail(email) && !UserValidator.isValidPassword(password)){
+            throw new ServiceException("Is not correct email or password");
         }
-        return users.map(userList -> userList.stream().anyMatch(user -> user.getEmail().equals(email))).orElse(false);
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
+        password = PasswordEncoder.encryption(password);
+        String dbPassword;
+        try {
+            dbPassword = userDaoImpl.findPassword(email);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return dbPassword.equals(password);
     }
 
-    public boolean register(User user, String password) {
+    public boolean register(User user, String password) throws DaoException {
         UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
-        boolean result = false;
+        boolean result;
         try {
-            result = userDaoImpl.add(user, password);
+            password = PasswordEncoder.encryption(password);
+            result = userDaoImpl.addUser(user, password);
         } catch (DaoException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         }
         return result;
-    }
-
-    public boolean checkUser(String emailValue, String passwordValue) {
-        return false;
     }
 }

@@ -1,12 +1,16 @@
 package com.epam.JavaWeb.db;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.MissingResourceException;
 import java.util.Properties;
 
-public class ConnectorCreator {
+@Log4j2
+final class ConnectorCreator {
     private static final String DB_PROPERTIES_PATH = "property/database.properties";
     private static final String DB_URL  = "db.url";
     private static final String DB_DRIVER = "db.driver";
@@ -19,16 +23,17 @@ public class ConnectorCreator {
             properties.load(classLoader.getResourceAsStream(DB_PROPERTIES_PATH));
             String driverName = (String) properties.get(DB_DRIVER);
             Class.forName(driverName);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            DATABASE_URL = (String) properties.get(DB_URL);
+        } catch (IOException | ClassNotFoundException | MissingResourceException e) {
+            log.error(e);
+            throw new RuntimeException(e);
         }
-        DATABASE_URL = (String) properties.get(DB_URL);
     }
 
     private ConnectorCreator() {
     }
 
-    public static Connection getConnection() throws SQLException {
+    protected static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DATABASE_URL, properties);
     }
 }

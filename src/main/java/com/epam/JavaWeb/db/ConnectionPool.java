@@ -15,22 +15,39 @@ import java.util.concurrent.LinkedBlockingDeque;
 public enum ConnectionPool {
     INSTANCE;
 
-    private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
-    private final static int DEFAULT_POOL_SIZE = 32;
+    private final Logger logger = LogManager.getLogger(ConnectionPool.class);
+    private final int DEFAULT_POOL_SIZE = 32;
     private final BlockingQueue<ProxyConnection> freeConnection;
     private final Queue<ProxyConnection> givenAwayConnection;
 
     ConnectionPool() {
         freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         givenAwayConnection = new ArrayDeque<>();
-        try {
-            for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-                freeConnection.offer(new ProxyConnection(ConnectorCreator.getConnection()));
+        initPool();
+        if(freeConnection.size() != DEFAULT_POOL_SIZE){
+            int amount = DEFAULT_POOL_SIZE - freeConnection.size();
+            for (int i = 0; i < amount; i++) {
+                try {
+                    ProxyConnection connection = new ProxyConnection(ConnectorCreator.getConnection());
+                    freeConnection.offer(connection);
+                } catch (SQLException e) {
+                    logger.error(e);
+                    throw new RuntimeException(e);
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+    }
 
+    private void initPool(){
+        for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
+            try {
+                ProxyConnection connection = new ProxyConnection(ConnectorCreator.getConnection());
+                freeConnection.offer(connection);
+            } catch (SQLException e) {
+                logger.error(e);
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public Connection getConnection() {
@@ -39,16 +56,16 @@ public enum ConnectionPool {
             connection = freeConnection.take();
             givenAwayConnection.offer(connection);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("Connection interrupted");
         }
         return connection;
     }
 
     public void releaseConnection(Connection connection) throws ConnectionException {
-        if(connection instanceof ProxyConnection){
+        if (connection instanceof ProxyConnection) {
             givenAwayConnection.remove(connection);
             freeConnection.offer((ProxyConnection) connection);
-        }else{
+        } else {
             throw new ConnectionException("Connection mismatch");
         }
     }
@@ -73,5 +90,4 @@ public enum ConnectionPool {
             }
         });
     }
-
 }

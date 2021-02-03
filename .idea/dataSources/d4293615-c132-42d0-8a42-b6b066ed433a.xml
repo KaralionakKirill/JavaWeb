@@ -4511,15 +4511,11 @@ SELECT|sys.sys_config
       <Position>6</Position>
       <DataType>varchar(40)|0s</DataType>
     </column>
-    <column id="1101" parent="364" name="gender">
+    <column id="1101" parent="364" name="date_of_birth">
       <Position>7</Position>
-      <DataType>tinyint(1)|0s</DataType>
-    </column>
-    <column id="1102" parent="364" name="date_of_birth">
-      <Position>8</Position>
       <DataType>date|0s</DataType>
     </column>
-    <key id="1103" parent="364" name="PRIMARY">
+    <key id="1102" parent="364" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>

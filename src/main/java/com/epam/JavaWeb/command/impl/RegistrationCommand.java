@@ -2,15 +2,14 @@ package com.epam.JavaWeb.command.impl;
 
 import com.epam.JavaWeb.command.*;
 import com.epam.JavaWeb.entity.User;
+import com.epam.JavaWeb.exception.DaoException;
 import com.epam.JavaWeb.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
-import java.util.Date;
 import java.util.HashMap;
 
+@Log4j2
 public class RegistrationCommand implements Command {
-    private static final Logger logger = LogManager.getLogger(RegistrationCommand.class);
     private final UserService service;
 
     public RegistrationCommand(UserService service) {
@@ -23,20 +22,20 @@ public class RegistrationCommand implements Command {
         String password = requestContext.getRequestParameters().get(RequestParameter.PASSWORD);
         String firstname = requestContext.getRequestParameters().get(RequestParameter.FIRST_NAME);
         String lastname = requestContext.getRequestParameters().get(RequestParameter.LAST_NAME);
-        String birthdate = requestContext.getRequestParameters().get(RequestParameter.DATE_OF_BIRTH);
         String email = requestContext.getRequestParameters().get(RequestParameter.EMAIL);
-        String gender = requestContext.getRequestParameters().get(RequestParameter.GENDER);
 
-        User user = new User.Builder()
-                .setUserLogin(login)
-                .setUserEmail(email)
-                .setUserFirstName(firstname)
-                .setUserLastName(lastname)
-                .setUserGender(true)
-                .setUserDateOfBirth(new Date())
+        User user = User.builder()
+                .withLogin(login)
+                .withEmail(email)
+                .withFirstName(firstname)
+                .withLastName(lastname)
                 .build();
-        if (service.register(user, password)) {
-            return new CommandResult(ResponseType.FORWARD, PagePath.LOGIN, new HashMap<>());
+        try {
+            if (service.register(user, password)) {
+                return new CommandResult(ResponseType.FORWARD, PagePath.LOGIN, new HashMap<>());
+            }
+        } catch (DaoException e) {
+            e.printStackTrace();
         }
         return new CommandResult(ResponseType.REDIRECT, PagePath.REGISTRATION, new HashMap<>());
     }

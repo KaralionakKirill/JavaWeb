@@ -33,7 +33,8 @@ public class Controller extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestContext content = new RequestContext(request);
 
-        Optional<Command> commandOptional = CommandProvider.defineCommand(request.getParameter(RequestParameter.COMMAND));
+        String reqCommand = request.getParameter(RequestParameter.COMMAND);
+        Optional<Command> commandOptional = CommandProvider.defineCommand(reqCommand);
         Command command = commandOptional.orElseThrow(IllegalArgumentException::new);
         CommandResult commandResult = command.execute(content);
 

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.IOException;
@@ -19,8 +18,6 @@ public class RequestContext {
 
     private Map<String, Object> sessionAttributes;
 
-    private Map<String, String> cookies;
-
     private List<Part> requestParts;
 
     private String locale;
@@ -29,7 +26,6 @@ public class RequestContext {
         requestParameters = extractRequestParameters(request);
         requestAttributes = extractRequestAttributes(request);
         sessionAttributes = extractSessionAttributes(request);
-        cookies = extractCookies(request);
         requestParts = extractRequestParts(request);
         locale = extractLocale(request);
     }
@@ -61,15 +57,6 @@ public class RequestContext {
             parts.addAll(request.getParts());
         }
         return parts;
-    }
-
-    private Map<String, String> extractCookies(HttpServletRequest request) {
-        Map<String, String> cookiesMap = new HashMap<>();
-        Cookie[] cookiesArray = request.getCookies();
-        if (cookiesArray != null && cookiesArray.length != 0) {
-            Arrays.stream(cookiesArray).forEach(cookie -> cookiesMap.put(cookie.getName(), cookie.getValue()));
-        }
-        return cookiesMap;
     }
 
     private Map<String, Object> extractSessionAttributes(HttpServletRequest request) {

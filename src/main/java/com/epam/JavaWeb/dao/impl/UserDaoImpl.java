@@ -5,6 +5,7 @@ import com.epam.JavaWeb.dao.UserDao;
 import com.epam.JavaWeb.db.ConnectionPool;
 import com.epam.JavaWeb.entity.User;
 import com.epam.JavaWeb.exception.DaoException;
+import lombok.extern.log4j.Log4j2;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.*;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
 
     @Language("SQL")
@@ -59,10 +61,8 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
                 password = resultSet.getString("password");
             }
         } catch (SQLException e) {
+            log.error(e);
             throw new DaoException(e);
-        }
-        if(password == null){
-            throw new DaoException("Password not found");
         }
         return password;
     }

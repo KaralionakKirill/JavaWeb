@@ -37,7 +37,6 @@ public class RequestContext {
             String parameterName = parameterNames.nextElement();
             parametersMap.put(parameterName, request.getParameter(parameterName));
         }
-
         return parametersMap;
     }
 

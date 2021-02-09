@@ -1,14 +1,15 @@
 package com.epam.JavaWeb.command.impl;
 
 import com.epam.JavaWeb.command.*;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Log4j2
 public class SetLocaleCommand implements Command {
-    private static final Logger logger = LogManager.getLogger(SetLocaleCommand.class);
 
     @Override
     public CommandResult execute(RequestContext requestContext) {

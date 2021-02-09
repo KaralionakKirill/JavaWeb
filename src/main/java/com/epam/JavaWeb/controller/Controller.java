@@ -2,6 +2,7 @@ package com.epam.JavaWeb.controller;
 
 import com.epam.JavaWeb.command.*;
 import com.epam.JavaWeb.db.ConnectionPool;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,11 +16,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 @WebServlet(urlPatterns = {"/controller", "*.do"})
+@Log4j2
 public class Controller extends HttpServlet {
-    private static final Logger logger = LogManager.getLogger(Controller.class);
-
-    public void init() {
-
+    public void init() throws ServletException {
+        super.init();
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -31,6 +31,7 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info("Request came");
         RequestContext content = new RequestContext(request);
 
         String reqCommand = request.getParameter(RequestParameter.COMMAND);

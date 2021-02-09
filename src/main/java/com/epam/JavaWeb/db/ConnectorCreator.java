@@ -11,8 +11,8 @@ import java.util.Properties;
 
 @Log4j2
 final class ConnectorCreator {
-    private static final String DB_PROPERTIES_PATH = "property/database.properties";
-    private static final String DB_URL  = "db.url";
+    private static final String DB_PROPERTIES_PATH = "database.properties";
+    private static final String DB_URL = "db.url";
     private static final String DB_DRIVER = "db.driver";
     private static final Properties properties = new Properties();
     private static final String DATABASE_URL;
@@ -25,7 +25,7 @@ final class ConnectorCreator {
             Class.forName(driverName);
             DATABASE_URL = (String) properties.get(DB_URL);
         } catch (IOException | ClassNotFoundException | MissingResourceException e) {
-            log.error(e);
+            log.fatal("fatal error: config file" + e);
             throw new RuntimeException(e);
         }
     }

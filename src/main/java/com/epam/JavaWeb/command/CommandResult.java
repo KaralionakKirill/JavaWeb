@@ -13,7 +13,8 @@ public class CommandResult {
 
     private final Map<String, Object> sessionAttributes;
 
-    public CommandResult(ResponseType responseType, String page, Map<String, Object> attributes, Map<String, Object> sessionAttributes) {
+    public CommandResult(ResponseType responseType, String page, Map<String, Object> attributes,
+                         Map<String, Object> sessionAttributes) {
         this.responseType = responseType;
         this.page = page;
         this.attributes = attributes;

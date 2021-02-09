@@ -4,6 +4,5 @@ public class RequestAttribute {
     private RequestAttribute() {
     }
 
-    public static final String ERROR_EMAIL_OR_PASSWORD = "errorEmailOrPassword";
-    public static final String ERROR_USER = "errorUser";
+    public static final String SERVER_MESSAGE = "server_message";
 }

@@ -27,10 +27,11 @@ public class LoginCommand implements Command {
         password = PasswordEncoder.encryption(password);
         CommandResult commandResult;
         try {
-            Optional<String> serverMessage = service.login(email, password);
+            HashMap<String, Object> session = new HashMap<>();
+            Optional<String> serverMessage = service.login(email, password, session);
             if (serverMessage.isEmpty()) {
                 commandResult = new CommandResult(Map.of(RequestAttribute.REDIRECT_COMMAND,
-                        CommandType.TO_MAIN.getCommandName()), new HashMap<>());//todo
+                        CommandType.TO_MAIN.getCommandName()), session);
             } else {
                 commandResult = new CommandResult(
                         Map.of(RequestAttribute.SERVER_MESSAGE,

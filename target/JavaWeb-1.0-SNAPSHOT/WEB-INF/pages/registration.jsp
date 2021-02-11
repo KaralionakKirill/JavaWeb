@@ -22,6 +22,9 @@
             <label for="inputEmail"><fmt:message key="email"/></label>
             <input id="inputEmail" class="form-control" type="email" name="email" required
                    placeholder="name@example.com"/>
+            <div class="invalid-feedback">
+                <fmt:message key="invalid.email"/>
+            </div>
         </div>
         <div>
             <label for="inputLogin"><fmt:message key="username"/></label>
@@ -35,15 +38,18 @@
             <input type="password" class="form-control" id="inputPassword" name="password"
                    pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={};:><.,/?`~±§-])(?=[^\r\n\t\f\v]+$).{8,20}$"
                    required/>
+            <div class="invalid-feedback">
+                <fmt:message key="invalid.password"/>
+            </div>
         </div>
         <div>
             <label for="repeatPassword"><fmt:message key="repeat.password"/></label>
             <input type="password" class="form-control" id="repeatPassword" name="password"
                    pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={};:><.,/?`~±§-])(?=[^\r\n\t\f\v]+$).{8,20}$"
-                   required/>
+                   required onchange="repeatPasswordChange()" onkeyup="this.onchange()" onpaste="this.onchange()" oninput="this.onchange()"/>
         </div>
         <div class="mt-2">
-            <button type="submit" class="btn btn-dark w-100"><fmt:message key="registration.button"/></button>
+            <button id="submitButton" disabled type="submit" class="btn btn-dark w-100"><fmt:message key="registration.button"/></button>
             <div class="mt-2 d-flex justify-content-center">
                 <span>
                     <fmt:message key="registration.offer"/>
@@ -68,6 +74,12 @@
             if (redirectCommand != null) {
                 window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand
             }
+        }
+
+        function repeatPasswordChange(e) {
+            let firstPassword = document.getElementById("inputPassword").value;
+            let secondPassword = document.getElementById("repeatPassword").value;
+            document.getElementById("submitButton").disabled = (firstPassword !== secondPassword);
         }
     </script>
 </div>

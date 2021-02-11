@@ -8,6 +8,7 @@ import com.epam.JavaWeb.exception.ServiceException;
 import com.epam.JavaWeb.util.ActivationMailSender;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -15,14 +16,16 @@ import java.util.concurrent.Executors;
 @Log4j2
 public class UserService {
 
-    public Optional<String> login(String email, String password) throws ServiceException {
+    public Optional<String> login(String email, String password, HashMap<String, Object> session) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
         try {
             String dbPassword = userDaoImpl.findPassword(email);
             if (password.equals(dbPassword)) {
                 User user = findByEmail(email).get();
-                if (!user.isActivate()) {
+                if (user.isActivate()) {
+                    session.put("user", user);
+                }else{
                     serverMessage = Optional.of("serverMessage.activateAccountPlease");
                 }
             } else {

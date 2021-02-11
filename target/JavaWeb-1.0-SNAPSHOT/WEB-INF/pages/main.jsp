@@ -21,14 +21,14 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="<c:url value="/images/3.jpg"/>" class="d-block w-100" alt="...">
+            <img src="<c:url value="/images/1.jpg"/>" class="d-block w-100" alt="...">
 
         </div>
         <div class="carousel-item">
-            <img src="<c:url value="/images/3.jpg"/>" class="d-block w-100" alt="...">
+            <img src="<c:url value="/images/2.jpg"/>" class="d-block w-100" alt="...">
         </div>
         <div class="carousel-item">
-            <img src="<c:url value="/images/4.jpg"/>" class="d-block w-100" alt="...">
+            <img src="<c:url value="/images/3.jpg"/>" class="d-block w-100" alt="...">
 
         </div>
     </div>

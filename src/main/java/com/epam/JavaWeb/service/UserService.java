@@ -6,7 +6,6 @@ import com.epam.JavaWeb.entity.User;
 import com.epam.JavaWeb.exception.DaoException;
 import com.epam.JavaWeb.exception.ServiceException;
 import com.epam.JavaWeb.util.ActivationMailSender;
-import com.epam.JavaWeb.validator.UserValidator;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Optional;
@@ -18,9 +17,6 @@ public class UserService {
 
     public Optional<String> login(String email, String password) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
-        if (!UserValidator.isValidEmail(email) && !UserValidator.isValidPassword(password)) {
-            return Optional.of("serverMessage.incorrectData");
-        }
         UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
         try {
             String dbPassword = userDaoImpl.findPassword(email);
@@ -55,7 +51,7 @@ public class UserService {
                     throw new ServiceException(e);
                 }
             } else {
-                serverMessage = Optional.of("serverMessage.usernameAlreadyTaken");//todo
+                serverMessage = Optional.of("serverMessage.usernameAlreadyTaken");
             }
         } else {
             serverMessage = Optional.of("serverMessage.emailAlreadyTaken");

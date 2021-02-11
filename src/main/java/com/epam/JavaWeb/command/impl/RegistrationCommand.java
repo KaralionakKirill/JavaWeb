@@ -39,8 +39,7 @@ public class RegistrationCommand implements Command {
             Optional<String> serverMessage = service.register(user, password);
             if (serverMessage.isEmpty()) {
                 commandResult = new CommandResult(Map.of(RequestAttribute.REDIRECT_COMMAND,
-                        CommandType.TO_LOGIN.getCommandName(), RequestAttribute.VERIFICATION_MESSAGE,
-                        LocalizationMessage.localize(requestContext.getLocale(), "verificationMessage.verifyPlease")),
+                        CommandType.TO_LOGIN.getCommandName()),
                         new HashMap<>());
             } else {
                 commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.REGISTRATION),

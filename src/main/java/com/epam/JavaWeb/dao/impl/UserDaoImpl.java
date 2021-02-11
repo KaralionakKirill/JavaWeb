@@ -19,8 +19,8 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
 
     @Language("SQL")
     private static final String SQL_INSERT_USER =
-            "INSERT INTO users(login, password, email, activation_code, is_activate) " +
-                    "VALUES (?, ?, ?, ?, ?);";
+            "INSERT INTO users(login, password, email, first_name, last_name, activation_code, is_activate) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
     @Language("SQL")
     private static final String SQL_DELETE_USER =
@@ -32,11 +32,11 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
 
     @Language("SQL")
     private static final String SQL_UPDATE_USER =
-            "UPDATE users SET first_name = ?, last_name = ?, email = ?, is_activate = ? WHERE login = ?;";
+            "UPDATE users SET login = ?, email = ?, first_name = ?, last_name = ?, activation_code = ?, is_activate = ? WHERE login = ?;";
 
     @Language("SQL")
     private static final String SQL_SELECT_USER =
-            "SELECT login, email, first_name, last_name, date_of_birth FROM users;";
+            "SELECT login, email, first_name, last_name, activation_code, is_activate FROM users;";
 
 
     private static final UserDaoImpl instance = new UserDaoImpl();
@@ -49,7 +49,7 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
     }
 
     private String sqlSelectByField(Field field){
-        StringBuilder stringBuilder = new StringBuilder("SELECT login, email, activation_code, is_activate, FROM users WHERE ");
+        StringBuilder stringBuilder = new StringBuilder("SELECT login, email, first_name, last_name, activation_code, is_activate FROM users WHERE ");
         switch (field){
             case ACTIVATION_CODE:
                 stringBuilder.append("activation_code = ?");
@@ -83,6 +83,8 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
                 user = User.builder()
                         .withLogin(resultSet.getString("login"))
                         .withEmail(resultSet.getString("email"))
+                        .withFirstName(resultSet.getString("first_name"))
+                        .withLastName(resultSet.getString("last_name"))
                         .withActivationCode(resultSet.getString("activation_code"))
                         .withIsActivate(resultSet.getBoolean("is_activate"))
                         .build();
@@ -119,8 +121,10 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
             preparedStatement.setString(1, entity.getLogin());
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, entity.getEmail());
-            preparedStatement.setString(4, entity.getActivationCode());
-            preparedStatement.setBoolean(5, entity.isActivate());
+            preparedStatement.setString(4, entity.getFirstName());
+            preparedStatement.setString(5, entity.getLastName());
+            preparedStatement.setString(6, entity.getActivationCode());
+            preparedStatement.setBoolean(7, entity.isActivate());
             isUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -151,11 +155,13 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER)) {
-            preparedStatement.setString(1, entity.getFirstName());
-            preparedStatement.setString(2, entity.getLastName());
-            preparedStatement.setString(3, entity.getEmail());
-            preparedStatement.setBoolean(4, entity.isActivate());
-            preparedStatement.setString(5, key);
+            preparedStatement.setString(1, entity.getLogin());
+            preparedStatement.setString(2, entity.getEmail());
+            preparedStatement.setString(3, entity.getFirstName());
+            preparedStatement.setString(4, entity.getLastName());
+            preparedStatement.setString(5, entity.getActivationCode());
+            preparedStatement.setBoolean(6, entity.isActivate());
+            preparedStatement.setString(7, key);
             isUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -175,6 +181,8 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
                         .withEmail(resultSet.getString("email"))
                         .withFirstName(resultSet.getString("first_name"))
                         .withLastName(resultSet.getString("last_name"))
+                        .withActivationCode(resultSet.getString("activation_code"))
+                        .withIsActivate(resultSet.getBoolean("is_activate"))
                         .build();
                 users.add(user);
             }

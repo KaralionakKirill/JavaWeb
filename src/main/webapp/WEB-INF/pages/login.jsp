@@ -19,9 +19,6 @@
         <c:if test="${not empty requestScope.verification_message}">
             <p class="alert alert-success">${requestScope.verification_message}</p>
         </c:if>
-        <c:if test="${not empty param.verification_message}">
-            <p class="alert alert-success">${param.verification_message}</p>
-        </c:if>
         <p id="server_message">${server_message}</p>
         <input type="hidden" name="command" value="login">
         <div>
@@ -56,12 +53,13 @@
         function onAjaxSuccess(data) {
             let pMessages = document.getElementById("server_message");
             pMessages.innerText = "";
-            pMessages.classList.add("alert", "alert-danger");
             let parse = JSON.parse(data);
             let serverMessages = parse.server_message;
             if (serverMessages != null) {
                 pMessages.innerText += serverMessages + '\n';
+                pMessages.classList.add("alert", "alert-danger");
             }
+
             let redirectCommand = parse.redirect_command;
             if (redirectCommand != null) {
                 window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand;

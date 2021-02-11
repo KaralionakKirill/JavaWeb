@@ -23,8 +23,8 @@ public class EncodingFilter implements Filter {
         String codeRequest = request.getCharacterEncoding();
         if (codeRequest == null || !codeRequest.equalsIgnoreCase(encoding)) {
             request.setCharacterEncoding(encoding);
-            response.setCharacterEncoding(encoding);
         }
+        response.setCharacterEncoding(encoding);
         chain.doFilter(request, response);
     }
 }

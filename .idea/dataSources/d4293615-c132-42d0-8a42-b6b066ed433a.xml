@@ -4515,7 +4515,15 @@ SELECT|sys.sys_config
       <Position>7</Position>
       <DataType>date|0s</DataType>
     </column>
-    <key id="1102" parent="364" name="PRIMARY">
+    <column id="1102" parent="364" name="activation_code">
+      <Position>8</Position>
+      <DataType>varchar(100)|0s</DataType>
+    </column>
+    <column id="1103" parent="364" name="is_activate">
+      <Position>9</Position>
+      <DataType>tinyint(1)|0s</DataType>
+    </column>
+    <key id="1104" parent="364" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>

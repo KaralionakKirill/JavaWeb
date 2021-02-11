@@ -1,33 +1,36 @@
 package com.epam.JavaWeb.service;
 
+import com.epam.JavaWeb.dao.Field;
 import com.epam.JavaWeb.dao.impl.UserDaoImpl;
 import com.epam.JavaWeb.entity.User;
 import com.epam.JavaWeb.exception.DaoException;
 import com.epam.JavaWeb.exception.ServiceException;
-import com.epam.JavaWeb.util.PasswordEncoder;
+import com.epam.JavaWeb.util.ActivationMailSender;
 import com.epam.JavaWeb.validator.UserValidator;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.Executors;
 
 @Log4j2
 public class UserService {
 
     public Optional<String> login(String email, String password) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
-        if(!UserValidator.isValidEmail(email) && !UserValidator.isValidPassword(password)){
+        if (!UserValidator.isValidEmail(email) && !UserValidator.isValidPassword(password)) {
             return Optional.of("serverMessage.incorrectData");
         }
         UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
         try {
             String dbPassword = userDaoImpl.findPassword(email);
-            PasswordEncoder.encryption(password);
-            if(dbPassword == null){
-                serverMessage = Optional.of("serverMessage.notFoundUser");
-            }else{
-                serverMessage = dbPassword.
-                        equals(password) ? serverMessage:
-                        Optional.of("serverMessage.noMatchesUser");
+            if (password.equals(dbPassword)) {
+                User user = findByEmail(email).get();
+                if (!user.isActivate()) {
+                    serverMessage = Optional.of("serverMessage.activateAccountPlease");
+                }
+            } else {
+                serverMessage = Optional.of("serverMessage.incorrectUsernameOrPassword");
             }
         } catch (DaoException e) {
             log.error(e);
@@ -36,18 +39,83 @@ public class UserService {
         return serverMessage;
     }
 
-    public Optional<String> register(User user, String password) throws DaoException {
+    public Optional<String> register(User user, String password) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
-        try {
-            PasswordEncoder.encryption(password);
-            if(userDaoImpl.addUser(user, password)){
-                serverMessage = Optional.of("serverMessage.registrationEx");//todo
+        if (findByEmail(user.getEmail()).isEmpty()) {
+            if (findByUsername(user.getLogin()).isEmpty()) {
+                String code = UUID.randomUUID().toString();
+                Runnable emailSender = new ActivationMailSender(code, user.getEmail());
+                Executors.newSingleThreadExecutor().submit(emailSender);
+                try {
+                    user.setActivationCode(code);
+                    userDaoImpl.addUser(user, password);
+                } catch (DaoException e) {
+                    log.error(e);
+                    throw new ServiceException(e);
+                }
+            } else {
+                serverMessage = Optional.of("serverMessage.usernameAlreadyTaken");//todo
             }
-        } catch (DaoException e) {
-            log.error(e);
-            throw new DaoException(e);
+        } else {
+            serverMessage = Optional.of("serverMessage.emailAlreadyTaken");
         }
         return serverMessage;
+    }
+
+    private Optional<User> findByUsername(String name) throws ServiceException {
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
+        Optional<User> user;
+        try {
+            user = userDaoImpl.findByField(name, Field.LOGIN);
+        } catch (DaoException e) {
+            log.error(e);
+            throw new ServiceException(e);
+        }
+        return user;
+    }
+
+    private Optional<User> findByEmail(String email) throws ServiceException {
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
+        Optional<User> user;
+        try {
+            user = userDaoImpl.findByField(email, Field.EMAIL);
+        } catch (DaoException e) {
+            log.error(e);
+            throw new ServiceException(e);
+        }
+        return user;
+    }
+
+    public Optional<String> activateUser(String activationCode) throws ServiceException {
+        Optional<String> serverMessage = Optional.empty();
+        Optional<User> userOptional = findByActivationCode(activationCode);
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
+        if (userOptional.isPresent()) {
+            try {
+                User user = userOptional.get();
+                user.setActivationCode(null);
+                user.setActivate(true);
+                userDaoImpl.update(user, user.getLogin());
+            } catch (DaoException e) {
+                log.error(e);
+                throw new ServiceException(e);
+            }
+        } else {
+            serverMessage = Optional.of("serverMessage.incorrectActivationCode");
+        }
+        return serverMessage;
+    }
+
+    public Optional<User> findByActivationCode(String activationCode) throws ServiceException {
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
+        Optional<User> user;
+        try {
+            user = userDaoImpl.findByField(activationCode, Field.ACTIVATION_CODE);
+        } catch (DaoException e) {
+            log.error(e);
+            throw new ServiceException(e);
+        }
+        return user;
     }
 }

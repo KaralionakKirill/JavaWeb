@@ -7,6 +7,6 @@ import java.util.HashMap;
 public class ToLoginCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(ResponseType.FORWARD, PagePath.LOGIN, new HashMap<>(), new HashMap<>());
+        return new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.LOGIN), new HashMap<>(), new HashMap<>());
     }
 }

@@ -3,8 +3,6 @@ package com.epam.JavaWeb.controller;
 import com.epam.JavaWeb.command.*;
 import com.epam.JavaWeb.db.ConnectionPool;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,9 +29,7 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.info("Request came");
         RequestContext content = new RequestContext(request);
-
         String reqCommand = request.getParameter(RequestParameter.COMMAND);
         Optional<Command> commandOptional = CommandProvider.defineCommand(reqCommand);
         Command command = commandOptional.orElseThrow(IllegalArgumentException::new);
@@ -41,12 +37,15 @@ public class Controller extends HttpServlet {
 
         commandResult.getAttributes().forEach(request::setAttribute);
         commandResult.getSessionAttributes().forEach(request.getSession()::setAttribute);
+        ResponseContext responseContext = commandResult.getResponseContext();
 
-        if (commandResult.getResponseType().equals(ResponseType.FORWARD)) {
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(commandResult.getPage());
+        if (responseContext.getType().equals(ResponseType.FORWARD)) {
+            String page = ((ForwardResponse) responseContext).getPage();
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(page);
             requestDispatcher.forward(request, response);
         } else {
-            response.sendRedirect(request.getContextPath() + commandResult.getPage());
+            String redirectCommand = ((RedirectResponse) responseContext).getCommand();
+            response.sendRedirect(request.getContextPath() + redirectCommand);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.epam.JavaWeb.dao.impl;
 
 import com.epam.JavaWeb.dao.BaseDao;
+import com.epam.JavaWeb.dao.Field;
 import com.epam.JavaWeb.dao.UserDao;
 import com.epam.JavaWeb.db.ConnectionPool;
 import com.epam.JavaWeb.entity.User;
@@ -18,7 +19,7 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
 
     @Language("SQL")
     private static final String SQL_INSERT_USER =
-            "INSERT INTO users(login, password, email, first_name, last_name) " +
+            "INSERT INTO users(login, password, email, activation_code, is_activate) " +
                     "VALUES (?, ?, ?, ?, ?);";
 
     @Language("SQL")
@@ -31,15 +32,12 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
 
     @Language("SQL")
     private static final String SQL_UPDATE_USER =
-            "UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE login = ?;";
+            "UPDATE users SET first_name = ?, last_name = ?, email = ?, is_activate = ? WHERE login = ?;";
 
     @Language("SQL")
     private static final String SQL_SELECT_USER =
             "SELECT login, email, first_name, last_name, date_of_birth FROM users;";
 
-    @Language("SQL")
-    private static final String SQL_SELECT_USER_WHERE =
-            "SELECT login, email, first_name, last_name, date_of_birth FROM users WHERE email = ?;";
 
     private static final UserDaoImpl instance = new UserDaoImpl();
 
@@ -48,6 +46,52 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
 
     public static UserDaoImpl getInstance() {
         return instance;
+    }
+
+    private String sqlSelectByField(Field field){
+        StringBuilder stringBuilder = new StringBuilder("SELECT login, email, activation_code, is_activate, FROM users WHERE ");
+        switch (field){
+            case ACTIVATION_CODE:
+                stringBuilder.append("activation_code = ?");
+                break;
+            case EMAIL:
+                stringBuilder.append("email = ?");
+                break;
+            case LOGIN:
+                stringBuilder.append("login = ?");
+                break;
+            case FIRSTNAME:
+                stringBuilder.append("first_name = ?");
+                break;
+            case LASTNAME:
+                stringBuilder.append("last_name = ?");
+                break;
+        }
+        return stringBuilder.toString();//todo
+    }
+
+    @Override
+    public Optional<User> findByField(String name, Field field) throws DaoException {
+        Optional<User> optionalUser = Optional.empty();
+        User user;
+        String sql = sqlSelectByField(field);
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user = User.builder()
+                        .withLogin(resultSet.getString("login"))
+                        .withEmail(resultSet.getString("email"))
+                        .withActivationCode(resultSet.getString("activation_code"))
+                        .withIsActivate(resultSet.getBoolean("is_activate"))
+                        .build();
+                optionalUser = Optional.of(user);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return optionalUser;
     }
 
     @Override
@@ -75,8 +119,8 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
             preparedStatement.setString(1, entity.getLogin());
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, entity.getEmail());
-            preparedStatement.setString(4, entity.getFirstName());
-            preparedStatement.setString(5, entity.getLastName());
+            preparedStatement.setString(4, entity.getActivationCode());
+            preparedStatement.setBoolean(5, entity.isActivate());
             isUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -110,35 +154,13 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
             preparedStatement.setString(3, entity.getEmail());
-            preparedStatement.setString(4, key);
+            preparedStatement.setBoolean(4, entity.isActivate());
+            preparedStatement.setString(5, key);
             isUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
         }
         return isUpdated;
-    }
-
-    @Override
-    public Optional<User> find(String key) throws DaoException {
-        Optional<User> optionalUser = Optional.empty();
-        User user;
-        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_WHERE)) {
-            preparedStatement.setString(1, key);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                user = User.builder()
-                        .withLogin(resultSet.getString("login"))
-                        .withEmail(resultSet.getString("email"))
-                        .withFirstName(resultSet.getString("first_name"))
-                        .withLastName(resultSet.getString("last_name"))
-                        .build();
-                optionalUser = Optional.ofNullable(user);
-            }
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-        return optionalUser;
     }
 
     @Override

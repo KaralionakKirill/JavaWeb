@@ -13,4 +13,7 @@ public class User extends Entity {
     private String lastName;
     private Role role;
     private Integer loyaltyPoints;
+    private String activationCode;
+    private boolean isActivate;
+    private boolean isBlocked;
 }

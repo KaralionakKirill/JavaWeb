@@ -1,24 +1,30 @@
 package com.epam.JavaWeb.command;
 
-import com.epam.JavaWeb.command.impl.SetLocaleCommand;
-import com.epam.JavaWeb.command.impl.LoginCommand;
-import com.epam.JavaWeb.command.impl.RegistrationCommand;
-import com.epam.JavaWeb.command.impl.ToLoginCommand;
+import com.epam.JavaWeb.command.impl.*;
 import com.epam.JavaWeb.service.UserService;
 
 public enum CommandType {
-    LOGIN(new LoginCommand(new UserService())),
-    SET_LOCALE(new SetLocaleCommand()),
-    REGISTRATION(new RegistrationCommand(new UserService())),
-    TO_LOGIN(new ToLoginCommand());
+    VERIFICATION(new ActivateUserCommand(new UserService()), "verification"),
+    LOGIN(new LoginCommand(new UserService()), "login"),
+    LOCALE(new LocaleCommand(), "locale"),
+    REGISTRATION(new RegistrationCommand(new UserService()), "registration"),
+    TO_LOGIN(new ToLoginCommand(),"to_login"),
+    TO_REGISTRATION(new ToRegistrationCommand(),"to_registration"),
+    TO_MAIN(new ToMainCommand(),"to_main");
 
     private Command command;
+    private String commandName;
 
-    CommandType(Command command) {
+    CommandType(Command command, String commandName) {
         this.command = command;
+        this.commandName = commandName;
     }
 
     public Command getCommand() {
         return command;
+    }
+
+    public String getCommandName() {
+        return commandName;
     }
 }

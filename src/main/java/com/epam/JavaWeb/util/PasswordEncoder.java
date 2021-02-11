@@ -6,7 +6,7 @@ public class PasswordEncoder {
     private PasswordEncoder() {
     }
 
-    public static void encryption(String value) {
-        DigestUtils.md5Hex(value);
+    public static String encryption(String value) {
+        return DigestUtils.md5Hex(value);
     }
 }

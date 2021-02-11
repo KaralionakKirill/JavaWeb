@@ -5,42 +5,36 @@ import java.util.Map;
 
 public class CommandResult {
 
-    private final ResponseType responseType;
-
-    private final String page;
-
     private final Map<String, Object> attributes;
-
     private final Map<String, Object> sessionAttributes;
+    private ResponseContext responseContext;
 
-    public CommandResult(ResponseType responseType, String page, Map<String, Object> attributes,
-                         Map<String, Object> sessionAttributes) {
-        this.responseType = responseType;
-        this.page = page;
+    public CommandResult(Map<String, Object> attributes, Map<String, Object> sessionAttributes) {
         this.attributes = attributes;
         this.sessionAttributes = sessionAttributes;
     }
 
-    public CommandResult(ResponseType responseType, String page, Map<String, Object> attributes) {
-        this.responseType = responseType;
-        this.page = page;
+    public CommandResult(ResponseContext responseContext, Map<String, Object> attributes,
+                         Map<String, Object> sessionAttributes) {
+        this.responseContext = responseContext;
+        this.attributes = attributes;
+        this.sessionAttributes = sessionAttributes;
+    }
+
+    public CommandResult(ResponseContext responseContext, Map<String, Object> attributes) {
+        this.responseContext = responseContext;
         this.attributes = attributes;
         this.sessionAttributes = new HashMap<>();
     }
 
-    public CommandResult(ResponseType responseType, String page) {
-        this.responseType = responseType;
-        this.page = page;
+    public CommandResult(ResponseContext responseContext) {
+        this.responseContext = responseContext;
         this.attributes = new HashMap<>();
         this.sessionAttributes = new HashMap<>();
     }
 
-    public ResponseType getResponseType() {
-        return responseType;
-    }
-
-    public String getPage() {
-        return page;
+    public ResponseContext getResponseContext() {
+        return responseContext;
     }
 
     public Map<String, Object> getAttributes() {

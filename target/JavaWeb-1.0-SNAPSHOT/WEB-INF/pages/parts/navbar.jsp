@@ -4,6 +4,7 @@
 <c:set var="locale" value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}"/>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
+<c:import url="/WEB-INF/pages/parts/sessionVar.jsp"/>
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="<c:url value="/controller?command=to_main"/>">Navbar</a>
@@ -19,39 +20,39 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
+                <c:if test="${isAuthorized}">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="<c:url value="/controller?command=to_profile"/>">
+                            <fmt:message key="navbar.profile"/></a>
+                    </li>
+                </c:if>
             </ul>
-            <div class="col-3 d-flex justify-content-end">
+            <div class="col-4 d-flex justify-content-end">
                 <form action="<c:url value="/controller"/>" method="post">
                     <input type="hidden" name="command" value="locale">
                     <input type="hidden" name="page" value="${ param.command }">
-                    <select name="locale" onchange="submit()" class="form-select">
+                    <select id="locale" name="locale" onchange="submit()" class="form-select">
                         <option value="ru_RU" <c:if test="${locale eq 'ru_RU'}">selected</c:if>>Русский</option>
                         <option value="en_US" <c:if test="${locale eq 'en_US'}">selected</c:if>>English</option>
                     </select>
                 </form>
-                <form action="<c:url value="/controller"/>" method="post" class="ms-2">
-                    <button type="submit" class="btn btn-dark" name="command" value="to_login">
-                        <fmt:message key="header.button.login"/>
-                    </button>
-                </form>
+                <c:if test="${isAuthorized}">
+                    <form action="<c:url value="/controller"/>" method="post" class="ms-2">
+                        <button type="submit" class="btn btn-dark" name="command" value="to_logout">
+                            <fmt:message key="navbar.logout"/>
+                        </button>
+                    </form>
+                </c:if>
+                <c:if test="${ not isAuthorized}">
+                    <form action="<c:url value="/controller"/>" method="post" class="ms-2">
+                        <button type="submit" class="btn btn-dark" name="command" value="to_login">
+                            <fmt:message key="navbar.login"/>
+                        </button>
+                    </form>
+                </c:if>
             </div>
         </div>
     </div>
 </nav>
+

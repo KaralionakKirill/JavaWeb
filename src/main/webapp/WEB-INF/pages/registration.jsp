@@ -46,14 +46,13 @@
             <label for="repeatPassword"><fmt:message key="repeat.password"/></label>
             <input type="password" class="form-control" id="repeatPassword" name="password"
                    pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={};:><.,/?`~±§-])(?=[^\r\n\t\f\v]+$).{8,20}$"
-                   required <%--onchange="repeatPasswordChange()" onkeyup="this.onchange()"
-                   onpaste="this.onchange()" oninput="this.onchange()"--%>/>
+                   required/>
             <div class="invalid-feedback">
                 <fmt:message key="invalid.password"/>
             </div>
         </div>
         <div class="mt-2">
-            <button id="submitButton" disabled type="submit" class="btn btn-dark w-100"><fmt:message key="registration.button"/></button>
+            <button id="submitButton" type="submit" class="btn btn-dark w-100"><fmt:message key="registration.button"/></button>
             <div class="mt-2 d-flex justify-content-center">
                 <span>
                     <fmt:message key="registration.offer"/>
@@ -79,12 +78,6 @@
                 window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand
             }
         }
-
-        /*function repeatPasswordChange(e) {
-            let firstPassword = document.getElementById("inputPassword").value;
-            let secondPassword = document.getElementById("repeatPassword").value;
-            document.getElementById("submitButton").disabled = (firstPassword !== secondPassword);
-        }*/
     </script>
 </div>
 <c:import url="parts/footer.jsp"/>

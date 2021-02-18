@@ -1,13 +1,15 @@
 package com.epam.bar.entity;
 
-public enum Role {
-    ADMIN(1),
-    USER(2),
-    BARMAN(3);
+public enum Alcohol {
+    VODKA(1),
+    WHISKEY(2),
+    TEQUILA(3),
+    GIN(4),
+    RUM(5);
 
     private int id;
 
-    Role(int  id){
+    Alcohol(int id) {
         this.id = id;
     }
 

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @WebServlet(urlPatterns = {"/rest"})
-@MultipartConfig(location = "D:\\Labs\\EPAM\\data", maxFileSize = 1024 * 1024 * 5,
+@MultipartConfig(location = "D:\\Labs\\EPAM\\JavaWeb\\src\\main\\webapp\\data", maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 2)
 public class RestServlet extends HttpServlet {
     @Override

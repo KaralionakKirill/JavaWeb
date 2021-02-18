@@ -33,6 +33,7 @@ public class RegistrationCommand implements Command {
                 .withEmail(email)
                 .withIsBlocked(false)
                 .withIsActivate(false)
+                .withLoyaltyPoints(0)
                 .build();
         CommandResult commandResult;
         try {

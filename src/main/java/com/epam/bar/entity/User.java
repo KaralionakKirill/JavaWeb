@@ -6,6 +6,7 @@ import lombok.*;
 @Data
 @Builder(setterPrefix = "with")
 public class User extends Entity{
+    private Long id;
     private String login;
     private String email;
     private String firstName;

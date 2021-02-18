@@ -26,13 +26,14 @@ public class UserService {
             if (password.equals(dbPassword)) {
                 User dbUser = findByEmail(email).get();
                 if (dbUser.isActivate()) {
+                    user.setId(dbUser.getId());
                     user.setLogin(dbUser.getLogin());
                     user.setRole(dbUser.getRole());
                     user.setFirstName(dbUser.getFirstName());
                     user.setLastName(dbUser.getLastName());
                     user.setLoyaltyPoints(dbUser.getLoyaltyPoints());
                     user.setActivate(dbUser.isActivate());
-                    user.setBlocked(dbUser.isBlocked());//todo
+                    user.setBlocked(dbUser.isBlocked());
                 }else{
                     serverMessage = Optional.of("serverMessage.activateAccountPlease");
                 }

@@ -42,7 +42,8 @@ public class LoginCommand implements Command {
             }
         } catch (ServiceException e) {
             log.error("Login failed" + e);
-            commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.ERROR_PAGE));
+            commandResult = new CommandResult(Map.of(RequestAttribute.REDIRECT_COMMAND,
+                    CommandType.ERROR.getCommandName()), new HashMap<>());
         }
         return commandResult;
     }

@@ -18,7 +18,7 @@ public class RequestContext {
 
     private Map<String, Object> sessionAttributes;
 
-    private List<Part> requestParts;
+    private Map<String, Part> requestParts;
 
     private String locale;
 
@@ -50,10 +50,12 @@ public class RequestContext {
         return attributes;
     }
 
-    private List<Part> extractRequestParts(HttpServletRequest request) throws IOException, ServletException {
-        List<Part> parts = new ArrayList<>();
+    private Map<String, Part> extractRequestParts(HttpServletRequest request) throws IOException, ServletException {
+        Map<String, Part> parts = new HashMap<>();
         if (request.getContentType() != null && request.getContentType().toLowerCase().contains("multipart/form-data")) {
-            parts.addAll(request.getParts());
+            for (Part part : request.getParts()) {
+                parts.put(part.getName(), part);
+            }
         }
         return parts;
     }

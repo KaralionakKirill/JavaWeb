@@ -4,6 +4,7 @@ import com.epam.bar.dao.BaseDao;
 import com.epam.bar.dao.FieldType;
 import com.epam.bar.dao.UserDao;
 import com.epam.bar.db.ConnectionPool;
+import com.epam.bar.entity.Role;
 import com.epam.bar.entity.User;
 import com.epam.bar.exception.DaoException;
 import lombok.extern.log4j.Log4j2;
@@ -22,8 +23,8 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
 
     @Language("SQL")
     private static final String SQL_INSERT_USER =
-            "INSERT INTO base_user(login, password, email, first_name, last_name, activation_code, is_activate) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?);";
+            "INSERT INTO base_user(login, password, email, role_id, first_name, last_name, " +
+                    "activation_code, is_activate, loyalty_points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     @Language("SQL")
     private static final String SQL_DELETE_USER =
@@ -35,31 +36,38 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
 
     @Language("SQL")
     private static final String SQL_UPDATE_USER =
-            "UPDATE base_user SET login = ?, email = ?, first_name = ?, last_name = ?, activation_code = ?, is_activate = ? WHERE login = ?;";
+            "UPDATE base_user SET login = ?, email = ?, role_id = ?, first_name = ?, last_name = ?, activation_code = ?, " +
+                    "is_activate = ?, loyalty_points = ? WHERE login = ?;";
 
     @Language("SQL")
     private static final String SQL_SELECT_USER =
-            "SELECT login, email, first_name, last_name, activation_code, is_activate FROM base_user;";
+            "SELECT bu.id, login, email, role_name, first_name, last_name, activation_code, is_activate, loyalty_points " +
+                    "FROM base_user AS bu INNER JOIN user_role AS ur on bu.role_id = ur.id;";
 
     @Language("SQL")
     private static final String SQL_SELECT_BY_CODE =
-            "SELECT login, email, first_name, last_name, activation_code, is_activate FROM base_user WHERE activation_code = ?;";
+            "SELECT bu.id, login, email, role_name, first_name, last_name, activation_code, is_activate, loyalty_points " +
+                    "FROM base_user AS bu INNER JOIN user_role AS ur on bu.role_id = ur.id WHERE activation_code = ? ;";
 
     @Language("SQL")
     private static final String SQL_SELECT_BY_EMAIL =
-            "SELECT login, email, first_name, last_name, activation_code, is_activate FROM base_user WHERE email = ?;";
+            "SELECT bu.id, login, email, role_name, first_name, last_name, activation_code, is_activate, loyalty_points " +
+                    "FROM base_user AS bu INNER JOIN user_role AS ur on bu.role_id = ur.id WHERE email = ?;";
 
     @Language("SQL")
     private static final String SQL_SELECT_BY_LOGIN =
-            "SELECT login, email, first_name, last_name, activation_code, is_activate FROM base_user WHERE login = ?;";
+            "SELECT login, email, role_name, first_name, last_name, activation_code, is_activate, loyalty_points " +
+                    "FROM base_user AS bu INNER JOIN user_role AS ur on bu.role_id = ur.id WHERE login = ?;";
 
     @Language("SQL")
     private static final String SQL_SELECT_BY_FIRSTNAME =
-            "SELECT login, email, first_name, last_name, activation_code, is_activate FROM base_user WHERE first_name = ?;";
+            "SELECT bu.id, login, email, role_name, first_name, last_name, activation_code, is_activate, loyalty_points " +
+                    "FROM base_user AS bu INNER JOIN user_role AS ur on bu.role_id = ur.id WHERE first_name = ?;";
 
     @Language("SQL")
     private static final String SQL_SELECT_BY_LASTNAME =
-            "SELECT login, email, first_name, last_name, activation_code, is_activate FROM base_user WHERE last_name = ?;";
+            "SELECT bu.id, login, email, role_name, first_name, last_name, activation_code, is_activate, loyalty_points " +
+                    "FROM base_user AS bu INNER JOIN user_role AS ur on bu.role_id = ur.id WHERE last_name = ?;";
 
     public UserDaoImpl() {
     }
@@ -99,12 +107,15 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = User.builder()
+                        .withId(resultSet.getLong("id"))
                         .withLogin(resultSet.getString("login"))
                         .withEmail(resultSet.getString("email"))
+                        .withRole(Role.valueOf(resultSet.getString("role_name")))
                         .withFirstName(resultSet.getString("first_name"))
                         .withLastName(resultSet.getString("last_name"))
                         .withActivationCode(resultSet.getString("activation_code"))
                         .withIsActivate(resultSet.getBoolean("is_activate"))
+                        .withLoyaltyPoints(resultSet.getInt("loyalty_points"))
                         .build();
                 optionalUser = Optional.of(user);
             }
@@ -139,10 +150,12 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
             preparedStatement.setString(1, entity.getLogin());
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, entity.getEmail());
-            preparedStatement.setString(4, entity.getFirstName());
-            preparedStatement.setString(5, entity.getLastName());
-            preparedStatement.setString(6, entity.getActivationCode());
-            preparedStatement.setBoolean(7, entity.isActivate());
+            preparedStatement.setInt(4, entity.getRole().getId());
+            preparedStatement.setString(5, entity.getFirstName());
+            preparedStatement.setString(6, entity.getLastName());
+            preparedStatement.setString(7, entity.getActivationCode());
+            preparedStatement.setBoolean(8, entity.isActivate());
+            preparedStatement.setInt(9, entity.getLoyaltyPoints());
             isUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -175,11 +188,13 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER)) {
             preparedStatement.setString(1, entity.getLogin());
             preparedStatement.setString(2, entity.getEmail());
-            preparedStatement.setString(3, entity.getFirstName());
-            preparedStatement.setString(4, entity.getLastName());
-            preparedStatement.setString(5, entity.getActivationCode());
-            preparedStatement.setBoolean(6, entity.isActivate());
-            preparedStatement.setString(7, key);
+            preparedStatement.setInt(3, entity.getRole().getId());
+            preparedStatement.setString(4, entity.getFirstName());
+            preparedStatement.setString(5, entity.getLastName());
+            preparedStatement.setString(6, entity.getActivationCode());
+            preparedStatement.setBoolean(7, entity.isActivate());
+            preparedStatement.setInt(8, entity.getLoyaltyPoints());
+            preparedStatement.setString(9, key);
             isUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -195,12 +210,15 @@ public class UserDaoImpl extends BaseDao<User, String> implements UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User user = User.builder()
+                        .withId(resultSet.getLong("id"))
                         .withLogin(resultSet.getString("login"))
                         .withEmail(resultSet.getString("email"))
+                        .withRole(Role.valueOf(resultSet.getString("role_name")))
                         .withFirstName(resultSet.getString("first_name"))
                         .withLastName(resultSet.getString("last_name"))
                         .withActivationCode(resultSet.getString("activation_code"))
                         .withIsActivate(resultSet.getBoolean("is_activate"))
+                        .withLoyaltyPoints(resultSet.getInt("loyalty_points"))
                         .build();
                 users.add(user);
             }

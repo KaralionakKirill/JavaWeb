@@ -12,8 +12,8 @@ public class LocaleCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
         String locale = requestContext.getRequestParameters().get(RequestParameter.LOCALE);
-        String lastUrl = requestContext.getRequestParameters().get(RequestParameter.CURRENT_PAGE);
-        return new CommandResult(new RedirectResponse(ResponseType.REDIRECT, lastUrl),
+        String page = requestContext.getRequestParameters().get(RequestParameter.CURRENT_PAGE);
+        return new CommandResult(new ForwardResponse(ResponseType.FORWARD, page),
                 new HashMap<>(), Map.of(RequestParameter.LOCALE, locale));
     }
 }

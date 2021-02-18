@@ -7,7 +7,8 @@ import java.util.HashMap;
 public class LogoutCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new RedirectResponse(ResponseType.REDIRECT, CommandType.TO_MAIN.getCommandName()),
-                new HashMap<>(), new HashMap<>());
+        requestContext.getSessionAttributes().put(RequestAttribute.USER, null);
+        return new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.MAIN),
+                new HashMap<>(), requestContext.getSessionAttributes());
     }
 }

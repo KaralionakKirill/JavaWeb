@@ -27,11 +27,16 @@
                             <fmt:message key="navbar.profile"/></a>
                     </li>
                 </c:if>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"
+                       href="<c:url value="/controller?command=to_add_cocktail"/>">
+                        Cocktails</a>
+                </li>
             </ul>
             <div class="col-4 d-flex justify-content-end">
                 <form action="<c:url value="/controller"/>" method="post">
                     <input type="hidden" name="command" value="locale">
-                    <input type="hidden" name="page" value="${ param.command }">
+                    <input type="hidden" name="page" value="${ requestScope.page }">
                     <select id="locale" name="locale" onchange="submit()" class="form-select">
                         <option value="ru_RU" <c:if test="${locale eq 'ru_RU'}">selected</c:if>>Русский</option>
                         <option value="en_US" <c:if test="${locale eq 'en_US'}">selected</c:if>>English</option>

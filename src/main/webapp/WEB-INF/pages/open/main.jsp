@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<c:set var="page" value="/pages/main.jsp" scope="request"/>
+<c:set var="page" value="/WEB-INF/pages/open/main.jsp" scope="request"/>
 <c:set var="locale" value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}"/>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>

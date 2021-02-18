@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="page" value="/WEB-INF/pages/open/profile.jsp" scope="request"/>
 <c:set var="locale" value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}"/>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
@@ -21,28 +22,32 @@
                 <p class="card-text"><fmt:message key="loyaltyPoints"/>: ${user.loyaltyPoints}</p>
                 <p class="card-text"><fmt:message key="username"/>: ${user.login}</p>
                 <p class="card-text"><fmt:message key="email"/>: ${user.email}</p>
-                <div>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col"><fmt:message key="username"/></th>
-                            <th scope="col"><fmt:message key="email"/></th>
-                            <th scope="col"><fmt:message key="firstname"/></th>
-                            <th scope="col"><fmt:message key="lastname"/></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${requestScope.users}" var="user">
+                <c:if test="${user.role eq 'ADMIN'}">
+                    <div>
+                        <table class="table">
+                            <thead>
                             <tr>
-                                <th scope="row">${user.login}</th>
-                                <td>${user.email}</td>
-                                <td>${user.firstName}</td>
-                                <td>${user.lastName}</td>
+                                <th scope="col"><fmt:message key="username"/></th>
+                                <th scope="col"><fmt:message key="email"/></th>
+                                <th scope="col"><fmt:message key="firstname"/></th>
+                                <th scope="col"><fmt:message key="lastname"/></th>
+                                <th scope="col">Role</th>
                             </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${requestScope.users}" var="user">
+                                <tr>
+                                    <th scope="row">${user.login}</th>
+                                    <td>${user.email}</td>
+                                    <td>${user.firstName}</td>
+                                    <td>${user.lastName}</td>
+                                    <td>${user.role}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>

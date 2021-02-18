@@ -1,6 +1,7 @@
 package com.epam.bar.command;
 
 import com.epam.bar.command.impl.*;
+import com.epam.bar.service.CocktailService;
 import com.epam.bar.service.UserService;
 
 public enum CommandType {
@@ -8,11 +9,14 @@ public enum CommandType {
     LOGIN(new LoginCommand(new UserService()), "login"),
     LOCALE(new LocaleCommand(), "locale"),
     REGISTRATION(new RegistrationCommand(new UserService()), "registration"),
+    ADD_COCKTAIL(new AddCocktailCommand(new CocktailService()), "add_cocktail"),
+    ERROR(new ToErrorPage(), "error"),
     TO_LOGIN(new ToLoginCommand(),"to_login"),
     TO_REGISTRATION(new ToRegistrationCommand(),"to_registration"),
     TO_MAIN(new ToMainCommand(),"to_main"),
     TO_REGISTRATION_CONFIRM(new ToRegistrationConfirmCommand(),"to_registration_confirm"),
     TO_LOGOUT(new LogoutCommand(),"to_logout"),
+    TO_ADD_COCKTAIL(new ToAddCocktailCommand(),"to_add_cocktail"),
     TO_PROFILE(new ToProfileCommand(new UserService()),"to_profile");
 
     private Command command;

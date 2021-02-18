@@ -2,17 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<c:set var="page" value="/pages/registration.jsp" scope="request"/>
+<c:set var="page" value="/WEB-INF/pages/open/registration.jsp" scope="request"/>
 <c:set var="locale" value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}"/>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
 <html>
 <head>
-    <c:import url="parts/header.jsp"/>
+    <c:import url="../parts/header.jsp"/>
     <title><fmt:message key="registration.title"/></title>
 </head>
 <body>
-<c:import url="parts/navbar.jsp"/>
+<c:import url="../parts/navbar.jsp"/>
 <div class="container-fluid d-flex justify-content-center mt-4">
     <form name="registration" action="<c:url value="/rest"/>" method="post" class="needs-validation w-25" novalidate>
         <h2><fmt:message key="registration.caption"/></h2>
@@ -80,6 +80,6 @@
         }
     </script>
 </div>
-<c:import url="parts/footer.jsp"/>
+<c:import url="../parts/footer.jsp"/>
 </body>
 </html>

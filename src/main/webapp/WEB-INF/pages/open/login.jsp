@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<c:set var="page" value="/pages/login.jsp" scope="request"/>
+<c:set var="page" value="/WEB-INF/pages/open/login.jsp" scope="request"/>
 <c:set var="locale" value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}"/>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
@@ -25,7 +25,7 @@
             <label class="form-label" for="loginLabel"><fmt:message key="email"/></label>
             <input type="email" class="form-control" placeholder="name@example.com" name="email"
                    id="loginLabel" pattern="([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}"
-                   required>
+                   required/>
             <div class="invalid-feedback">
                 <fmt:message key="invalid.email"/>
             </div>
@@ -33,7 +33,7 @@
         <div>
             <label class="form-label" for="passwordLabel"><fmt:message key="password"/></label>
             <input type="password" name="password" class="form-control" id="passwordLabel"
-                   required>
+                   required/>
             <div class="invalid-feedback">
                 <fmt:message key="invalid.password"/>
             </div>

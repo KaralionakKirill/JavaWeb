@@ -26,8 +26,8 @@
     })()
 
     function sendRequest(name) {
-        let form = document.forms[name]
-        let data = new FormData(form)
+        let form = document.forms[name];
+        let data = new FormData(form);
         jQuery.ajax({
             url: '<c:url value="/rest"/>',
             data: data,

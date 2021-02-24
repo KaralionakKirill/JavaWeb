@@ -65,7 +65,7 @@ public class RequestContext {
         Enumeration<String> attributeNames = request.getSession(true).getAttributeNames();
         while (attributeNames.hasMoreElements()) {
             String attributeName = attributeNames.nextElement();
-            sessionAttributes.put(attributeName, request.getAttribute(attributeName));
+            sessionAttributes.put(attributeName, request.getSession().getAttribute(attributeName));
         }
         return sessionAttributes;
     }

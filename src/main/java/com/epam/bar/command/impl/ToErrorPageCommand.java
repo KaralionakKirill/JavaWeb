@@ -4,7 +4,7 @@ import com.epam.bar.command.*;
 
 import java.util.HashMap;
 
-public class ToErrorPage implements Command {
+public class ToErrorPageCommand implements Command {
 
     @Override
     public CommandResult execute(RequestContext requestContext) {

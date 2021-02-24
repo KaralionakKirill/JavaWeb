@@ -11,7 +11,7 @@ import java.util.Properties;
 
 @Log4j2
 final class ConnectorCreator {
-    private static final String DB_PROPERTIES_PATH = "database.properties";
+    private static final String DB_PROPERTIES_PATH = "property/database.properties";
     private static final String DB_URL = "db.url";
     private static final String DB_DRIVER = "db.driver";
     private static final Properties properties = new Properties();

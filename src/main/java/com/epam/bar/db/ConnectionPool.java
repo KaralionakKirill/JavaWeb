@@ -1,6 +1,7 @@
 package com.epam.bar.db;
 
 import com.epam.bar.exception.ConnectionException;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +12,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+
 
 public enum ConnectionPool {
     INSTANCE;

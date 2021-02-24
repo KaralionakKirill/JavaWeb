@@ -11,7 +11,7 @@ import java.util.Properties;
 public class AppConfig {
     private static volatile AppConfig instance;
     private final Properties properties;
-    public static final String APP_PROPERTIES= "application.properties";
+    public static final String APP_PROPERTIES= "property/application.properties";
     public static final String SERVER_PORT= "server.port";
     private static final String SERVER_HOST = "server.host";
     private static final String APP_POINTS = "app.pointsPerDollar";

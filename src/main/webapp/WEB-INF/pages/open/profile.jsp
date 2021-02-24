@@ -10,44 +10,16 @@
     <c:import url="/WEB-INF/pages/parts/header.jsp"/>
     <title><fmt:message key="profile.title"/></title>
 </head>
-<body style="background-image: url(/images/3.jpg)">
+<body>
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
 <div class="d-flex justify-content-center">
     <div class="w-50">
-        <p class="display-2 text-center">Профиль</p>
         <div class="card mt-4">
-            <h4 class="card-header">Данные</h4>
+            <h4 class="card-header"><fmt:message key="profile.data"/></h4>
             <div class="card-body" style="width: 500px;">
-                <h5 class="card-title">Info</h5>
                 <p class="card-text"><fmt:message key="loyaltyPoints"/>: ${user.loyaltyPoints}</p>
                 <p class="card-text"><fmt:message key="username"/>: ${user.login}</p>
                 <p class="card-text"><fmt:message key="email"/>: ${user.email}</p>
-                <c:if test="${user.role eq 'ADMIN'}">
-                    <div>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col"><fmt:message key="username"/></th>
-                                <th scope="col"><fmt:message key="email"/></th>
-                                <th scope="col"><fmt:message key="firstname"/></th>
-                                <th scope="col"><fmt:message key="lastname"/></th>
-                                <th scope="col">Role</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${requestScope.users}" var="user">
-                                <tr>
-                                    <th scope="row">${user.login}</th>
-                                    <td>${user.email}</td>
-                                    <td>${user.firstName}</td>
-                                    <td>${user.lastName}</td>
-                                    <td>${user.role}</td>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </c:if>
             </div>
         </div>
     </div>

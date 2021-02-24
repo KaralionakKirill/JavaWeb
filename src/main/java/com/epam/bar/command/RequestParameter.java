@@ -1,12 +1,11 @@
 package com.epam.bar.command;
 
 public class RequestParameter {
-    private RequestParameter() {
-    }
-
+    public static final String ID = "id";
     public static final String COMMAND = "command";
     public static final String LOCALE = "locale";
     public static final String CURRENT_PAGE = "page";
+    public static final String USER = "user";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String LOGIN = "login";
@@ -18,4 +17,9 @@ public class RequestParameter {
     public static final String COCKTAIL_NAME = "cocktail_name";
     public static final String ALCOHOL = "alcohol";
     public static final String COMPOSITION = "composition";
+    public static final String ROLE = "role";
+    public static final String PAGE = "page";
+
+    private RequestParameter() {
+    }
 }

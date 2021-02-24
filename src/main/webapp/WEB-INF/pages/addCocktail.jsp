@@ -33,11 +33,11 @@
                 <label  for="alcohol" class="form-label"><fmt:message key="cocktailAdd.alcohol"/></label>
                 <select id="alcohol" class="form-select" aria-label="Default select example" name="alcohol" required>
                     <option selected>Open this select menu</option>
-                    <option value="VODKA">One</option>
-                    <option value="WHISKEY">Two</option>
-                    <option value="TEQUILA">Three</option>
-                    <option value="GIN">Two</option>
-                    <option value="RUM">Three</option>
+                    <option value="VODKA">VODKA</option>
+                    <option value="WHISKEY">WHISKEY</option>
+                    <option value="TEQUILA">TEQUILA</option>
+                    <option value="GIN">GIN</option>
+                    <option value="RUM">RUM</option>
                 </select>
             </div>
         </div>
@@ -45,8 +45,10 @@
             <label for='composition' class="form-label"><fmt:message key="cocktailAdd.composition"/></label>
             <textarea id="composition" class="form-control" type="text" name="composition" required></textarea>
         </div>
-        <button type="submit" class="btn btn-dark mt-4 w-50">
-            <fmt:message key="cocktailAdd.button.add"/></button>
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-dark mt-4 w-50">
+                <fmt:message key="cocktailAdd.button.add"/></button>
+        </div>
     </form>
 </div>
 <script>

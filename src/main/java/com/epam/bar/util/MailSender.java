@@ -11,7 +11,7 @@ import java.util.Properties;
 @Log4j2
 public abstract class MailSender implements Runnable{
     public static final String ENCODING = "UTF-8";
-    private static final String MAIL_PROPERTIES = "mail.properties";
+    private static final String MAIL_PROPERTIES = "property/mail.properties";
     private static final String USER_NAME_PROPERTIES = "mail.user.name";
     private static final String USER_PASSWORD_PROPERTIES = "mail.user.password";
     private final Properties properties;

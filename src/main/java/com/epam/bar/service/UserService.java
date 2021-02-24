@@ -1,14 +1,14 @@
 package com.epam.bar.service;
 
 import com.epam.bar.dao.FieldType;
-import com.epam.bar.dao.impl.UserDaoImpl;
+import com.epam.bar.dao.UserDao;
+import com.epam.bar.entity.Role;
 import com.epam.bar.entity.User;
 import com.epam.bar.exception.DaoException;
 import com.epam.bar.exception.ServiceException;
 import com.epam.bar.util.ActivationMailSender;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,13 +16,13 @@ import java.util.concurrent.Executors;
 
 @Log4j2
 public class UserService {
-    private final UserDaoImpl userDaoImpl = new UserDaoImpl();
+    private final UserDao userDao = new UserDao();
 
     public Optional<String> login(User user, String password) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         String email = user.getEmail();
         try {
-            String dbPassword = userDaoImpl.findPassword(email);
+            String dbPassword = userDao.findPassword(email);
             if (password.equals(dbPassword)) {
                 User dbUser = findByEmail(email).get();
                 if (dbUser.isActivate()) {
@@ -34,7 +34,7 @@ public class UserService {
                     user.setLoyaltyPoints(dbUser.getLoyaltyPoints());
                     user.setActivate(dbUser.isActivate());
                     user.setBlocked(dbUser.isBlocked());
-                }else{
+                } else {
                     serverMessage = Optional.of("serverMessage.activateAccountPlease");
                 }
             } else {
@@ -56,7 +56,7 @@ public class UserService {
                 Executors.newSingleThreadExecutor().submit(emailSender);
                 try {
                     user.setActivationCode(code);
-                    userDaoImpl.addUser(user, password);
+                    userDao.addUser(user, password);
                 } catch (DaoException e) {
                     log.error(e);
                     throw new ServiceException(e);
@@ -70,16 +70,27 @@ public class UserService {
         return serverMessage;
     }
 
-    public List<User> findAllUsers(){
-        List<User> users = new ArrayList<>();
+    public List<User> findAllUsers() throws ServiceException {
+        List<User> users;
         try {
-            users = userDaoImpl.findAll();
+            users = userDao.findAll();
         } catch (DaoException e) {
-            e.printStackTrace();
+            log.error(e);
+            throw new ServiceException(e);
         }
         return users;
     }
 
+    public Optional<String> changeUserRole(int id, Role role) throws ServiceException {
+        Optional<String> serverMessage = Optional.empty();
+        try {
+            userDao.changeRole(id, role);//todo
+        } catch (DaoException e) {
+            log.error(e);
+            throw new ServiceException(e);
+        }
+        return serverMessage;
+    }
 
     public Optional<String> activateUser(String activationCode) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
@@ -89,7 +100,7 @@ public class UserService {
                 User user = userOptional.get();
                 user.setActivationCode(null);
                 user.setActivate(true);
-                userDaoImpl.update(user, user.getLogin());
+                userDao.update(user, user.getLogin());
             } catch (DaoException e) {
                 log.error(e);
                 throw new ServiceException(e);
@@ -103,7 +114,7 @@ public class UserService {
     public Optional<User> findByActivationCode(String activationCode) throws ServiceException {
         Optional<User> user;
         try {
-            user = userDaoImpl.findByField(activationCode, FieldType.ACTIVATION_CODE);
+            user = userDao.findByField(activationCode, FieldType.ACTIVATION_CODE);
         } catch (DaoException e) {
             log.error(e);
             throw new ServiceException(e);
@@ -114,7 +125,7 @@ public class UserService {
     private Optional<User> findByUsername(String name) throws ServiceException {
         Optional<User> user;
         try {
-            user = userDaoImpl.findByField(name, FieldType.LOGIN);
+            user = userDao.findByField(name, FieldType.LOGIN);
         } catch (DaoException e) {
             log.error(e);
             throw new ServiceException(e);
@@ -125,7 +136,7 @@ public class UserService {
     private Optional<User> findByEmail(String email) throws ServiceException {
         Optional<User> user;
         try {
-            user = userDaoImpl.findByField(email, FieldType.EMAIL);
+            user = userDao.findByField(email, FieldType.EMAIL);
         } catch (DaoException e) {
             log.error(e);
             throw new ServiceException(e);

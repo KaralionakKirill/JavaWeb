@@ -1,24 +1,33 @@
-package com.epam.bar.dao.impl;
+package com.epam.bar.dao;
 
-import com.epam.bar.dao.BaseDao;
-import com.epam.bar.dao.FieldType;
 import com.epam.bar.db.ConnectionPool;
+import com.epam.bar.entity.Alcohol;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.exception.DaoException;
+import lombok.extern.log4j.Log4j2;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class CocktailDaoImpl extends BaseDao<Cocktail, String> {
+@Log4j2
+public class CocktailDao extends BaseDao<String, Cocktail> {
     @Language("SQL")
     private static final String SQL_INSERT_COCKTAIL =
             "INSERT INTO cocktail(cocktail_name, alcohol_id, composition, author_id, img_name, is_approved) " +
                     "VALUES (?, ?, ?, ?, ?, ?);";
 
-    public CocktailDaoImpl() {
+    @Language("SQL")
+    private static final String SQL_SELECT_COCKTAIL =
+            "SELECT cocktail_name, alcohol_name, composition, img_name " +
+                    "FROM cocktail INNER JOIN alcohol on cocktail.alcohol_id = alcohol.id";
+
+    public CocktailDao() {
     }
 
     @Override
@@ -52,5 +61,27 @@ public class CocktailDaoImpl extends BaseDao<Cocktail, String> {
     @Override
     public Optional<Cocktail> findByField(String key, FieldType fieldType) throws DaoException {
         return Optional.empty();
+    }
+
+    @Override
+    public List<Cocktail> findAll() throws DaoException {
+        List<Cocktail> cocktails = new ArrayList<>();
+        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COCKTAIL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Cocktail cocktail = Cocktail.builder()
+                        .withName(resultSet.getString("cocktail_name"))
+                        .withAlcohol(Alcohol.valueOf(resultSet.getString("alcohol_name")))
+                        .withComposition(resultSet.getString("composition"))
+                        .withImgName(resultSet.getString("img_name"))
+                        .build();
+                cocktails.add(cocktail);
+            }
+        } catch (SQLException e) {
+            log.error(e);
+            throw new DaoException(e);
+        }
+        return cocktails;
     }
 }

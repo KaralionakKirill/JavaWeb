@@ -6,34 +6,42 @@
 <fmt:setBundle basename="property.pagecontent"/>
 <c:import url="/WEB-INF/pages/parts/sessionVar.jsp"/>
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="<c:url value="/controller?command=to_main"/>">Navbar</a>
+    <div class="container-fluid text-center">
+        <a class="navbar-brand" href="<c:url value="/controller?command=to_main"/>">
+            <img src="<c:url value="/images/logo.png"/>" alt="">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
+            <div class="navbar-nav me-auto mb-2 mb-lg-0">
                 <c:if test="${isAuthorized}">
-                    <li class="nav-item">
+                    <div class="nav-item">
                         <a class="nav-link active" aria-current="page"
                            href="<c:url value="/controller?command=to_profile"/>">
                             <fmt:message key="navbar.profile"/></a>
-                    </li>
+                    </div>
                 </c:if>
+                <c:if test="${user.role eq 'ADMIN'}">
+                    <div class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="<c:url value="/controller?command=to_users&page=1"/>">
+                            <fmt:message key="navbar.users"/></a>
+                    </div>
+                </c:if>
+                <div class="nav-item">
+                    <a class="nav-link active" aria-current="page"
+                       href="<c:url value="/controller?command=to_menu"/>">
+                        <fmt:message key="navbar.menu"/></a>
+                </div>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page"
                        href="<c:url value="/controller?command=to_add_cocktail"/>">
-                        Cocktails</a>
+                        Add cocktails</a>
                 </li>
-            </ul>
-            <div class="col-4 d-flex justify-content-end">
+            </div>
+            <div class="col-4 d-flex justify-content-end text-center">
                 <form action="<c:url value="/controller"/>" method="post">
                     <input type="hidden" name="command" value="locale">
                     <input type="hidden" name="page" value="${ requestScope.page }">

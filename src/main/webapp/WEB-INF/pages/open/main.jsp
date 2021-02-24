@@ -9,7 +9,7 @@
 <html>
 <head>
     <c:import url="/WEB-INF/pages/parts/header.jsp"/>
-    <title>T</title>
+    <title><fmt:message key="main.title"/></title>
 </head>
 <body>
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>

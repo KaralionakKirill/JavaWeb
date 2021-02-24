@@ -10,17 +10,21 @@ public enum CommandType {
     LOCALE(new LocaleCommand(), "locale"),
     REGISTRATION(new RegistrationCommand(new UserService()), "registration"),
     ADD_COCKTAIL(new AddCocktailCommand(new CocktailService()), "add_cocktail"),
-    ERROR(new ToErrorPage(), "error"),
+    ERROR(new ToErrorPageCommand(), "error"),
+    CHANGE_ROLE(new ChangeUserRoleCommand(new UserService()),"change_role"),
     TO_LOGIN(new ToLoginCommand(),"to_login"),
     TO_REGISTRATION(new ToRegistrationCommand(),"to_registration"),
     TO_MAIN(new ToMainCommand(),"to_main"),
     TO_REGISTRATION_CONFIRM(new ToRegistrationConfirmCommand(),"to_registration_confirm"),
     TO_LOGOUT(new LogoutCommand(),"to_logout"),
     TO_ADD_COCKTAIL(new ToAddCocktailCommand(),"to_add_cocktail"),
-    TO_PROFILE(new ToProfileCommand(new UserService()),"to_profile");
+    TO_PROFILE(new ToProfileCommand(),"to_profile"),
+    TO_COCKTAILS(new ToCocktailsCommand(new CocktailService()),"to_cocktails"),
+    TO_MENU(new ToMenuCommand(), "to_menu"),
+    TO_USERS(new ToUsersCommand(new UserService()), "to_users");
 
-    private Command command;
-    private String commandName;
+    private final Command command;
+    private final String commandName;
 
     CommandType(Command command, String commandName) {
         this.command = command;

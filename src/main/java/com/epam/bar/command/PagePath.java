@@ -8,6 +8,10 @@ public class PagePath {
     public static final String MAIN = "/WEB-INF/pages/open/main.jsp";
     public static final String LOGIN = "/WEB-INF/pages/open/login.jsp";
     public static final String REGISTRATION = "/WEB-INF/pages/open/registration.jsp";
-    public PagePath() {
+    public static final String USERS = "/WEB-INF/pages/secured/users.jsp";
+    public static final String COCKTAILS = "/WEB-INF/pages/open/cocktails.jsp";
+    public static final String MENU = "/WEB-INF/pages/open/menu.jsp";
+
+    private PagePath() {
     }
 }

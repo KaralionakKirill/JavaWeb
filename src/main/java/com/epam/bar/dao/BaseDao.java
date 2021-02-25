@@ -15,8 +15,6 @@ public abstract class BaseDao<K, T extends Entity> {
 
     public abstract boolean update(T entity, K key) throws DaoException;
 
-    public abstract Optional<T> findByField(K key, FieldType fieldType) throws DaoException;
-
     public abstract List<T> findAll() throws DaoException;
 
 }

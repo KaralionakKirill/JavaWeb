@@ -5,5 +5,6 @@ public enum FieldType {
     EMAIL,
     LOGIN,
     FIRSTNAME,
+    ALCOHOL,
     LASTNAME;
 }

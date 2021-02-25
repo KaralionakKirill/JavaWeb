@@ -1,6 +1,8 @@
 package com.epam.bar.service;
 
 import com.epam.bar.dao.CocktailDao;
+import com.epam.bar.dao.FieldType;
+import com.epam.bar.entity.Alcohol;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.exception.DaoException;
 import com.epam.bar.exception.ServiceException;
@@ -11,7 +13,7 @@ import java.util.Optional;
 
 @Log4j2
 public class CocktailService {
-    private final CocktailDao cocktailDao =  new CocktailDao();
+    private final CocktailDao cocktailDao = new CocktailDao();
 
     public CocktailService() {
     }
@@ -27,10 +29,10 @@ public class CocktailService {
         return serverMessage;
     }
 
-    public List<Cocktail> findAll() throws ServiceException{
+    public List<Cocktail> findAll(Alcohol alcohol) throws ServiceException {
         List<Cocktail> cocktails;
         try {
-            cocktails = cocktailDao.findAll();
+            cocktails = cocktailDao.findByField(Integer.toString(alcohol.getId()), FieldType.ALCOHOL);
         } catch (DaoException e) {
             log.error(e);
             throw new ServiceException(e);

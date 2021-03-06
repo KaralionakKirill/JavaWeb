@@ -27,7 +27,7 @@
             </div>
         </div>
         <div>
-            <label for="inputLogin"><fmt:message key="username"/></label>
+            <label for="inputLogin"><fmt:message key="userName"/></label>
             <input type="text" class="form-control" id="inputLogin"
                    name="login"
                    pattern="^[(\w)-]{4,20}" required

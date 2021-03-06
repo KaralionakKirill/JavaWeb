@@ -13,6 +13,7 @@
 </head>
 <body>
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
+<p id="server_message">${server_message}</p>
 <div class="d-flex justify-content-center">
     <div class="card mt-4 w-75">
         <div class="card-dody">
@@ -20,10 +21,11 @@
                 <table class="table table-dark table-striped w-100">
                     <thead>
                     <tr>
-                        <th scope="col"><fmt:message key="username"/></th>
+                        <th scope="col"><fmt:message key="userName"/></th>
                         <th scope="col"><fmt:message key="email"/></th>
                         <th scope="col"><fmt:message key="firstname"/></th>
                         <th scope="col"><fmt:message key="lastname"/></th>
+                        <th scope="col"><fmt:message key="loyaltyPoints"/></th>
                         <th scope="col"><fmt:message key="role"/></th>
                     </tr>
                     </thead>
@@ -35,9 +37,10 @@
                                 <td>${user.email}</td>
                                 <td>${user.firstName}</td>
                                 <td>${user.lastName}</td>
+                                <td>${user.loyaltyPoints}</td>
                                 <td>
                                     <input type="hidden" name="command" value="change_role">
-                                    <input type="hidden" name="id" value="${user.id}">
+                                    <input type="hidden" name="user_id" value="${user.id}">
                                     <select name="role" onchange="changeRole(form.name)" class="form-select">
                                         <option value="${user.role}">${user.role}</option>
                                         <option value="ADMIN">ADMIN</option>
@@ -72,8 +75,19 @@
             contentType: false,
             processData: false,
             method: 'POST',
-            /*success: onAjaxSuccess*/
+            success: onAjaxSuccess
         });
+    }
+
+    function onAjaxSuccess(data) {
+        let pMessages = document.getElementById("server_message");
+        pMessages.innerText = "";
+        let parse = JSON.parse(data);
+        let serverMessages = parse.server_message;
+        if (serverMessages != null) {
+            pMessages.innerText += serverMessages + '\n';
+            pMessages.classList.add("alert", "alert-danger");
+        }
     }
 </script>
 <c:import url="/WEB-INF/pages/parts/footer.jsp"/>

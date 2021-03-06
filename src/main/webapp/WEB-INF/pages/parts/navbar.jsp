@@ -6,9 +6,9 @@
 <fmt:setBundle basename="property.pagecontent"/>
 <c:import url="/WEB-INF/pages/parts/sessionVar.jsp"/>
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-    <div class="container-fluid text-center">
+    <div class="container-fluid d-flex justify-content-between">
         <a class="navbar-brand" href="<c:url value="/controller?command=to_main"/>">
-            <img src="<c:url value="/images/logo.png"/>" alt="">
+            <img src="<c:url value="/images/logo.png"/>" style="width: 32px; height: 32px" alt="">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,19 +30,21 @@
                             <fmt:message key="navbar.users"/></a>
                     </div>
                 </c:if>
+                <c:if test="${user.role eq 'BARMAN'}">
+                    <div class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="<c:url value="/controller?command=to_all_cocktails&page=1"/>">
+                            <fmt:message key="navbar.allCocktails"/></a>
+                    </div>
+                </c:if>
                 <div class="nav-item">
                     <a class="nav-link active" aria-current="page"
                        href="<c:url value="/controller?command=to_menu"/>">
                         <fmt:message key="navbar.menu"/></a>
                 </div>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page"
-                       href="<c:url value="/controller?command=to_add_cocktail"/>">
-                        Add cocktails</a>
-                </li>
             </div>
-            <div class="col-4 d-flex justify-content-end text-center">
-                <form action="<c:url value="/controller"/>" method="post">
+            <div class="d-flex">
+                <form action="<c:url value="/controller"/>" method="post" class="m-2">
                     <input type="hidden" name="command" value="locale">
                     <input type="hidden" name="page" value="${ requestScope.page }">
                     <select id="locale" name="locale" onchange="submit()" class="form-select">
@@ -51,14 +53,14 @@
                     </select>
                 </form>
                 <c:if test="${isAuthorized}">
-                    <form action="<c:url value="/controller"/>" method="post" class="ms-2">
+                    <form action="<c:url value="/controller"/>" method="post" class="m-2">
                         <button type="submit" class="btn btn-dark" name="command" value="to_logout">
                             <fmt:message key="navbar.logout"/>
                         </button>
                     </form>
                 </c:if>
                 <c:if test="${ not isAuthorized}">
-                    <form action="<c:url value="/controller"/>" method="post" class="ms-2">
+                    <form action="<c:url value="/controller"/>" method="post" class="m-2">
                         <button type="submit" class="btn btn-dark" name="command" value="to_login">
                             <fmt:message key="navbar.login"/>
                         </button>

@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 public class PageContent<T> {
-    private static final int PER_PAGE = 1;
+    private static final int PER_PAGE = 10;
     private final List<T> objects;
     private final int page;
     private final int totalPages;

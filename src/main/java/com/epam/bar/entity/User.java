@@ -16,4 +16,20 @@ public class User extends Entity{
     private String activationCode;
     private boolean isActivate;
     private boolean isBlocked;
+
+    public enum Role {
+        ADMIN(1),
+        USER(2),
+        BARMAN(3);
+
+        private int id;
+
+        Role(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+    }
 }

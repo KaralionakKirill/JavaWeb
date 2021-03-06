@@ -1,7 +1,6 @@
 package com.epam.bar.dao;
 
 import com.epam.bar.db.ConnectionPool;
-import com.epam.bar.entity.Role;
 import com.epam.bar.entity.User;
 import com.epam.bar.exception.DaoException;
 import lombok.extern.log4j.Log4j2;
@@ -111,7 +110,7 @@ public class UserDao extends AbstractUserDao {
                         .withId(resultSet.getLong("id"))
                         .withLogin(resultSet.getString("login"))
                         .withEmail(resultSet.getString("email"))
-                        .withRole(Role.valueOf(resultSet.getString("role_name")))
+                        .withRole(User.Role.valueOf(resultSet.getString("role_name")))
                         .withFirstName(resultSet.getString("first_name"))
                         .withLastName(resultSet.getString("last_name"))
                         .withActivationCode(resultSet.getString("activation_code"))
@@ -128,12 +127,12 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean changeRole(int id, Role role) throws DaoException {
+    public boolean changeRole(Long id, User.Role role) throws DaoException {
         boolean isUpdated;
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_CHANGE_ROLE)) {
             preparedStatement.setInt(1, role.getId());
-            preparedStatement.setInt(2, id);
+            preparedStatement.setLong(2, id);
             isUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             log.error(e);
@@ -233,7 +232,7 @@ public class UserDao extends AbstractUserDao {
                         .withId(resultSet.getLong("id"))
                         .withLogin(resultSet.getString("login"))
                         .withEmail(resultSet.getString("email"))
-                        .withRole(Role.valueOf(resultSet.getString("role_name")))
+                        .withRole(User.Role.valueOf(resultSet.getString("role_name")))
                         .withFirstName(resultSet.getString("first_name"))
                         .withLastName(resultSet.getString("last_name"))
                         .withActivationCode(resultSet.getString("activation_code"))

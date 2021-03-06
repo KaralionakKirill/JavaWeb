@@ -1,7 +1,7 @@
 package com.epam.bar.command.impl;
 
 import com.epam.bar.command.*;
-import com.epam.bar.entity.Alcohol;
+import com.epam.bar.dao.FieldType;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.exception.ServiceException;
 import com.epam.bar.service.CocktailService;
@@ -21,10 +21,11 @@ public class ToCocktailsCommand implements Command {
 
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        Alcohol alcohol = Alcohol.valueOf(requestContext.getRequestParameters().get(RequestParameter.ALCOHOL));
+        Cocktail.Alcohol alcohol = Cocktail.Alcohol.valueOf(requestContext.getRequestParameters().get(RequestParameter.ALCOHOL));
         CommandResult commandResult;
         try {
-            List<Cocktail> cocktails = service.findAll(alcohol);
+            String alcoholId = Integer.toString(alcohol.getId());
+            List<Cocktail> cocktails = service.findByField(alcoholId, FieldType.ALCOHOL);
             cocktails = cocktails.stream().filter(Cocktail::isApproved).collect(Collectors.toList());
             if (cocktails.size() != 0) {
                 commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.COCKTAILS),

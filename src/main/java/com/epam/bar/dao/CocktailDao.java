@@ -1,7 +1,6 @@
 package com.epam.bar.dao;
 
 import com.epam.bar.db.ConnectionPool;
-import com.epam.bar.entity.Alcohol;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.exception.DaoException;
 import lombok.extern.log4j.Log4j2;
@@ -21,22 +20,30 @@ public class CocktailDao extends AbstractCocktailDao {
 
     @Language("SQL")
     private static final String SQL_UPDATE_USER =
-            "UPDATE cocktail SET cocktail_name = ?, alcohol_id = ?, composition = ?, author_id = ?, " +
-                    "img_name = ?, is_approved = ? WHERE cocktail_name = ?;";
+            "UPDATE cocktail SET cocktail_name = ?, alcohol_id = ?, composition = ?, author = ?, " +
+                    "img_name = ?, is_approved = ? WHERE id = ?;";
+
+    @Language("SQL")
+    private static final String SQL_ENDORSE_COCKTAIL =
+            "UPDATE cocktail SET is_approved = ? WHERE id = ?;";
 
     @Language("SQL")
     private static final String SQL_INSERT_COCKTAIL =
-            "INSERT INTO cocktail(cocktail_name, alcohol_id, composition, author_id, img_name, is_approved) " +
+            "INSERT INTO cocktail(cocktail_name, alcohol_id, composition, author, img_name, is_approved) " +
                     "VALUES (?, ?, ?, ?, ?, ?);";
 
     @Language("SQL")
     private static final String SQL_SELECT_COCKTAIL =
-            "SELECT cocktail_name, alcohol_name, composition, img_name, is_approved  " +
+            "SELECT cocktail.id, cocktail_name, author, alcohol_name, composition, img_name, is_approved  " +
                     "FROM cocktail INNER JOIN alcohol on cocktail.alcohol_id = alcohol.id";
+    @Language("SQL")
+    private static final String SQL_SELECT__BY_ID =
+            "SELECT cocktail.id, cocktail_name, author, alcohol_name, composition, img_name, is_approved  " +
+                    "FROM cocktail INNER JOIN alcohol on cocktail.alcohol_id = alcohol.id where cocktail.id = ?";
 
     @Language("SQL")
     private static final String SQL_SELECT_BY_ALCOHOL =
-            "SELECT cocktail_name, alcohol_name, composition, img_name, is_approved  " +
+            "SELECT cocktail.id, cocktail_name, author, alcohol_name, composition, img_name, is_approved  " +
                     "FROM cocktail INNER JOIN alcohol on cocktail.alcohol_id = alcohol.id " +
                     "WHERE alcohol_id = ?";
 
@@ -48,6 +55,9 @@ public class CocktailDao extends AbstractCocktailDao {
         switch (fieldType) {
             case ALCOHOL:
                 sql = SQL_SELECT_BY_ALCOHOL;
+                break;
+            case ID:
+                sql = SQL_SELECT__BY_ID;
                 break;
             default:
                 sql = SQL_SELECT_COCKTAIL;
@@ -64,7 +74,7 @@ public class CocktailDao extends AbstractCocktailDao {
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setInt(2, entity.getAlcohol().getId());
             preparedStatement.setString(3, entity.getComposition());
-            preparedStatement.setInt(4, entity.getAuthorId());
+            preparedStatement.setString(4, entity.getAuthor());
             preparedStatement.setString(5, entity.getImgName());
             preparedStatement.setBoolean(6, entity.isApproved());
             isUpdated = preparedStatement.executeUpdate() > 0;
@@ -95,7 +105,7 @@ public class CocktailDao extends AbstractCocktailDao {
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setInt(2, entity.getAlcohol().getId());
             preparedStatement.setString(3, entity.getComposition());
-            preparedStatement.setInt(4, entity.getAuthorId());
+            preparedStatement.setString(4, entity.getAuthor());
             preparedStatement.setString(5, entity.getImgName());
             preparedStatement.setBoolean(6, entity.isApproved());
             preparedStatement.setString(7, key);
@@ -116,11 +126,13 @@ public class CocktailDao extends AbstractCocktailDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Cocktail cocktail = Cocktail.builder()
+                        .withId(resultSet.getLong("cocktail.id"))
                         .withName(resultSet.getString("cocktail_name"))
-                        .withAlcohol(Alcohol.valueOf(resultSet.getString("alcohol_name")))
+                        .withAuthor(resultSet.getString("author"))
+                        .withAlcohol(Cocktail.Alcohol.valueOf(resultSet.getString("alcohol_name")))
                         .withComposition(resultSet.getString("composition"))
                         .withImgName(resultSet.getString("img_name"))
-                        .withIsApproved(resultSet.getBoolean("is_approved"))
+                        .withApproved(resultSet.getBoolean("is_approved"))
                         .build();
                 cocktails.add(cocktail);
             }
@@ -132,6 +144,21 @@ public class CocktailDao extends AbstractCocktailDao {
     }
 
     @Override
+    public boolean endorseCocktail(String id) throws DaoException {
+        boolean isUpdated;
+        try(Connection connection = ConnectionPool.INSTANCE.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_ENDORSE_COCKTAIL) ){
+            preparedStatement.setBoolean(1, true);
+            preparedStatement.setString(2, id);
+            isUpdated = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            log.error(e);
+            throw new DaoException(e);
+        }
+        return isUpdated;
+    }
+
+    @Override
     public List<Cocktail> findAll() throws DaoException {
         List<Cocktail> cocktails = new ArrayList<>();
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
@@ -139,11 +166,13 @@ public class CocktailDao extends AbstractCocktailDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Cocktail cocktail = Cocktail.builder()
+                        .withId(resultSet.getLong("cocktail.id"))
                         .withName(resultSet.getString("cocktail_name"))
-                        .withAlcohol(Alcohol.valueOf(resultSet.getString("alcohol_name")))
+                        .withAuthor(resultSet.getString("author"))
+                        .withAlcohol(Cocktail.Alcohol.valueOf(resultSet.getString("alcohol_name")))
                         .withComposition(resultSet.getString("composition"))
                         .withImgName(resultSet.getString("img_name"))
-                        .withIsApproved(resultSet.getBoolean("is_approved"))
+                        .withApproved(resultSet.getBoolean("is_approved"))
                         .build();
                 cocktails.add(cocktail);
             }

@@ -12,8 +12,25 @@ public class Cocktail extends Entity{
     private String name;
     private String composition;
     private Alcohol alcohol;
-    private int feedbackId;
-    private int authorId;
+    private String author;
     private String imgName;
-    private boolean isApproved;
+    private boolean approved;
+
+    public enum Alcohol {
+        VODKA(1),
+        WHISKEY(2),
+        TEQUILA(3),
+        GIN(4),
+        RUM(5);
+
+        private final int id;
+
+        Alcohol(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+    }
 }

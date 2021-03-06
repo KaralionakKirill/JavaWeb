@@ -13,10 +13,6 @@
 <body>
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
 <div class="d-flex justify-content-center flex-wrap">
-    <a class="mt-5" href="<c:url value="/controller?command=to_add_cocktail"/>">
-        <img src="<c:url value='/images/add.png'/>" class="img-thumbnail" style="height: 18rem; width: 18rem" alt="">
-    </a>
-
     <c:forEach items="${requestScope.cocktails}" var="cocktail">
         <div class="card m-5" style=" height: 18rem; width: 18rem;">
             <img src="<c:url value='/data/${cocktail.imgName}'/>" class="card-img-top" alt="" style="max-height: 14rem">

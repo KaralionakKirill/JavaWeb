@@ -1,7 +1,6 @@
 package com.epam.bar.command.impl;
 
 import com.epam.bar.command.*;
-import com.epam.bar.entity.Role;
 import com.epam.bar.entity.User;
 import com.epam.bar.exception.ServiceException;
 import com.epam.bar.service.UserService;
@@ -28,7 +27,7 @@ public class RegistrationCommand implements Command {
         String email = requestContext.getRequestParameters().get(RequestParameter.EMAIL);
         password = PasswordEncoder.encryption(password);
         User user = User.builder()
-                .withRole(Role.USER)
+                .withRole(User.Role.USER)
                 .withLogin(login)
                 .withEmail(email)
                 .withIsBlocked(false)
@@ -43,9 +42,9 @@ public class RegistrationCommand implements Command {
                         CommandType.TO_REGISTRATION_CONFIRM.getCommandName()),
                         new HashMap<>());
             } else {
-                commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.REGISTRATION),
-                        Map.of(RequestAttribute.SERVER_MESSAGE,
-                                LocalizationMessage.localize(requestContext.getLocale(), serverMessage.get())));
+                commandResult = new CommandResult(Map.of(RequestAttribute.SERVER_MESSAGE,
+                        LocalizationMessage.localize(requestContext.getLocale(),
+                                serverMessage.get())), new HashMap<>());
             }
         } catch (ServiceException e) {
             log.error("Registration failed" + e);

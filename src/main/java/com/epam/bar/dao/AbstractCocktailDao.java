@@ -8,4 +8,6 @@ import java.util.List;
 public abstract class AbstractCocktailDao extends BaseDao<String, Cocktail>{
 
     public abstract List<Cocktail> findByField(String key, FieldType fieldType) throws DaoException;
+
+    public abstract boolean endorseCocktail(String id) throws DaoException;
 }

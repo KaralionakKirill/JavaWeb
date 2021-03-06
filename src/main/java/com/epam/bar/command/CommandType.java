@@ -12,6 +12,9 @@ public enum CommandType {
     ADD_COCKTAIL(new AddCocktailCommand(new CocktailService()), "add_cocktail"),
     ERROR(new ToErrorPageCommand(), "error"),
     CHANGE_ROLE(new ChangeUserRoleCommand(new UserService()),"change_role"),
+    USER_EDIT_PROFILE(new EditUserProfileCommand(new UserService()),"user_edit_profile"),
+    COCKTAIL_EDIT(new EditCocktailCommand(new CocktailService()),"cocktail_edit"),
+    ENDORSE_COCKTAIL(new EndorseCocktailCommand(new CocktailService()),"endorse_cocktail"),
     TO_LOGIN(new ToLoginCommand(),"to_login"),
     TO_REGISTRATION(new ToRegistrationCommand(),"to_registration"),
     TO_MAIN(new ToMainCommand(),"to_main"),
@@ -20,6 +23,7 @@ public enum CommandType {
     TO_ADD_COCKTAIL(new ToAddCocktailCommand(),"to_add_cocktail"),
     TO_PROFILE(new ToProfileCommand(),"to_profile"),
     TO_COCKTAILS(new ToCocktailsCommand(new CocktailService()),"to_cocktails"),
+    TO_ALL_COCKTAILS(new ToAllCocktailsCommand(new CocktailService()),"to_all_cocktails"),
     TO_MENU(new ToMenuCommand(), "to_menu"),
     TO_USERS(new ToUsersCommand(new UserService()), "to_users");
 

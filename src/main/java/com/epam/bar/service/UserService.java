@@ -2,7 +2,6 @@ package com.epam.bar.service;
 
 import com.epam.bar.dao.FieldType;
 import com.epam.bar.dao.UserDao;
-import com.epam.bar.entity.Role;
 import com.epam.bar.entity.User;
 import com.epam.bar.exception.DaoException;
 import com.epam.bar.exception.ServiceException;
@@ -81,10 +80,25 @@ public class UserService {
         return users;
     }
 
-    public Optional<String> changeUserRole(int id, Role role) throws ServiceException {
+    public Optional<String> updateUser(User user) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         try {
-            userDao.changeRole(id, role);//todo
+            if (!userDao.update(user, user.getLogin())) {
+                serverMessage = Optional.of("serverMessage.updateUserException");
+            }
+        } catch (DaoException e) {
+            log.error(e);
+            throw new ServiceException(e);
+        }
+        return serverMessage;
+    }
+
+    public Optional<String> changeUserRole(Long id, User.Role role) throws ServiceException {
+        Optional<String> serverMessage = Optional.empty();
+        try {
+            if (!userDao.changeRole(id, role)) {
+                serverMessage = Optional.of("serverMessage.changeRoleException");
+            }
         } catch (DaoException e) {
             log.error(e);
             throw new ServiceException(e);

@@ -12,27 +12,30 @@ import java.util.Map;
 import java.util.Optional;
 
 @Log4j2
-public class ChangeUserRoleCommand implements Command {
-    private final UserService userService;
+public class EditUserProfileCommand implements Command {
+    private final UserService service;
 
-    public ChangeUserRoleCommand(UserService userService) {
-        this.userService = userService;
+    public EditUserProfileCommand(UserService service) {
+        this.service = service;
     }
 
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        Long userId = Long.getLong(requestContext.getRequestParameters().get(RequestParameter.USER_ID));
-        User.Role role = User.Role.valueOf(requestContext.getRequestParameters().get(RequestParameter.ROLE));
+        User user = (User) requestContext.getSessionAttributes().get(RequestParameter.USER);
+        String firstName = requestContext.getRequestParameters().get(RequestParameter.FIRST_NAME);
+        String lastName = requestContext.getRequestParameters().get(RequestParameter.LAST_NAME);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         CommandResult commandResult = new CommandResult(new HashMap<>(), new HashMap<>());
         try {
-            Optional<String> serverMessage = userService.changeUserRole(userId, role);
+            Optional<String> serverMessage = service.updateUser(user);
             if (serverMessage.isPresent()) {
                 commandResult = new CommandResult(Map.of(RequestAttribute.SERVER_MESSAGE,
                         LocalizationMessage.localize(requestContext.getLocale(), serverMessage.get())),
                         new HashMap<>());
             }
         } catch (ServiceException e) {
-            log.error("Change role failed" + e);
+            log.error("Update user failed" + e);
             commandResult = new CommandResult(Map.of(RequestAttribute.REDIRECT_COMMAND,
                     CommandType.ERROR.getCommandName()), new HashMap<>());
         }

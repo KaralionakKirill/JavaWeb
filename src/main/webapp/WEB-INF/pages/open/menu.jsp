@@ -11,9 +11,15 @@
     <c:import url="/WEB-INF/pages/parts/header.jsp"/>
     <title><fmt:message key="menu.title"/></title>
 </head>
-<body>
+<body style="background-image: url(<c:url value="/images/menu.jpg"/>)">
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
 <div class="d-flex justify-content-center flex-wrap">
+    <c:if test="${isAuthorized}">
+        <a class="m-5" href="<c:url value="/controller?command=to_add_cocktail"/>">
+            <img src="<c:url value='/images/add.png'/>"class="mt-3" style="height: 18rem; width: 18rem" alt="">
+        </a>
+    </c:if>
+
     <div class="card m-5" style="width: 20rem">
         <img class="card-img-top" src="<c:url value="/data/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>"
              alt="">

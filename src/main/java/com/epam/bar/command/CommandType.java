@@ -15,6 +15,7 @@ public enum CommandType {
     USER_EDIT_PROFILE(new EditUserProfileCommand(new UserService()),"user_edit_profile"),
     COCKTAIL_EDIT(new EditCocktailCommand(new CocktailService()),"cocktail_edit"),
     ENDORSE_COCKTAIL(new EndorseCocktailCommand(new CocktailService()),"endorse_cocktail"),
+    TO_COCKTAIL_VIEW(new ToCocktailViewCommand(new CocktailService()),"to_cocktail_view"),
     TO_LOGIN(new ToLoginCommand(),"to_login"),
     TO_REGISTRATION(new ToRegistrationCommand(),"to_registration"),
     TO_MAIN(new ToMainCommand(),"to_main"),

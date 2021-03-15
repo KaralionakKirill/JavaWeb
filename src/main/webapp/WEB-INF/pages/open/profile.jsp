@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="page" value="/WEB-INF/pages/open/profile.jsp" scope="request"/>
 <c:set var="locale" value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}"/>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
@@ -10,14 +9,14 @@
     <c:import url="/WEB-INF/pages/parts/header.jsp"/>
     <title><fmt:message key="profile.title"/></title>
 </head>
-<body style="background-image: url(<c:url value="/images/profile.jpg"/>)">
+<body style="background-image: url(<c:url value="/images/profile.jpg"/>); background-size: cover">
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
 <div class="d-flex justify-content-center">
     <div class="card mt-4">
         <h4 class="card-header"><fmt:message key="profile.data"/></h4>
         <div class="card-body" style="width: 750px;">
             <div class="row">
-                <p class="card-text col"><fmt:message key="userName"/>: ${user.login}</p>
+                <p class="card-text col"><fmt:message key="username"/>: ${user.login}</p>
                 <p class="card-text col"><fmt:message key="loyaltyPoints"/>: ${user.loyaltyPoints}</p>
             </div>
             <p class="card-text"><fmt:message key="email"/>: ${user.email}</p>

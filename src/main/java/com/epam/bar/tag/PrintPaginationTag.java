@@ -37,7 +37,7 @@ public class PrintPaginationTag extends TagSupport {
         if (page > 1) {
             String href = "href='" + url + (page - 1) + "' ";
             stringBuilder.append("<li class='page-item'>");
-            stringBuilder.append("<a class='page-link' ");
+            stringBuilder.append("<a class='page-link bg-dark' style='color: white; border-color: white;' ");
             stringBuilder.append(href);
             stringBuilder.append("aria-label='Previous'> <span aria-hidden='true'>&laquo; </span> </a>");
             stringBuilder.append("</li>");
@@ -45,7 +45,7 @@ public class PrintPaginationTag extends TagSupport {
 
         for (Integer number : body) {
             String href = "href='" + url + (number) + "' ";
-            String active = (number.equals(page)) ? "active" : "";
+            String active = (number.equals(page)) ? "activated" : "";
             stringBuilder.append("<li class='page-item ");
             if (number.equals(-1)) {
                 stringBuilder.append("disabled");
@@ -53,7 +53,13 @@ public class PrintPaginationTag extends TagSupport {
                 stringBuilder.append(active);
             }
             stringBuilder.append("'>");
-            stringBuilder.append("<a class='page-link'");
+
+            if(active.equals("activated")) {
+                stringBuilder.append("<a class='page-link bg-white' style='color: black; border-color: black;'");
+            }else{
+                stringBuilder.append("<a class='page-link bg-dark' style='color: white; border-color: white;'");
+            }
+
             if (number.equals(-1)) {
                 stringBuilder.append(" aria-disabled='true' href='#'");
             } else {
@@ -68,7 +74,7 @@ public class PrintPaginationTag extends TagSupport {
         if (!page.equals(pages) && pages > 1) {
             String href = "href='" + url + (page + 1) + "' ";
             stringBuilder.append("<li class='page-item'>");
-            stringBuilder.append("<a class='page-link' ");
+            stringBuilder.append("<a class='page-link bg-dark' style='color: white; border-color: white;' ");
             stringBuilder.append(href);
             stringBuilder.append("aria-label='Next'> <span aria-hidden='true'>&raquo; </span> </a>");
             stringBuilder.append("</li>");

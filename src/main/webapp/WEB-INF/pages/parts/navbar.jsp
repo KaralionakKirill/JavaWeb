@@ -46,7 +46,7 @@
             <div class="d-flex">
                 <form action="<c:url value="/controller"/>" method="post" class="m-2">
                     <input type="hidden" name="command" value="locale">
-                    <input type="hidden" name="page" value="${ requestScope.page }">
+                    <input type="hidden" name="currUrl" id="currUrl">
                     <select id="locale" name="locale" onchange="submit()" class="form-select">
                         <option value="ru_RU" <c:if test="${locale eq 'ru_RU'}">selected</c:if>>Русский</option>
                         <option value="en_US" <c:if test="${locale eq 'en_US'}">selected</c:if>>English</option>

@@ -4,7 +4,7 @@ public class RequestParameter {
     public static final String USER_ID = "user_id";
     public static final String COMMAND = "command";
     public static final String LOCALE = "locale";
-    public static final String CURRENT_PAGE = "page";
+    public static final String CURRENT_URL = "currUrl";
     public static final String USER = "user";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
@@ -20,6 +20,7 @@ public class RequestParameter {
     public static final String ROLE = "role";
     public static final String PAGE = "page";
     public static final String COCKTAIL_ID = "cocktail_id";
+    public static final String REPEAT_PASSWORD = "repeatPassword";
 
     private RequestParameter() {
     }

@@ -14,8 +14,7 @@ public class User extends Entity{
     private Role role;
     private Integer loyaltyPoints;
     private String activationCode;
-    private boolean isActivate;
-    private boolean isBlocked;
+    private boolean activated;
 
     public enum Role {
         ADMIN(1),

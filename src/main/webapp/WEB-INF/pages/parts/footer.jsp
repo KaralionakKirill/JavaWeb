@@ -7,6 +7,7 @@
         integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
         crossorigin="anonymous"></script>
 <script>
+    document.getElementById("currUrl").value = window.location.search;
 
     (function () {
         'use strict'

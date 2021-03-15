@@ -6,6 +6,7 @@ import com.epam.bar.entity.User;
 import com.epam.bar.exception.DaoException;
 import com.epam.bar.exception.ServiceException;
 import com.epam.bar.util.ActivationMailSender;
+import com.epam.bar.util.PasswordEncoder;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
@@ -20,19 +21,19 @@ public class UserService {
     public Optional<String> login(User user, String password) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         String email = user.getEmail();
+        password = PasswordEncoder.encryption(password);
         try {
             String dbPassword = userDao.findPassword(email);
             if (password.equals(dbPassword)) {
                 User dbUser = findByEmail(email).get();
-                if (dbUser.isActivate()) {
+                if (dbUser.isActivated()) {
                     user.setId(dbUser.getId());
                     user.setLogin(dbUser.getLogin());
                     user.setRole(dbUser.getRole());
                     user.setFirstName(dbUser.getFirstName());
                     user.setLastName(dbUser.getLastName());
                     user.setLoyaltyPoints(dbUser.getLoyaltyPoints());
-                    user.setActivate(dbUser.isActivate());
-                    user.setBlocked(dbUser.isBlocked());
+                    user.setActivated(dbUser.isActivated());
                 } else {
                     serverMessage = Optional.of("serverMessage.activateAccountPlease");
                 }
@@ -48,6 +49,7 @@ public class UserService {
 
     public Optional<String> register(User user, String password) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
+        password = PasswordEncoder.encryption(password);
         if (findByEmail(user.getEmail()).isEmpty()) {
             if (findByUsername(user.getLogin()).isEmpty()) {
                 String code = UUID.randomUUID().toString();
@@ -113,7 +115,7 @@ public class UserService {
             try {
                 User user = userOptional.get();
                 user.setActivationCode(null);
-                user.setActivate(true);
+                user.setActivated(true);
                 userDao.update(user, user.getLogin());
             } catch (DaoException e) {
                 log.error(e);
@@ -136,7 +138,7 @@ public class UserService {
         return user;
     }
 
-    private Optional<User> findByUsername(String name) throws ServiceException {
+    public Optional<User> findByUsername(String name) throws ServiceException {
         Optional<User> user;
         try {
             user = userDao.findByField(name, FieldType.LOGIN);
@@ -147,7 +149,7 @@ public class UserService {
         return user;
     }
 
-    private Optional<User> findByEmail(String email) throws ServiceException {
+    public Optional<User> findByEmail(String email) throws ServiceException {
         Optional<User> user;
         try {
             user = userDao.findByField(email, FieldType.EMAIL);

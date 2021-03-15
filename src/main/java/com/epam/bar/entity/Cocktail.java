@@ -21,7 +21,8 @@ public class Cocktail extends Entity{
         WHISKEY(2),
         TEQUILA(3),
         GIN(4),
-        RUM(5);
+        RUM(5),
+        CHAMPAGNE(6);
 
         private final int id;
 

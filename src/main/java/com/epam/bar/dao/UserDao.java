@@ -56,7 +56,7 @@ public class UserDao extends AbstractUserDao {
 
     @Language("SQL")
     private static final String SQL_SELECT_BY_LOGIN =
-            "SELECT login, email, role_name, first_name, last_name, activation_code, is_activate, loyalty_points " +
+            "SELECT bu.id, login, email, role_name, first_name, last_name, activation_code, is_activate, loyalty_points " +
                     "FROM base_user AS bu INNER JOIN user_role AS ur on bu.role_id = ur.id WHERE login = ?;";
 
     @Language("SQL")
@@ -114,7 +114,7 @@ public class UserDao extends AbstractUserDao {
                         .withFirstName(resultSet.getString("first_name"))
                         .withLastName(resultSet.getString("last_name"))
                         .withActivationCode(resultSet.getString("activation_code"))
-                        .withIsActivate(resultSet.getBoolean("is_activate"))
+                        .withActivated(resultSet.getBoolean("is_activate"))
                         .withLoyaltyPoints(resultSet.getInt("loyalty_points"))
                         .build();
                 optionalUser = Optional.of(user);
@@ -170,7 +170,7 @@ public class UserDao extends AbstractUserDao {
             preparedStatement.setString(5, entity.getFirstName());
             preparedStatement.setString(6, entity.getLastName());
             preparedStatement.setString(7, entity.getActivationCode());
-            preparedStatement.setBoolean(8, entity.isActivate());
+            preparedStatement.setBoolean(8, entity.isActivated());
             preparedStatement.setInt(9, entity.getLoyaltyPoints());
             isUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -210,7 +210,7 @@ public class UserDao extends AbstractUserDao {
             preparedStatement.setString(4, entity.getFirstName());
             preparedStatement.setString(5, entity.getLastName());
             preparedStatement.setString(6, entity.getActivationCode());
-            preparedStatement.setBoolean(7, entity.isActivate());
+            preparedStatement.setBoolean(7, entity.isActivated());
             preparedStatement.setInt(8, entity.getLoyaltyPoints());
             preparedStatement.setString(9, key);
             isUpdated = preparedStatement.executeUpdate() > 0;
@@ -236,7 +236,7 @@ public class UserDao extends AbstractUserDao {
                         .withFirstName(resultSet.getString("first_name"))
                         .withLastName(resultSet.getString("last_name"))
                         .withActivationCode(resultSet.getString("activation_code"))
-                        .withIsActivate(resultSet.getBoolean("is_activate"))
+                        .withActivated(resultSet.getBoolean("is_activate"))
                         .withLoyaltyPoints(resultSet.getInt("loyalty_points"))
                         .build();
                 users.add(user);

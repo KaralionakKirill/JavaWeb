@@ -64,7 +64,6 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public String getHeader(String name) {
-
         String value = super.getHeader(name);
         return stripXSS(value);
     }

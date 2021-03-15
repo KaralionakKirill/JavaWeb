@@ -69,7 +69,7 @@ public class CocktailService {
         return serverMessage;
     }
 
-    private Optional<Cocktail> findCocktailById(String id) throws ServiceException {
+    public Optional<Cocktail> findCocktailById(String id) throws ServiceException {
         Optional<Cocktail> cocktail = Optional.empty();
         try {
             List<Cocktail> cocktails = cocktailDao.findByField(id, FieldType.ID);

@@ -2,6 +2,7 @@ package com.epam.bar.command.impl;
 
 import com.epam.bar.command.*;
 import com.epam.bar.entity.Cocktail;
+import com.epam.bar.entity.User;
 import com.epam.bar.exception.ServiceException;
 import com.epam.bar.service.CocktailService;
 import com.epam.bar.util.LocalizationMessage;
@@ -30,20 +31,21 @@ public class AddCocktailCommand implements Command {
         String name = requestContext.getRequestParameters().get(RequestParameter.COCKTAIL_NAME);
         String alcohol = requestContext.getRequestParameters().get(RequestParameter.ALCOHOL);
         String composition = requestContext.getRequestParameters().get(RequestParameter.COMPOSITION);
+        User user = (User) requestContext.getSessionAttributes().get(RequestParameter.USER);
         Cocktail cocktail = Cocktail.builder()
                 .withAuthor(author)
                 .withName(name)
                 .withComposition(composition)
                 .withAlcohol(Cocktail.Alcohol.valueOf(alcohol))
                 .withImgName(filename)
-                .withApproved(false)
+                .withApproved(user.getRole() == User.Role.ADMIN)
                 .build();
         CommandResult commandResult;
         try {
             Optional<String> serverMessage = service.addCocktail(cocktail);
             if (serverMessage.isEmpty()) {
                 img.write(filename);
-                commandResult = new CommandResult(Map.of(RequestAttribute.ACCEPTANCE_MESSAGE,
+                commandResult = new CommandResult(Map.of(RequestAttribute.CONFIRMATION_MESSAGE,
                         LocalizationMessage.localize(requestContext.getLocale(), "acceptanceMessage")),
                         new HashMap<>());
             } else {

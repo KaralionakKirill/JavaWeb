@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<c:set var="page" value="/WEB-INF/pages/open/registration.jsp" scope="request"/>
 <c:set var="locale" value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}"/>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
@@ -20,35 +19,35 @@
         <input type="hidden" name="command" value="registration">
         <div class="mt-2">
             <label for="inputEmail"><fmt:message key="email"/></label>
-            <input id="inputEmail" class="form-control" type="email" name="email" required
-                   placeholder="name@example.com"/>
+            <input id="inputEmail" class="form-control" type="email" name="email"
+                   pattern="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$" required/>
             <div class="invalid-feedback">
-                <fmt:message key="invalid.email"/>
+                <fmt:message key="prescription.email"/>
             </div>
         </div>
         <div>
-            <label for="inputLogin"><fmt:message key="userName"/></label>
+            <label for="inputLogin"><fmt:message key="username"/></label>
             <input type="text" class="form-control" id="inputLogin"
                    name="login"
-                   pattern="^[(\w)-]{4,20}" required
-                   placeholder="<fmt:message key="placeholder.username"/>"/>
+                   pattern="^[A-Za-z_]{4,20}$" required/>
+            <div class="invalid-feedback">
+                <fmt:message key="prescription.username"/>
+            </div>
         </div>
         <div>
             <label for="inputPassword"><fmt:message key="password"/></label>
             <input type="password" class="form-control" id="inputPassword" name="password"
-                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={};:><.,/?`~±§-])(?=[^\r\n\t\f\v]+$).{8,20}$"
-                   required/>
+                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z_!@#$%^&*]{6,}" required/>
             <div class="invalid-feedback">
-                <fmt:message key="invalid.password"/>
+                <fmt:message key="prescription.password"/>
             </div>
         </div>
         <div>
             <label for="repeatPassword"><fmt:message key="repeat.password"/></label>
-            <input type="password" class="form-control" id="repeatPassword" name="password"
-                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={};:><.,/?`~±§-])(?=[^\r\n\t\f\v]+$).{8,20}$"
-                   required/>
+            <input type="password" class="form-control" id="repeatPassword" name="repeatPassword"
+                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z_!@#$%^&*]{6,}" required/>
             <div class="invalid-feedback">
-                <fmt:message key="invalid.password"/>
+                <fmt:message key="prescription.password"/>
             </div>
         </div>
         <div class="mt-2">

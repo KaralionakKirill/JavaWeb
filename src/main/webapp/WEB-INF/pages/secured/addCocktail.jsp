@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<c:set var="page" value="/WEB-INF/pages/secured/addCocktail.jsp" scope="request"/>
 <c:set var="locale" value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}"/>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
@@ -39,6 +38,7 @@
                     <option value="TEQUILA"><fmt:message key="tequila"/></option>
                     <option value="GIN"><fmt:message key="gin"/></option>
                     <option value="RUM"><fmt:message key="rum"/></option>
+                    <option value="CHAMPAGNE"><fmt:message key="champagne"/></option>
                 </select>
             </div>
         </div>
@@ -56,21 +56,21 @@
     function onAjaxSuccess(data) {
         let sMessage = document.getElementById("server_message");
         sMessage.innerText = "";
-        let aMessages = document.getElementById("acceptance_message");
-        aMessages.innerText = "";
+        let aMessage = document.getElementById("confirmation_message");
+        aMessage.innerText = "";
 
         let parse = JSON.parse(data);
 
-        let serverMessages = parse.server_message;
-        if (serverMessages != null) {
-            sMessage.innerText += serverMessages + '\n';
+        let serverMessage = parse.server_message;
+        if (serverMessage != null) {
+            sMessage.innerText += serverMessage + '\n';
             sMessage.classList.add("alert", "alert-danger");
         }
 
-        let acceptanceMessages = parse.acceptance_message;
-        if (serverMessages != null) {
-            aMessages.innerText += acceptanceMessages + '\n';
-            aMessages.classList.add("alert", "alert-success");
+        let confirmationMessage = parse.confirmation_message;
+        if (confirmationMessage != null) {
+            aMessage.innerText += confirmationMessage + '\n';
+            aMessage.classList.add("alert", "alert-success");
         }
 
         let redirectCommand = parse.redirect_command;

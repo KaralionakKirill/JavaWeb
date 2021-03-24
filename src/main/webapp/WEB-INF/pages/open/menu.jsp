@@ -20,7 +20,7 @@
     </c:if>
 
     <div class="card m-5" style="width: 20rem">
-        <img class="card-img-top" src="<c:url value="/data/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>"
+        <img class="card-img-top" src="<c:url value="/uploads/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>"
              alt="">
         <div class="card-body text-center">
             <h3 class="card-title"><fmt:message key="vodka"/></h3>
@@ -32,7 +32,7 @@
 
     <div class="card m-5" style="width: 20rem">
         <img class="card-img-top"
-             src="<c:url value="/data/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>" alt="">
+             src="<c:url value="/uploads/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>" alt="">
         <div class="card-body text-center">
             <h3 class="card-title"><fmt:message key="tequila"/></h3>
             <a class="btn btn-dark w-75" href="<c:url value="/controller?command=to_cocktails&alcohol=TEQUILA"/>">
@@ -43,7 +43,7 @@
 
     <div class="card m-5" style="width: 20rem">
         <img class="card-img-top"
-             src="<c:url value="/data/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>" alt="">
+             src="<c:url value="/uploads/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>" alt="">
         <div class="card-body text-center">
             <h3 class="card-title"><fmt:message key="whiskey"/></h3>
             <a class="btn btn-dark w-75" href="<c:url value="/controller?command=to_cocktails&alcohol=WHISKEY"/>">
@@ -54,7 +54,7 @@
 
     <div class="card m-5" style="width: 20rem">
         <img class="card-img-top"
-             src="<c:url value="/data/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>" alt="">
+             src="<c:url value="/uploads/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>" alt="">
         <div class="card-body text-center">
             <h3 class="card-title"><fmt:message key="gin"/></h3>
             <a class="btn btn-dark w-75" href="<c:url value="/controller?command=to_cocktails&alcohol=GIN"/>">
@@ -65,7 +65,7 @@
 
     <div class="card m-5" style="width: 20rem">
         <img class="card-img-top"
-             src="<c:url value="/data/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>" alt="">
+             src="<c:url value="/uploads/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>" alt="">
         <div class="card-body text-center">
             <h3 class="card-title"><fmt:message key="rum"/></h3>
             <a class="btn btn-dark w-75" href="<c:url value="/controller?command=to_cocktails&alcohol=RUM"/>">
@@ -75,7 +75,7 @@
     </div>
 
     <div class="card m-5" style="width: 20rem">
-        <img class="card-img-top" src="<c:url value="/data/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>"
+        <img class="card-img-top" src="<c:url value="/uploads/3fcbf3f5-f054-4152-addb-9c7185578fc9GI_hHwTS5xc.jpg"/>"
              alt="">
         <div class="card-body text-center">
             <h3 class="card-title"><fmt:message key="champagne"/></h3>

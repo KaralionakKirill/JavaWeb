@@ -12,7 +12,10 @@
 </head>
 <body>
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
-<p id="server_message">${server_message}</p>
+<div class="container d-flex justify-content-center mt-2">
+    <p id="server_message">${server_message}</p>
+    <p id="confirmation_message">${confirmation_message}</p>
+</div>
 <c:if test="${not empty requestScope.pageContent}">
     <div class="d-flex justify-content-center">
         <div style="width: 70rem">
@@ -22,6 +25,7 @@
                     <th scope="col"><fmt:message key="cocktailName"/></th>
                     <th scope="col"><fmt:message key="alcohol"/></th>
                     <th scope="col"><fmt:message key="author"/></th>
+                    <th scope="col"><fmt:message key="rate"/></th>
                     <th scope="col"><fmt:message key="isApproved"/></th>
                 </tr>
                 </thead>
@@ -31,7 +35,8 @@
                         onclick='cocktailViewing(${app:objToJSON(cocktail)})'>
                         <th scope="row">${cocktail.name}</th>
                         <td>${cocktail.alcohol}</td>
-                        <td>${cocktail.author}</td>
+                        <td>${cocktail.author.login}</td>
+                        <td>${cocktail.rate}/5</td>
                         <c:if test="${cocktail.approved eq 'false'}">
                             <td><fmt:message key="barman.cocktail.notApproved"/></td>
                         </c:if>
@@ -68,17 +73,24 @@
                             <img id="img" alt="" src="" style="object-fit: cover; max-width:100%; max-height:100%;">
                         </div>
                         <div style="width: 30rem">
-                            <input type="hidden" name="command" value="cocktail_edit">
+                            <input type="hidden" name="command" id="command">
                             <input type="hidden" name="cocktail_id" id="cocktail_id">
                             <div class=" mt-4 ">
                                 <label for="nameId" class="form-label"><fmt:message key="cocktail.name"/></label>
-                                <input type="text" id="nameId" class="form-control" name="cocktail_name" required/>
+                                <input type="text" id="nameId" class="form-control" name="cocktail_name"
+                                       pattern=".{4,30}" required/>
+                                <div class="invalid-feedback">
+                                    <fmt:message key="prescription.cocktailName"/>
+                                </div>
                             </div>
                             <div class="mt-4">
                                 <label for='composition' class="form-label"><fmt:message
                                         key="cocktail.composition"/></label>
                                 <textarea id="composition" class="form-control h-50" type="text" name="composition"
-                                          required></textarea>
+                                          maxlength="500" minlength="10" required></textarea>
+                                <div class="invalid-feedback">
+                                    <fmt:message key="prescription.composition"/>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -87,10 +99,13 @@
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
                         <fmt:message key="button.close"/>
                     </button>
-                    <button type="submit" class="btn btn-dark" data-bs-dismiss="modal">
+                    <button type="submit" class="btn btn-dark" onclick='changeInputValue("delete")'>
+                        <fmt:message key="button.delete"/>
+                    </button>
+                    <button type="submit" class="btn btn-dark" onclick='changeInputValue("edit")'>
                         <fmt:message key="button.save"/>
                     </button>
-                    <button id="approveButton" type="button" onclick='endorseCocktail()' class="btn btn-dark" data-bs-dismiss="modal">
+                    <button id="approveButton" type="submit" onclick='changeInputValue("endorse")' class="btn btn-dark">
                         <fmt:message key="barman.button.approved"/>
                     </button>
                 </div>
@@ -99,16 +114,8 @@
     </div>
 </div>
 <script>
-    function endorseCocktail() {
-        let id = document.getElementById('cocktail_id').value;
-        jQuery.ajax({
-            url: '<c:url value="/rest?command=endorse_cocktail&cocktail_id="/>'.concat(id),
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            success: onAjaxSuccess
-        });
+    function changeInputValue(command) {
+        document.getElementById("command").value = command + "_cocktail";
     }
 
     function cocktailViewing(obj) {
@@ -116,23 +123,39 @@
         document.getElementById('modalTitle').innerText = obj.name;
         document.getElementById('nameId').value = obj.name;
         document.getElementById('composition').value = obj.composition;
-        document.getElementById('img').src = '/data/'.concat(obj.imgName);
+        document.getElementById('img').src = '/uploads/'.concat(obj.imgName);
         document.getElementById('approveButton').disabled = !!obj.approved;
     }
 
     function onAjaxSuccess(data) {
+        $('#modal').modal('hide');
         let pMessages = document.getElementById("server_message");
         pMessages.innerText = "";
+
+        let cMessages = document.getElementById("confirmation_message");
+        cMessages.innerText = "";
+
         let parse = JSON.parse(data);
+
         let serverMessages = parse.server_message;
         if (serverMessages != null) {
             pMessages.innerText += serverMessages + '\n';
             pMessages.classList.add("alert", "alert-danger");
         }
-        let redirectCommand = parse.redirect_command;
-        if (redirectCommand != null) {
-            window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand + "&page=1";
+
+        let confirmMessages = parse.confirmation_message;
+        if (confirmMessages != null) {
+            cMessages.innerText += confirmMessages + '\n';
+            cMessages.classList.add("alert", "alert-success");
         }
+
+        setTimeout(() => {
+            let redirectCommand = parse.redirect_command;
+            if (redirectCommand != null) {
+                window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand + "&page=1";
+            }
+        }, 3000)
+
     }
 
 </script>

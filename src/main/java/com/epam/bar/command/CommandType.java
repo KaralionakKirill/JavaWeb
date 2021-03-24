@@ -2,6 +2,7 @@ package com.epam.bar.command;
 
 import com.epam.bar.command.impl.*;
 import com.epam.bar.service.CocktailService;
+import com.epam.bar.service.ReviewService;
 import com.epam.bar.service.UserService;
 
 public enum CommandType {
@@ -11,11 +12,13 @@ public enum CommandType {
     REGISTRATION(new RegistrationCommand(new UserService()), "registration"),
     ADD_COCKTAIL(new AddCocktailCommand(new CocktailService()), "add_cocktail"),
     ERROR(new ToErrorPageCommand(), "error"),
-    CHANGE_ROLE(new ChangeUserRoleCommand(new UserService()),"change_role"),
+    UPDATE_USER(new UpdateUserCommand(new UserService()),"update_user"),
+    ADD_REVIEW(new AddReviewCommand(new ReviewService()),"add_review"),
     USER_EDIT_PROFILE(new EditUserProfileCommand(new UserService()),"user_edit_profile"),
-    COCKTAIL_EDIT(new EditCocktailCommand(new CocktailService()),"cocktail_edit"),
+    EDIT_COCKTAIL(new EditCocktailCommand(new CocktailService()),"edit_cocktail"),
     ENDORSE_COCKTAIL(new EndorseCocktailCommand(new CocktailService()),"endorse_cocktail"),
-    TO_COCKTAIL_VIEW(new ToCocktailViewCommand(new CocktailService()),"to_cocktail_view"),
+    DELETE_COCKTAIL(new DeleteCocktailCommand(new CocktailService()),"delete_cocktail"),
+    TO_COCKTAIL_VIEW(new ToCocktailViewCommand(new CocktailService(), new ReviewService()),"to_cocktail_view"),
     TO_LOGIN(new ToLoginCommand(),"to_login"),
     TO_REGISTRATION(new ToRegistrationCommand(),"to_registration"),
     TO_MAIN(new ToMainCommand(),"to_main"),

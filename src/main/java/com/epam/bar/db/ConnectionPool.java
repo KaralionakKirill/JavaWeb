@@ -1,7 +1,6 @@
 package com.epam.bar.db;
 
 import com.epam.bar.exception.ConnectionException;
-import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -77,7 +76,7 @@ public enum ConnectionPool {
             try {
                 freeConnection.take().finalClose();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         deregisterDrivers();

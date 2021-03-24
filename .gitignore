@@ -1,3 +1,5 @@
 .idea
 target
+lib
+logs
 *.iml

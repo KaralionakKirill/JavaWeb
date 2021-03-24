@@ -26,7 +26,7 @@ public class PageContent<T> {
         int end = page * PER_PAGE;
         int diff = Math.abs(objects.size() - end);
         end = (diff >= PER_PAGE) ? end : end - diff;
-        for(int i = start; i < end; i++){
+        for (int i = start; i < end; i++) {
             copyObjects.add(objects.get(i));
         }
         return copyObjects;

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @WebServlet(urlPatterns = {"/rest"})
-@MultipartConfig(location = "D:\\Labs\\EPAM\\JavaWeb\\src\\main\\webapp\\data", maxFileSize = 1024 * 1024 * 5,
+@MultipartConfig(location = "D:\\Labs\\EPAM\\JavaWeb\\target\\JavaWeb-1.0-SNAPSHOT\\uploads", maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 2)
 public class RestServlet extends HttpServlet {
     @Override
@@ -28,7 +28,7 @@ public class RestServlet extends HttpServlet {
 
         String reqCommand = request.getParameter(RequestParameter.COMMAND);
         Optional<Command> commandOptional = CommandProvider.defineCommand(reqCommand);
-        Command command = commandOptional.orElseThrow(IllegalArgumentException::new);
+        Command command = commandOptional.orElse(CommandType.ERROR.getCommand());
         CommandResult commandResult = command.execute(content);
         commandResult.getSessionAttributes().forEach(request.getSession()::setAttribute);
         response.getWriter().write(new ObjectMapper().writeValueAsString(commandResult.getAttributes()));

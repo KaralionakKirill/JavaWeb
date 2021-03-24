@@ -8,7 +8,7 @@ public class LogoutCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
         requestContext.getSessionAttributes().put(RequestParameter.USER, null);
-        return new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.MAIN),
+        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.MAIN),
                 new HashMap<>(), requestContext.getSessionAttributes());
     }
 }

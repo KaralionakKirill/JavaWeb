@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Log4j2
-public class EditUserProfileCommand implements Command {
+public class EditUserProfileCommand implements Command, UserCommand {
     private final UserService service;
 
     public EditUserProfileCommand(UserService service) {
@@ -26,12 +26,18 @@ public class EditUserProfileCommand implements Command {
         String lastName = requestContext.getRequestParameters().get(RequestParameter.LAST_NAME);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        CommandResult commandResult = new CommandResult(new HashMap<>(), new HashMap<>());
+        CommandResult commandResult;
         try {
             Optional<String> serverMessage = service.updateUser(user);
-            if (serverMessage.isPresent()) {
+            if (serverMessage.isEmpty()) {
+                commandResult = new CommandResult(Map.of(RequestAttribute.CONFIRMATION_MESSAGE,
+                        LocalizationMessage.localize(requestContext.getLocale(), "serverMessage.editUserSuccess"),
+                        RequestAttribute.REDIRECT_COMMAND, CommandType.TO_PROFILE.getCommandName()),
+                        new HashMap<>());
+            }else {
                 commandResult = new CommandResult(Map.of(RequestAttribute.SERVER_MESSAGE,
-                        LocalizationMessage.localize(requestContext.getLocale(), serverMessage.get())),
+                        LocalizationMessage.localize(requestContext.getLocale(), serverMessage.get()),
+                        RequestAttribute.REDIRECT_COMMAND, CommandType.TO_PROFILE.getCommandName()),
                         new HashMap<>());
             }
         } catch (ServiceException e) {

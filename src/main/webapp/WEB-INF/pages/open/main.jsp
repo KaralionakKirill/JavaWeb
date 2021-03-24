@@ -13,6 +13,7 @@
 <body style="background-image: url(<c:url value="/images/menu.jpg"/>); background-size: cover">
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
 
+
 <c:import url="/WEB-INF/pages/parts/footer.jsp"/>
 </body>
 </html>

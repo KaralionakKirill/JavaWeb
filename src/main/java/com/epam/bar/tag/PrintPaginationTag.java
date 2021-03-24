@@ -54,9 +54,9 @@ public class PrintPaginationTag extends TagSupport {
             }
             stringBuilder.append("'>");
 
-            if(active.equals("activated")) {
+            if (active.equals("activated")) {
                 stringBuilder.append("<a class='page-link bg-white' style='color: black; border-color: black;'");
-            }else{
+            } else {
                 stringBuilder.append("<a class='page-link bg-dark' style='color: white; border-color: white;'");
             }
 

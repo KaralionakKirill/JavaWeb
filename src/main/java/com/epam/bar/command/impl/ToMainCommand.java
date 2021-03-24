@@ -7,6 +7,6 @@ import java.util.HashMap;
 public class ToMainCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.MAIN), new HashMap<>(), new HashMap<>());
+        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.MAIN), new HashMap<>(), new HashMap<>());
     }
 }

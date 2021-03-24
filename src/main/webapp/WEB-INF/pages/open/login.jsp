@@ -47,24 +47,24 @@
             </div>
         </div>
     </form>
-    <script>
-        function onAjaxSuccess(data) {
-            let pMessages = document.getElementById("server_message");
-            pMessages.innerText = "";
-            let parse = JSON.parse(data);
-            let serverMessages = parse.server_message;
-            if (serverMessages != null) {
-                pMessages.innerText += serverMessages + '\n';
-                pMessages.classList.add("alert", "alert-danger");
-            }
-
-            let redirectCommand = parse.redirect_command;
-            if (redirectCommand != null) {
-                window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand;
-            }
-        }
-    </script>
 </div>
+<script>
+    function onAjaxSuccess(data) {
+        let pMessages = document.getElementById("server_message");
+        pMessages.innerText = "";
+        let parse = JSON.parse(data);
+        let serverMessages = parse.server_message;
+        if (serverMessages != null) {
+            pMessages.innerText += serverMessages + '\n';
+            pMessages.classList.add("alert", "alert-danger");
+        }
+
+        let redirectCommand = parse.redirect_command;
+        if (redirectCommand != null) {
+            window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand;
+        }
+    }
+</script>
 <c:import url="/WEB-INF/pages/parts/footer.jsp"/>
 </body>
 </html>

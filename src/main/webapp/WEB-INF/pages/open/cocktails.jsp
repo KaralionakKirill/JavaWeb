@@ -15,7 +15,7 @@
 <div class="d-flex justify-content-center flex-wrap">
     <c:forEach items="${requestScope.cocktails}" var="cocktail">
         <div class="card m-5" style="width: 20rem">
-            <img src="<c:url value='/data/${cocktail.imgName}'/>" class="card-img-top" alt="" style="object-fit: cover">
+            <img src="<c:url value='/uploads/${cocktail.imgName}'/>" class="card-img-top" alt="" style="object-fit: cover">
             <div class="card-body text-center">
                 <h3 class="card-title">${cocktail.name}</h3>
                 <div class="d-flex justify-content-center">

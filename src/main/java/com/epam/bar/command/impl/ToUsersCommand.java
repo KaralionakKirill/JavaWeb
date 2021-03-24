@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Log4j2
-public class ToUsersCommand implements Command {
+public class ToUsersCommand implements Command, AdminCommand {
     private final UserService service;
 
     public ToUsersCommand(UserService service) {
@@ -27,15 +27,15 @@ public class ToUsersCommand implements Command {
             List<User> users = service.findAllUsers();
             if(users.size() != 0){
                 PageContent<User> pageContent = new PageContent<>(users, page);
-                commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.USERS),
+                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.USERS),
                         Map.of(RequestAttribute.PAGE_CONTENT, pageContent), new HashMap<>());
             }else{
-                commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.USERS),
+                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.USERS),
                         new HashMap<>(), new HashMap<>());
             }
         } catch (ServiceException e) {
             log.error(e);
-            commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.ERROR_PAGE),
+            commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE),
                     new HashMap<>(), new HashMap<>());
         }
         return commandResult;

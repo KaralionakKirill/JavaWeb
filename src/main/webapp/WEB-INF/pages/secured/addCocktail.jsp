@@ -15,24 +15,30 @@
 <div class="container d-flex justify-content-center">
     <form name="add-cocktail" action="<c:url value="/rest"/>" method="post" class="needs-validation w-50" novalidate
           enctype="multipart/form-data">
-        <p id="server_message">${server_message}</p>
-        <p id="acceptance_message">${acceptance_message}</p>
-        <input type="hidden" name="author" value="${user.login}">
+        <div class="mt-2">
+            <p id="server_message">${server_message}</p>
+            <p id="confirmation_message">${confirmation_message}</p>
+        </div>
         <input type="hidden" name="command" value="add_cocktail">
         <div class="form-group">
             <label for="img" class="form-label"><fmt:message key="cocktailAdd.title"/></label>
             <input id="img" class="form-control" type="file" name="image" accept="image/x-png,image/jpeg,image/jpg"
                    required/>
+            <div class="invalid-feedback">
+                <fmt:message key="prescription.img"/>
+            </div>
         </div>
         <div class="form-group mt-4 row">
-            <div class="col-5">
+            <div class="col-7">
                 <label for="nameId" class="form-label"><fmt:message key="cocktail.name"/></label>
-                <input type="text" id="nameId" class="form-control" name="cocktail_name" required/>
+                <input type="text" id="nameId" class="form-control" name="cocktail_name" pattern=".{4,30}" required/>
+                <div class="invalid-feedback">
+                    <fmt:message key="prescription.cocktailName"/>
+                </div>
             </div>
             <div class="col-5">
-                <label  for="alcohol" class="form-label"><fmt:message key="cocktail.alcohol"/></label>
-                <select id="alcohol" class="form-select" aria-label="Default select example" name="alcohol" required>
-                    <option selected><fmt:message key="cocktail.chooseAlcohol"/></option>
+                <label  for="alcohol" class="form-label"><fmt:message key="cocktail.chooseAlcohol"/></label>
+                <select id="alcohol" class="form-select" name="alcohol" required>
                     <option value="VODKA"><fmt:message key="vodka"/></option>
                     <option value="WHISKEY"><fmt:message key="whiskey"/></option>
                     <option value="TEQUILA"><fmt:message key="tequila"/></option>
@@ -44,7 +50,11 @@
         </div>
         <div class="form-group mt-4">
             <label for='composition' class="form-label"><fmt:message key="cocktail.composition"/></label>
-            <textarea id="composition" class="form-control" type="text" name="composition" required></textarea>
+            <textarea id="composition" class="form-control" type="text" name="composition"
+                      maxlength="255" minlength="10" required></textarea>
+            <div class="invalid-feedback">
+                <fmt:message key="prescription.composition"/>
+            </div>
         </div>
         <div class="d-flex justify-content-center">
             <button type="submit" class="btn btn-dark mt-4 w-50">
@@ -73,10 +83,12 @@
             aMessage.classList.add("alert", "alert-success");
         }
 
-        let redirectCommand = parse.redirect_command;
-        if (redirectCommand != null) {
-            window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand;
-        }
+        setTimeout(() => {
+            let redirectCommand = parse.redirect_command;
+            if (redirectCommand != null) {
+                window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand;
+            }
+        }, 3000)
     }
 </script>
 <c:import url="/WEB-INF/pages/parts/footer.jsp"/>

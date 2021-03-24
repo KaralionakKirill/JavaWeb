@@ -8,30 +8,13 @@ import lombok.EqualsAndHashCode;
 @Data
 @Builder(setterPrefix = "with")
 public class Cocktail extends Entity{
-    private Long id;
+    private int id;
     private String name;
     private String composition;
     private Alcohol alcohol;
-    private String author;
+    private double rate;
+    private User author;
     private String imgName;
     private boolean approved;
 
-    public enum Alcohol {
-        VODKA(1),
-        WHISKEY(2),
-        TEQUILA(3),
-        GIN(4),
-        RUM(5),
-        CHAMPAGNE(6);
-
-        private final int id;
-
-        Alcohol(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
 }

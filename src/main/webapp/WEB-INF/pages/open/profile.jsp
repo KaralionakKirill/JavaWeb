@@ -11,6 +11,10 @@
 </head>
 <body style="background-image: url(<c:url value="/images/profile.jpg"/>); background-size: cover">
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
+<div class="container d-flex justify-content-center mt-2">
+    <p id="server_message">${server_message}</p>
+    <p id="confirmation_message">${confirmation_message}</p>
+</div>
 <div class="d-flex justify-content-center">
     <div class="card mt-4">
         <h4 class="card-header"><fmt:message key="profile.data"/></h4>
@@ -40,7 +44,6 @@
             <form name="edit" action="<c:url value="/controller"/>" method="post" class="needs-validation"
                   novalidate accept-charset="UTF-8">
                 <div class="modal-body">
-                    <p id="server_message" class="text-danger"></p>
                     <input type="hidden" name="command" value="user_edit_profile">
                     <div class="row mt-3">
                         <div class="col-6">
@@ -69,18 +72,33 @@
 </div>
 <script>
     function onAjaxSuccess(data) {
+        $('#modal').modal('hide');
         let pMessages = document.getElementById("server_message");
         pMessages.innerText = "";
+
+        let cMessages = document.getElementById("confirmation_message");
+        cMessages.innerText = "";
+
         let parse = JSON.parse(data);
+
         let serverMessages = parse.server_message;
         if (serverMessages != null) {
             pMessages.innerText += serverMessages + '\n';
             pMessages.classList.add("alert", "alert-danger");
         }
-        let redirectCommand = parse.redirect_command;
-        if (redirectCommand != null) {
-            window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand;
+
+        let confirmMessages = parse.confirmation_message;
+        if (confirmMessages != null) {
+            cMessages.innerText += confirmMessages + '\n';
+            cMessages.classList.add("alert", "alert-success");
         }
+
+        setTimeout(() => {
+            let redirectCommand = parse.redirect_command;
+            if (redirectCommand != null) {
+                window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand + "&page=1";
+            }
+        }, 5000)
     }
 </script>
 <c:import url="/WEB-INF/pages/parts/footer.jsp"/>

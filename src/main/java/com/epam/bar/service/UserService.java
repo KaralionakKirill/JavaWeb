@@ -1,7 +1,7 @@
 package com.epam.bar.service;
 
-import com.epam.bar.dao.FieldType;
 import com.epam.bar.dao.UserDao;
+import com.epam.bar.dao.field.UserField;
 import com.epam.bar.entity.User;
 import com.epam.bar.exception.DaoException;
 import com.epam.bar.exception.ServiceException;
@@ -25,17 +25,20 @@ public class UserService {
         try {
             String dbPassword = userDao.findPassword(email);
             if (password.equals(dbPassword)) {
-                User dbUser = findByEmail(email).get();
-                if (dbUser.isActivated()) {
-                    user.setId(dbUser.getId());
-                    user.setLogin(dbUser.getLogin());
-                    user.setRole(dbUser.getRole());
-                    user.setFirstName(dbUser.getFirstName());
-                    user.setLastName(dbUser.getLastName());
-                    user.setLoyaltyPoints(dbUser.getLoyaltyPoints());
-                    user.setActivated(dbUser.isActivated());
-                } else {
-                    serverMessage = Optional.of("serverMessage.activateAccountPlease");
+                User dbUser = findByField(email, UserField.EMAIL).get();
+                if(!dbUser.isBlocked()) {
+                    if (dbUser.isActivated()) {
+                        user.setId(dbUser.getId());
+                        user.setLogin(dbUser.getLogin());
+                        user.setRole(dbUser.getRole());
+                        user.setFirstName(dbUser.getFirstName());
+                        user.setLastName(dbUser.getLastName());
+                        user.setLoyaltyPoints(dbUser.getLoyaltyPoints());
+                    } else {
+                        serverMessage = Optional.of("serverMessage.activateAccountPlease");
+                    }
+                }else{
+                    serverMessage = Optional.of("serverMessage.blockedAccount");
                 }
             } else {
                 serverMessage = Optional.of("serverMessage.incorrectUsernameOrPassword");
@@ -50,14 +53,14 @@ public class UserService {
     public Optional<String> register(User user, String password) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         password = PasswordEncoder.encryption(password);
-        if (findByEmail(user.getEmail()).isEmpty()) {
-            if (findByUsername(user.getLogin()).isEmpty()) {
+        if (findByField(user.getEmail(), UserField.EMAIL).isEmpty()) {
+            if (findByField(user.getLogin(), UserField.LOGIN).isEmpty()) {
                 String code = UUID.randomUUID().toString();
                 Runnable emailSender = new ActivationMailSender(code, user.getEmail());
                 Executors.newSingleThreadExecutor().submit(emailSender);
                 try {
                     user.setActivationCode(code);
-                    userDao.addUser(user, password);
+                    userDao.add(user, password);
                 } catch (DaoException e) {
                     log.error(e);
                     throw new ServiceException(e);
@@ -85,21 +88,9 @@ public class UserService {
     public Optional<String> updateUser(User user) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         try {
-            if (!userDao.update(user, user.getLogin())) {
+            String id = user.getId().toString();
+            if (!userDao.update(user, id)) {
                 serverMessage = Optional.of("serverMessage.updateUserException");
-            }
-        } catch (DaoException e) {
-            log.error(e);
-            throw new ServiceException(e);
-        }
-        return serverMessage;
-    }
-
-    public Optional<String> changeUserRole(Long id, User.Role role) throws ServiceException {
-        Optional<String> serverMessage = Optional.empty();
-        try {
-            if (!userDao.changeRole(id, role)) {
-                serverMessage = Optional.of("serverMessage.changeRoleException");
             }
         } catch (DaoException e) {
             log.error(e);
@@ -110,13 +101,13 @@ public class UserService {
 
     public Optional<String> activateUser(String activationCode) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
-        Optional<User> userOptional = findByActivationCode(activationCode);
+        Optional<User> userOptional = findByField(activationCode, UserField.ACTIVATION_CODE);
         if (userOptional.isPresent()) {
             try {
                 User user = userOptional.get();
                 user.setActivationCode(null);
                 user.setActivated(true);
-                userDao.update(user, user.getLogin());
+                userDao.update(user, user.getId().toString());
             } catch (DaoException e) {
                 log.error(e);
                 throw new ServiceException(e);
@@ -127,32 +118,10 @@ public class UserService {
         return serverMessage;
     }
 
-    public Optional<User> findByActivationCode(String activationCode) throws ServiceException {
+    public Optional<User> findByField(String id, UserField field) throws ServiceException {
         Optional<User> user;
         try {
-            user = userDao.findByField(activationCode, FieldType.ACTIVATION_CODE);
-        } catch (DaoException e) {
-            log.error(e);
-            throw new ServiceException(e);
-        }
-        return user;
-    }
-
-    public Optional<User> findByUsername(String name) throws ServiceException {
-        Optional<User> user;
-        try {
-            user = userDao.findByField(name, FieldType.LOGIN);
-        } catch (DaoException e) {
-            log.error(e);
-            throw new ServiceException(e);
-        }
-        return user;
-    }
-
-    public Optional<User> findByEmail(String email) throws ServiceException {
-        Optional<User> user;
-        try {
-            user = userDao.findByField(email, FieldType.EMAIL);
+            user = userDao.findByField(id, field);
         } catch (DaoException e) {
             log.error(e);
             throw new ServiceException(e);

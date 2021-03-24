@@ -2,9 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title></title></head>
-    <body>
-        <c:redirect url="/controller?command=to_main"/>
-    </body>
+<head>
+    <title></title></head>
+<body>
+<jsp:forward page="/controller?command=to_main"/>
+</body>
 </html>

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Log4j2
-public class ToAllCocktailsCommand implements Command {
+public class ToAllCocktailsCommand implements Command, BarmanCommand {
     private final CocktailService service;
 
     public ToAllCocktailsCommand(CocktailService service) {
@@ -27,15 +27,15 @@ public class ToAllCocktailsCommand implements Command {
             List<Cocktail> cocktails = service.findAll();
             if(cocktails.size() != 0){
                 PageContent<Cocktail> pageContent = new PageContent<>(cocktails, page);
-                commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.COCKTAILS_LIST),
+                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.COCKTAILS_LIST),
                         Map.of(RequestAttribute.PAGE_CONTENT, pageContent), new HashMap<>());
             }else{
-                commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.COCKTAILS_LIST),
+                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.COCKTAILS_LIST),
                         new HashMap<>(), new HashMap<>());
             }
         } catch (ServiceException e) {
             log.error(e);
-            commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.ERROR_PAGE),
+            commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE),
                     new HashMap<>(), new HashMap<>());
         }
         return commandResult;

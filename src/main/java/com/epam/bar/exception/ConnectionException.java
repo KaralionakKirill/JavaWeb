@@ -1,6 +1,6 @@
 package com.epam.bar.exception;
 
-public class ConnectionException extends Exception{
+public class ConnectionException extends Exception {
     public ConnectionException() {
     }
 

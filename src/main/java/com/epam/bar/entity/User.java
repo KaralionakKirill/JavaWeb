@@ -15,20 +15,6 @@ public class User extends Entity{
     private Integer loyaltyPoints;
     private String activationCode;
     private boolean activated;
+    private boolean blocked;
 
-    public enum Role {
-        ADMIN(1),
-        USER(2),
-        BARMAN(3);
-
-        private int id;
-
-        Role(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
 }

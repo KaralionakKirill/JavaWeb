@@ -1,6 +1,7 @@
 package com.epam.bar.db;
 
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,8 +10,8 @@ import java.sql.SQLException;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
-@Log4j2
 final class ConnectorCreator {
+    private static final Logger logger = LogManager.getLogger(ConnectorCreator.class);
     private static final String DB_PROPERTIES_PATH = "property/database.properties";
     private static final String DB_URL = "db.url";
     private static final String DB_DRIVER = "db.driver";
@@ -25,7 +26,7 @@ final class ConnectorCreator {
             Class.forName(driverName);
             DATABASE_URL = (String) properties.get(DB_URL);
         } catch (IOException | ClassNotFoundException | MissingResourceException e) {
-            log.fatal("fatal error: config file" + e);
+            logger.fatal("fatal error: config file" + e);
             throw new RuntimeException(e);
         }
     }

@@ -9,7 +9,7 @@ public class CommandProvider {
 
     public static Optional<Command> defineCommand(String commandName) {
         Optional<Command> current;
-        if (commandName == null && commandName.isBlank()) {
+        if (commandName == null) {
             return Optional.empty();
         }
         try {

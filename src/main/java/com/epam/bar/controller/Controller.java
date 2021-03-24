@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet(urlPatterns = {"/controller", "*.do"})
+@WebServlet(urlPatterns = {"/controller"})
 @Log4j2
 public class Controller extends HttpServlet {
     public void init() throws ServletException {
@@ -32,14 +32,14 @@ public class Controller extends HttpServlet {
         RequestContext content = new RequestContext(request);
         String reqCommand = request.getParameter(RequestParameter.COMMAND);
         Optional<Command> commandOptional = CommandProvider.defineCommand(reqCommand);
-        Command command = commandOptional.orElseThrow(IllegalArgumentException::new);
+        Command command = commandOptional.orElse(CommandType.ERROR.getCommand());
         CommandResult commandResult = command.execute(content);
 
         commandResult.getAttributes().forEach(request::setAttribute);
         commandResult.getSessionAttributes().forEach(request.getSession()::setAttribute);
         ResponseContext responseContext = commandResult.getResponseContext();
 
-        if (responseContext.getType().equals(ResponseType.FORWARD)) {
+        if (responseContext.getType().equals(ResponseContext.ResponseType.FORWARD)) {
             String page = ((ForwardResponse) responseContext).getPage();
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(page);
             requestDispatcher.forward(request, response);

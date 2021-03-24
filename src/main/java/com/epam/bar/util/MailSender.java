@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Log4j2
-public abstract class MailSender implements Runnable{
+public abstract class MailSender implements Runnable {
     public static final String ENCODING = "UTF-8";
     private static final String MAIL_PROPERTIES = "property/mail.properties";
     private static final String USER_NAME_PROPERTIES = "mail.user.name";

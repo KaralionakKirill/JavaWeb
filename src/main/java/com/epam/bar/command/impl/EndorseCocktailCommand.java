@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Log4j2
-public class EndorseCocktailCommand implements Command {
+public class EndorseCocktailCommand implements Command, BarmanCommand {
     private final CocktailService service;
 
     public EndorseCocktailCommand(CocktailService service) {
@@ -21,13 +21,16 @@ public class EndorseCocktailCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
         String id = requestContext.getRequestParameters().get(RequestParameter.COCKTAIL_ID);
-        CommandResult commandResult = new CommandResult(new HashMap<>(), new HashMap<>());
+        CommandResult commandResult;
         try {
             Optional<String> serverMessage = service.endorseCocktail(id);
-            if (serverMessage.isPresent()) {
-                commandResult = new CommandResult(
-                        Map.of(RequestAttribute.SERVER_MESSAGE, LocalizationMessage.localize(requestContext.getLocale(),
-                                serverMessage.get())), new HashMap<>());
+            if (serverMessage.isEmpty()) {
+                commandResult = new CommandResult(Map.of(RequestAttribute.CONFIRMATION_MESSAGE,
+                        LocalizationMessage.localize(requestContext.getLocale(), "serverMessage.endorseCocktailSuccess"),
+                        RequestAttribute.REDIRECT_COMMAND, CommandType.TO_ALL_COCKTAILS.getCommandName()), new HashMap<>());
+            } else {
+                commandResult = new CommandResult(Map.of(RequestAttribute.SERVER_MESSAGE,
+                        LocalizationMessage.localize(requestContext.getLocale(), serverMessage.get())), new HashMap<>());
             }
         } catch (ServiceException e) {
             log.error("Endorse cocktail failed" + e);

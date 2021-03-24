@@ -12,7 +12,10 @@
 </head>
 <body>
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
-<p id="server_message">${server_message}</p>
+<div class="container d-flex justify-content-center mt-2">
+    <p id="server_message">${server_message}</p>
+    <p id="confirmation_message">${confirmation_message}</p>
+</div>
 <c:if test="${not empty requestScope.pageContent}">
     <div class="d-flex justify-content-center">
         <div style="width: 70rem">
@@ -21,40 +24,36 @@
                 <tr>
                     <th scope="col"><fmt:message key="username"/></th>
                     <th scope="col"><fmt:message key="email"/></th>
-                    <th scope="col"><fmt:message key="firstname"/></th>
-                    <th scope="col"><fmt:message key="lastname"/></th>
                     <th scope="col"><fmt:message key="loyaltyPoints"/></th>
                     <th scope="col"><fmt:message key="role"/></th>
-                    <th scope="col"><fmt:message key="isActivated"/></th>
+                    <th scope="col"><fmt:message key="blocking"/></th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${requestScope.pageContent.objects}" var="user">
-                    <form name="${user.login}" action="<c:url value="/rest"/>" method="post">
-                        <tr>
-                            <th scope="row">${user.login}</th>
-                            <td>${user.email}</td>
-                            <td>${user.firstName}</td>
-                            <td>${user.lastName}</td>
-                            <td>${user.loyaltyPoints}</td>
-                            <td>
-                                <input type="hidden" name="command" value="change_role">
-                                <input type="hidden" name="user_id" value="${user.id}">
-                                <select name="role" onchange="changeRole(form.name)" class="form-select">
-                                    <option value="${user.role}">${user.role}</option>
-                                    <option value="ADMIN">ADMIN</option>
-                                    <option value="USER">USER</option>
-                                    <option value="BARMAN">BARMAN</option>
-                                </select>
-                            </td>
-                            <c:if test="${user.activated eq 'false'}">
-                                <td><fmt:message key="activated"/></td>
-                            </c:if>
-                            <c:if test="${user.activated eq 'true'}">
-                                <td><fmt:message key="notActivated"/></td>
-                            </c:if>
-                        </tr>
-                    </form>
+                    <tr>
+                        <th scope="row">${user.login}</th>
+                        <td>${user.email}</td>
+                        <td>${user.loyaltyPoints}</td>
+                        <td>
+                            <select id="role-${user.id}" onchange="changeRole(${user.id})" class="form-select">
+                                <option value="${user.role}">${user.role}</option>
+                                <option value="ADMIN">ADMIN</option>
+                                <option value="USER">USER</option>
+                                <option value="BARMAN">BARMAN</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input name="block" class="form-check-input" type="checkbox"
+                                   id="check-${user.id}" <c:if test="${user.blocked}">checked</c:if>>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-light" onclick="saveChanges(${user.id})">
+                                <fmt:message key="button.save"/>
+                            </button>
+                        </td>
+                    </tr>
                 </c:forEach>
                 </tbody>
             </table>
@@ -69,9 +68,12 @@
     </div>
 </c:if>
 <script>
-    function changeRole(name) {
-        let form = document.forms[name];
-        let data = new FormData(form);
+    function saveChanges(id) {
+        let data = new FormData();
+        data.append('user_id', id);
+        data.append('role', document.getElementById('role-' + id).value);
+        data.append('block', document.getElementById('check-' + id).checked);
+        data.append('command', 'update_user');
         jQuery.ajax({
             url: '<c:url value="/rest"/>',
             data: data,
@@ -79,19 +81,37 @@
             contentType: false,
             processData: false,
             method: 'POST',
-            success: onAjaxSuccess
+            success: successChange
         });
     }
 
-    function onAjaxSuccess(data) {
+    function successChange(data) {
         let pMessages = document.getElementById("server_message");
         pMessages.innerText = "";
+
+        let cMessages = document.getElementById("confirmation_message");
+        cMessages.innerText = "";
+
         let parse = JSON.parse(data);
+
         let serverMessages = parse.server_message;
         if (serverMessages != null) {
             pMessages.innerText += serverMessages + '\n';
             pMessages.classList.add("alert", "alert-danger");
         }
+
+        let confirmMessages = parse.confirmation_message;
+        if (confirmMessages != null) {
+            cMessages.innerText += confirmMessages + '\n';
+            cMessages.classList.add("alert", "alert-success");
+        }
+
+        setTimeout(() => {
+            let redirectCommand = parse.redirect_command;
+            if (redirectCommand != null) {
+                window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand + "&page=1";
+            }
+        }, 3000)
     }
 </script>
 <c:import url="/WEB-INF/pages/parts/footer.jsp"/>

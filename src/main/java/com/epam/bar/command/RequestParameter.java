@@ -21,6 +21,13 @@ public class RequestParameter {
     public static final String PAGE = "page";
     public static final String COCKTAIL_ID = "cocktail_id";
     public static final String REPEAT_PASSWORD = "repeatPassword";
+    public static final String BLOCK = "block";
+    public static final String FALSE = "false";
+    public static final String TRUE = "true";
+    public static final String FEEDBACK = "feedback";
+    public static final String RATE = "rate";
+    public static final String AUTHOR_ID = "author_id";
+    public static final String COCKTAIL = "cocktail";
 
     private RequestParameter() {
     }

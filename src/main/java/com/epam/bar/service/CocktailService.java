@@ -1,7 +1,7 @@
 package com.epam.bar.service;
 
 import com.epam.bar.dao.CocktailDao;
-import com.epam.bar.dao.FieldType;
+import com.epam.bar.dao.field.CocktailField;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.exception.DaoException;
 import com.epam.bar.exception.ServiceException;
@@ -20,7 +20,9 @@ public class CocktailService {
     public Optional<String> addCocktail(Cocktail cocktail) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         try {
-            cocktailDao.add(cocktail);
+            if (!cocktailDao.add(cocktail)) {
+                serverMessage = Optional.of("serverMessage.addCocktailException");
+            }
         } catch (DaoException e) {
             log.error(e);
             throw new ServiceException(e);
@@ -28,10 +30,10 @@ public class CocktailService {
         return serverMessage;
     }
 
-    public List<Cocktail> findByField(String key, FieldType fieldType) throws ServiceException {
+    public List<Cocktail> findByField(String key, CocktailField field) throws ServiceException {
         List<Cocktail> cocktails;
         try {
-            cocktails = cocktailDao.findByField(key, fieldType);
+            cocktails = cocktailDao.findByField(key, field);
         } catch (DaoException e) {
             log.error(e);
             throw new ServiceException(e);
@@ -58,13 +60,15 @@ public class CocktailService {
             cocktail.setName(name);
             cocktail.setComposition(composition);
             try {
-                cocktailDao.update(cocktail, id);
+                if (!cocktailDao.update(cocktail, id)) {
+                    serverMessage = Optional.of("serverMessage.editCocktailException");
+                }
             } catch (DaoException e) {
                 log.error(e);
                 throw new ServiceException(e);
             }
         } else {
-            serverMessage = Optional.of("");
+            serverMessage = Optional.of("serverMessage.editCocktailException");
         }
         return serverMessage;
     }
@@ -72,7 +76,7 @@ public class CocktailService {
     public Optional<Cocktail> findCocktailById(String id) throws ServiceException {
         Optional<Cocktail> cocktail = Optional.empty();
         try {
-            List<Cocktail> cocktails = cocktailDao.findByField(id, FieldType.ID);
+            List<Cocktail> cocktails = cocktailDao.findByField(id, CocktailField.ID);
             if (cocktails.size() > 0) {
                 cocktail = Optional.of(cocktails.get(0));
             }
@@ -87,7 +91,20 @@ public class CocktailService {
         Optional<String> serverMessage = Optional.empty();
         try {
             if (!cocktailDao.endorseCocktail(id)) {
-                serverMessage = Optional.of("");//todo
+                serverMessage = Optional.of("serverMessage.endorseCocktailException");
+            }
+        } catch (DaoException e) {
+            log.error(e);
+            throw new ServiceException(e);
+        }
+        return serverMessage;
+    }
+
+    public Optional<String> deleteCocktail(String id) throws ServiceException {
+        Optional<String> serverMessage = Optional.empty();
+        try {
+            if (!cocktailDao.remove(id)) {
+                serverMessage = Optional.of("serverMessage.deleteCocktailException");
             }
         } catch (DaoException e) {
             log.error(e);

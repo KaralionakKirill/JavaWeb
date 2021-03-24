@@ -5,11 +5,11 @@ import com.epam.bar.entity.User;
 import com.epam.bar.exception.ServiceException;
 import com.epam.bar.service.UserService;
 import com.epam.bar.util.LocalizationMessage;
+import com.epam.bar.validator.Validator;
 import com.epam.bar.validator.impl.EmailValidator;
 import com.epam.bar.validator.impl.PasswordValidator;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -25,13 +25,11 @@ public class LoginCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
         CommandResult commandResult;
-        Optional<String> serverMessage =
-                new EmailValidator(
-                        new PasswordValidator(null))
-                        .validate(requestContext.getRequestParameters());
+        String email = requestContext.getRequestParameters().get(RequestParameter.EMAIL);
+        String password = requestContext.getRequestParameters().get(RequestParameter.PASSWORD);
+        Validator validator = new EmailValidator(email, new PasswordValidator(password));
+        Optional<String> serverMessage = validator.validate();
         if (serverMessage.isEmpty()) {
-            String email = requestContext.getRequestParameters().get(RequestParameter.EMAIL);
-            String password = requestContext.getRequestParameters().get(RequestParameter.PASSWORD);
             User user = User.builder()
                     .withEmail(email)
                     .build();

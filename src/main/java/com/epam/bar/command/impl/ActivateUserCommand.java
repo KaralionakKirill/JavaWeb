@@ -26,12 +26,12 @@ public class ActivateUserCommand implements Command {
             Optional<String> serverMessage = service.activateUser(activationCode);
             if (serverMessage.isEmpty()) {
                 commandResult = new CommandResult(
-                        new ForwardResponse(ResponseType.FORWARD, PagePath.LOGIN),
+                        new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.LOGIN),
                         Map.of(RequestAttribute.VERIFICATION_MESSAGE, LocalizationMessage.localize(
                                 requestContext.getLocale(), "verificationMessage.verificationSuccess")),
                         new HashMap<>());
             }else {
-                commandResult = new CommandResult(new ForwardResponse(ResponseType.FORWARD, PagePath.LOGIN),
+                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.LOGIN),
                         Map.of(RequestAttribute.SERVER_MESSAGE, LocalizationMessage.localize(
                                         requestContext.getLocale(), serverMessage.get())), new HashMap<>());
             }

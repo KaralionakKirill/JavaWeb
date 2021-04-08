@@ -41,7 +41,7 @@
                 <h5 class="modal-title"><fmt:message key="profile.title.edit"/></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form name="edit" action="<c:url value="/controller"/>" method="post" class="needs-validation"
+            <form name="edit" action="<c:url value="/rest"/>" method="post" class="needs-validation"
                   novalidate accept-charset="UTF-8">
                 <div class="modal-body">
                     <input type="hidden" name="command" value="user_edit_profile">
@@ -50,11 +50,17 @@
                             <label for="first-name" class="form-label"><fmt:message key="firstname"/></label>
                             <input type="text" id="first-name" name="first_name" class="form-control"
                                    value='${user.firstName}' pattern="^[A-Za-zА-Яа-яЁё']{2,20}?$" required/>
+                            <div class="invalid-feedback">
+                                <fmt:message key="prescription.firstName"/>
+                            </div>
                         </div>
                         <div class="col-6">
                             <label for="last-name" class="form-label"><fmt:message key="lastname"/></label>
                             <input type="text" id="last-name" name="last_name" class="form-control"
                                    value='${user.lastName}' pattern="^[A-Za-zА-Яа-яЁё']{2,20}?$" required/>
+                            <div class="invalid-feedback">
+                                <fmt:message key="prescription.lastName"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +104,7 @@
             if (redirectCommand != null) {
                 window.location.href = '<c:url value="/controller"/>' + "?command=" + redirectCommand + "&page=1";
             }
-        }, 5000)
+        }, 3000)
     }
 </script>
 <c:import url="/WEB-INF/pages/parts/footer.jsp"/>

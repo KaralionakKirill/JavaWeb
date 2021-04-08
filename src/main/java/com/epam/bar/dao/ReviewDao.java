@@ -1,7 +1,5 @@
 package com.epam.bar.dao;
 
-import com.epam.bar.dao.field.CocktailField;
-import com.epam.bar.dao.field.UserField;
 import com.epam.bar.db.ConnectionPool;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.entity.Review;
@@ -18,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class ReviewDao extends AbstractReviewDao {
     @Language("SQL")
@@ -33,15 +35,9 @@ public class ReviewDao extends AbstractReviewDao {
             "INSERT INTO review(rate, feedback, cocktail_id, user_id) VALUES (?, ?, ?, ?);";
 
     @Language("SQL")
-    private static final String SQL_DELETE_REVIEW =
-            "DELETE FROM review WHERE id = ?;";
-
-    @Language("SQL")
     private static final String SQL_SELECT_BY_COCKTAIL_ID =
             "SELECT id, rate, feedback, cocktail_id, user_id FROM review WHERE cocktail_id = ?;";
 
-    private final UserDao userDao = new UserDao();
-    private final CocktailDao cocktailDao = new CocktailDao();
 
     @Override
     public boolean add(Review entity) throws DaoException {
@@ -74,13 +70,13 @@ public class ReviewDao extends AbstractReviewDao {
                 connection.rollback();
                 throw new DaoException(e);
             } finally {
-                if(preparedStatementReview != null){
+                if (preparedStatementReview != null) {
                     preparedStatementReview.close();
                 }
-                if(preparedStatementUser != null){
+                if (preparedStatementUser != null) {
                     preparedStatementUser.close();
                 }
-                if(preparedStatementCocktail != null){
+                if (preparedStatementCocktail != null) {
                     preparedStatementCocktail.close();
                 }
                 connection.setAutoCommit(true);
@@ -94,16 +90,7 @@ public class ReviewDao extends AbstractReviewDao {
 
     @Override
     public boolean remove(String key) throws DaoException {
-        boolean isUpdated;
-        try (Connection connection = ConnectionPool.INSTANCE.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_REVIEW)) {
-            preparedStatement.setString(1, key);
-            isUpdated = preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            log.error(e);
-            throw new DaoException(e);
-        }
-        return isUpdated;
+        throw new UnsupportedOperationException("Unsupported operation in ReviewDao");
     }
 
     @Override
@@ -117,6 +104,7 @@ public class ReviewDao extends AbstractReviewDao {
     }
 
     private User findUser(String id) throws DaoException {
+        UserDao userDao = new UserDao();
         Optional<User> user = userDao.findByField(id, UserField.ID);
         if (user.isPresent()) {
             return user.get();
@@ -126,6 +114,7 @@ public class ReviewDao extends AbstractReviewDao {
     }
 
     private Cocktail findCocktail(String id) throws DaoException {
+        CocktailDao cocktailDao = new CocktailDao();
         List<Cocktail> cocktails = cocktailDao.findByField(id, CocktailField.ID);
         if (cocktails.size() != 0) {
             return cocktails.get(0);

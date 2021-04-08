@@ -20,7 +20,7 @@
         <div class="mt-2">
             <label for="inputEmail"><fmt:message key="email"/></label>
             <input id="inputEmail" class="form-control" type="email" name="email"
-                   pattern="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$" required/>
+                   pattern="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]{1,100}$" required/>
             <div class="invalid-feedback">
                 <fmt:message key="prescription.email"/>
             </div>
@@ -29,7 +29,7 @@
             <label for="inputLogin"><fmt:message key="username"/></label>
             <input type="text" class="form-control" id="inputLogin"
                    name="login"
-                   pattern="^[A-Za-z_]{4,20}$" required/>
+                   pattern="^[A-Za-z_]{4,100}$" required/>
             <div class="invalid-feedback">
                 <fmt:message key="prescription.username"/>
             </div>
@@ -37,7 +37,7 @@
         <div>
             <label for="inputPassword"><fmt:message key="password"/></label>
             <input type="password" class="form-control" id="inputPassword" name="password"
-                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z_!@#$%^&*]{6,}" required/>
+                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z_!@#$%^&*]{6,100}" required/>
             <div class="invalid-feedback">
                 <fmt:message key="prescription.password"/>
             </div>
@@ -45,13 +45,14 @@
         <div>
             <label for="repeatPassword"><fmt:message key="repeat.password"/></label>
             <input type="password" class="form-control" id="repeatPassword" name="repeatPassword"
-                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z_!@#$%^&*]{6,}" required/>
+                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z_!@#$%^&*]{6,100}" required/>
             <div class="invalid-feedback">
                 <fmt:message key="prescription.password"/>
             </div>
         </div>
         <div class="mt-2">
-            <button id="submitButton" type="submit" class="btn btn-dark w-100"><fmt:message key="registration.button"/></button>
+            <button id="submitButton" type="submit" class="btn btn-dark w-100"><fmt:message
+                    key="registration.button"/></button>
             <div class="mt-2 d-flex justify-content-center">
                 <span>
                     <fmt:message key="registration.offer"/>

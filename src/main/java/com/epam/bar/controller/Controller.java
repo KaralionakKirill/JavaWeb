@@ -13,6 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Entry point for all simple requests
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @WebServlet(urlPatterns = {"/controller"})
 @Log4j2
 public class Controller extends HttpServlet {
@@ -34,6 +40,11 @@ public class Controller extends HttpServlet {
         Optional<Command> commandOptional = CommandProvider.defineCommand(reqCommand);
         Command command = commandOptional.orElse(CommandType.ERROR.getCommand());
         CommandResult commandResult = command.execute(content);
+
+        if (commandResult.getAttributes().containsKey(RequestAttribute.REMOVE)) {
+            String attribute = (String) commandResult.getAttributes().get(RequestAttribute.REMOVE);
+            request.getSession().removeAttribute(attribute);
+        }
 
         commandResult.getAttributes().forEach(request::setAttribute);
         commandResult.getSessionAttributes().forEach(request.getSession()::setAttribute);

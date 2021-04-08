@@ -10,20 +10,41 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The class prints a navigation of pagination
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class PrintPaginationTag extends TagSupport {
     private Integer pages;
     private Integer page;
     private String url;
 
+    /**
+     * Sets pages.
+     *
+     * @param pages the pages
+     */
     public void setPages(Integer pages) {
         this.pages = pages;
     }
 
+    /**
+     * Sets page.
+     *
+     * @param page the page
+     */
     public void setPage(Integer page) {
         this.page = page;
     }
 
+    /**
+     * Sets url.
+     *
+     * @param url the url
+     */
     public void setUrl(String url) {
         this.url = url;
     }

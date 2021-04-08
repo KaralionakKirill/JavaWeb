@@ -8,10 +8,19 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * The class proxies {@link Connection} to substitute close method
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class ProxyConnection implements Connection {
     private final Connection connection;
 
+    /**
+     * @param connection the connection
+     */
     protected ProxyConnection(Connection connection) {
         this.connection = connection;
     }
@@ -65,6 +74,9 @@ public class ProxyConnection implements Connection {
         }
     }
 
+    /**
+     * Final close.
+     */
     void finalClose() {
         try {
             connection.close();

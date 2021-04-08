@@ -1,7 +1,7 @@
 package com.epam.bar.service;
 
 import com.epam.bar.dao.CocktailDao;
-import com.epam.bar.dao.field.CocktailField;
+import com.epam.bar.dao.CocktailField;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.exception.DaoException;
 import com.epam.bar.exception.ServiceException;
@@ -10,13 +10,23 @@ import lombok.extern.log4j.Log4j2;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The class provides a business logic of application connected with {@link Cocktail}
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class CocktailService {
     private final CocktailDao cocktailDao = new CocktailDao();
 
-    public CocktailService() {
-    }
-
+    /**
+     * Add cocktail
+     *
+     * @param cocktail the cocktail
+     * @return the optional
+     * @throws ServiceException the service exception
+     */
     public Optional<String> addCocktail(Cocktail cocktail) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         try {
@@ -30,6 +40,14 @@ public class CocktailService {
         return serverMessage;
     }
 
+    /**
+     * Find cocktails by field
+     *
+     * @param key   the key
+     * @param field the field
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     public List<Cocktail> findByField(String key, CocktailField field) throws ServiceException {
         List<Cocktail> cocktails;
         try {
@@ -41,6 +59,12 @@ public class CocktailService {
         return cocktails;
     }
 
+    /**
+     * Find cocktails
+     *
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     public List<Cocktail> findAll() throws ServiceException {
         List<Cocktail> cocktails;
         try {
@@ -52,6 +76,15 @@ public class CocktailService {
         return cocktails;
     }
 
+    /**
+     * Edit cocktail
+     *
+     * @param id          the id
+     * @param name        the name
+     * @param composition the composition
+     * @return the optional with server message or empty optional
+     * @throws ServiceException the service exception
+     */
     public Optional<String> editCocktail(String id, String name, String composition) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         Optional<Cocktail> cocktailOptional = findCocktailById(id);
@@ -73,6 +106,13 @@ public class CocktailService {
         return serverMessage;
     }
 
+    /**
+     * Find cocktail by id
+     *
+     * @param id the id
+     * @return the optional
+     * @throws ServiceException the service exception
+     */
     public Optional<Cocktail> findCocktailById(String id) throws ServiceException {
         Optional<Cocktail> cocktail = Optional.empty();
         try {
@@ -87,6 +127,13 @@ public class CocktailService {
         return cocktail;
     }
 
+    /**
+     * Endorse cocktail optional.
+     *
+     * @param id the id
+     * @return the optional with server message or empty optional
+     * @throws ServiceException the service exception
+     */
     public Optional<String> endorseCocktail(String id) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         try {
@@ -100,6 +147,13 @@ public class CocktailService {
         return serverMessage;
     }
 
+    /**
+     * Delete cocktail optional.
+     *
+     * @param id the id
+     * @return the optional with server message or empty optional
+     * @throws ServiceException the service exception
+     */
     public Optional<String> deleteCocktail(String id) throws ServiceException {
         Optional<String> serverMessage = Optional.empty();
         try {

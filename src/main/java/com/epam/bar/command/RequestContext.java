@@ -7,8 +7,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.IOException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * Wraps data of the {@link HttpServletRequest}
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 public class RequestContext {
@@ -22,6 +30,13 @@ public class RequestContext {
 
     private String locale;
 
+    /**
+     * Instantiates a new Request context.
+     *
+     * @param request the request
+     * @throws IOException      the io exception
+     * @throws ServletException the servlet exception
+     */
     public RequestContext(HttpServletRequest request) throws IOException, ServletException {
         requestParameters = extractRequestParameters(request);
         requestAttributes = extractRequestAttributes(request);

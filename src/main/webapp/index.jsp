@@ -5,6 +5,6 @@
 <head>
     <title></title></head>
 <body>
-<jsp:forward page="/controller?command=to_main"/>
+<c:redirect url="/controller?command=to_main"/>
 </body>
 </html>

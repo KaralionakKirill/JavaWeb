@@ -53,18 +53,14 @@
                     </select>
                 </form>
                 <c:if test="${isAuthorized}">
-                    <form action="<c:url value="/controller"/>" method="post" class="m-2">
-                        <button type="submit" class="btn btn-dark" name="command" value="to_logout">
-                            <fmt:message key="navbar.logout"/>
-                        </button>
-                    </form>
+                    <a class="btn btn-dark m-2" href="<c:url value="/controller?command=to_logout"/>">
+                        <fmt:message key="navbar.logout"/>
+                    </a>
                 </c:if>
                 <c:if test="${ not isAuthorized}">
-                    <form action="<c:url value="/controller"/>" method="post" class="m-2">
-                        <button type="submit" class="btn btn-dark" name="command" value="to_login">
-                            <fmt:message key="navbar.login"/>
-                        </button>
-                    </form>
+                    <a class="btn btn-dark m-2" href="<c:url value="/controller?command=to_login"/>">
+                        <fmt:message key="navbar.login"/>
+                    </a>
                 </c:if>
             </div>
         </div>

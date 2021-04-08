@@ -5,30 +5,108 @@ import com.epam.bar.service.CocktailService;
 import com.epam.bar.service.ReviewService;
 import com.epam.bar.service.UserService;
 
+/**
+ * Type of {@link Command}
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 public enum CommandType {
+    /**
+     * The Verification.
+     */
     VERIFICATION(new ActivateUserCommand(new UserService()), "verification"),
-    LOGIN(new LoginCommand(new UserService()), "login"),
+    /**
+     * The Login.
+     */
+    LOGIN(new RestLoginCommand(new UserService()), "login"),
+    /**
+     * The Locale.
+     */
     LOCALE(new LocaleCommand(), "locale"),
-    REGISTRATION(new RegistrationCommand(new UserService()), "registration"),
-    ADD_COCKTAIL(new AddCocktailCommand(new CocktailService()), "add_cocktail"),
+    /**
+     * The Registration.
+     */
+    REGISTRATION(new RestRegistrationCommand(new UserService()), "registration"),
+    /**
+     * The Add cocktail.
+     */
+    ADD_COCKTAIL(new RestAddCocktailCommand(new CocktailService()), "add_cocktail"),
+    /**
+     * The Error.
+     */
     ERROR(new ToErrorPageCommand(), "error"),
-    UPDATE_USER(new UpdateUserCommand(new UserService()),"update_user"),
-    ADD_REVIEW(new AddReviewCommand(new ReviewService()),"add_review"),
-    USER_EDIT_PROFILE(new EditUserProfileCommand(new UserService()),"user_edit_profile"),
-    EDIT_COCKTAIL(new EditCocktailCommand(new CocktailService()),"edit_cocktail"),
-    ENDORSE_COCKTAIL(new EndorseCocktailCommand(new CocktailService()),"endorse_cocktail"),
-    DELETE_COCKTAIL(new DeleteCocktailCommand(new CocktailService()),"delete_cocktail"),
-    TO_COCKTAIL_VIEW(new ToCocktailViewCommand(new CocktailService(), new ReviewService()),"to_cocktail_view"),
-    TO_LOGIN(new ToLoginCommand(),"to_login"),
-    TO_REGISTRATION(new ToRegistrationCommand(),"to_registration"),
-    TO_MAIN(new ToMainCommand(),"to_main"),
-    TO_REGISTRATION_CONFIRM(new ToRegistrationConfirmCommand(),"to_registration_confirm"),
-    TO_LOGOUT(new LogoutCommand(),"to_logout"),
-    TO_ADD_COCKTAIL(new ToAddCocktailCommand(),"to_add_cocktail"),
-    TO_PROFILE(new ToProfileCommand(),"to_profile"),
-    TO_COCKTAILS(new ToCocktailsCommand(new CocktailService()),"to_cocktails"),
-    TO_ALL_COCKTAILS(new ToAllCocktailsCommand(new CocktailService()),"to_all_cocktails"),
+    /**
+     * The Update user.
+     */
+    UPDATE_USER(new RestUpdateUserCommand(new UserService()), "update_user"),
+    /**
+     * The Add review.
+     */
+    ADD_REVIEW(new RestAddReviewCommand(new ReviewService()), "add_review"),
+    /**
+     * The User edit profile.
+     */
+    USER_EDIT_PROFILE(new RestEditUserProfileCommand(new UserService()), "user_edit_profile"),
+    /**
+     * The Edit cocktail.
+     */
+    EDIT_COCKTAIL(new RestEditCocktailCommand(new CocktailService()), "edit_cocktail"),
+    /**
+     * The Endorse cocktail.
+     */
+    ENDORSE_COCKTAIL(new RestEndorseCocktailCommand(new CocktailService()), "endorse_cocktail"),
+    /**
+     * The Delete cocktail.
+     */
+    DELETE_COCKTAIL(new RestDeleteCocktailCommand(new CocktailService()), "delete_cocktail"),
+    /**
+     * The To cocktail view.
+     */
+    TO_COCKTAIL_VIEW(new ToCocktailViewCommand(new CocktailService(), new ReviewService()), "to_cocktail_view"),
+    /**
+     * The To login.
+     */
+    TO_LOGIN(new ToLoginCommand(), "to_login"),
+    /**
+     * The To registration.
+     */
+    TO_REGISTRATION(new ToRegistrationCommand(), "to_registration"),
+    /**
+     * The To main.
+     */
+    TO_MAIN(new ToMainCommand(), "to_main"),
+    /**
+     * The To registration confirm.
+     */
+    TO_REGISTRATION_CONFIRM(new ToRegistrationConfirmCommand(), "to_registration_confirm"),
+    /**
+     * The To logout.
+     */
+    TO_LOGOUT(new LogoutCommand(), "to_logout"),
+    /**
+     * The To add cocktail.
+     */
+    TO_ADD_COCKTAIL(new ToAddCocktailCommand(), "to_add_cocktail"),
+    /**
+     * The To profile.
+     */
+    TO_PROFILE(new ToProfileCommand(), "to_profile"),
+    /**
+     * The To cocktails.
+     */
+    TO_COCKTAILS(new ToCocktailsCommand(new CocktailService()), "to_cocktails"),
+    /**
+     * The To all cocktails.
+     */
+    TO_ALL_COCKTAILS(new ToAllCocktailsCommand(new CocktailService()), "to_all_cocktails"),
+    /**
+     * The To menu.
+     */
     TO_MENU(new ToMenuCommand(), "to_menu"),
+    /**
+     * The To users.
+     */
     TO_USERS(new ToUsersCommand(new UserService()), "to_users");
 
     private final Command command;
@@ -39,10 +117,20 @@ public enum CommandType {
         this.commandName = commandName;
     }
 
+    /**
+     * Gets command.
+     *
+     * @return the command
+     */
     public Command getCommand() {
         return command;
     }
 
+    /**
+     * Gets command name.
+     *
+     * @return the command name
+     */
     public String getCommandName() {
         return commandName;
     }

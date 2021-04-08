@@ -1,19 +1,38 @@
 package com.epam.bar.validator.impl;
 
-import com.epam.bar.validator.Validator;
+import com.epam.bar.validator.ChainValidator;
 
 import javax.servlet.http.Part;
 import java.util.Optional;
 
-public class ImgFileValidator implements Validator {
+/**
+ * Validate img file
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
+public class ImgFileValidator implements ChainValidator {
+    private static final String PNG_EXTENSION = ".png";
+    private static final String JPG_EXTENSION = ".jpg";
     private final Part img;
-    private Validator validator = null;
+    private ChainValidator validator;
 
-    public ImgFileValidator(Part img, Validator validator) {
+    /**
+     * Instantiates a new Img file validator.
+     *
+     * @param img       the img
+     * @param validator the validator
+     */
+    public ImgFileValidator(Part img, ChainValidator validator) {
         this.validator = validator;
         this.img = img;
     }
 
+    /**
+     * Instantiates a new Img file validator.
+     *
+     * @param img the img
+     */
     public ImgFileValidator(Part img) {
         this.img = img;
     }
@@ -22,7 +41,7 @@ public class ImgFileValidator implements Validator {
     public Optional<String> validate() {
         Optional<String> serverMessage = Optional.empty();
         if (img == null || img.getSubmittedFileName().isEmpty() ||
-                (!img.getSubmittedFileName().endsWith(".png") && !img.getSubmittedFileName().endsWith(".jpg"))) {
+                (!img.getSubmittedFileName().endsWith(PNG_EXTENSION) && !img.getSubmittedFileName().endsWith(JPG_EXTENSION))) {
             serverMessage = Optional.of("serverMessage.invalid.img");
         }
 

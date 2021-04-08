@@ -1,10 +1,16 @@
 package com.epam.bar.controller.filter;
 
 import javax.servlet.*;
-import javax.servlet.annotation.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * The class defending {@link com.epam.bar.command.RequestContext} from js injection
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @WebFilter(filterName = "XssAttackFilter", urlPatterns = {"/*"})
 public class XssAttackFilter implements Filter {
     @Override

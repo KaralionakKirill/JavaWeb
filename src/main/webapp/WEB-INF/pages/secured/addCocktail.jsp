@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="col-5">
-                <label  for="alcohol" class="form-label"><fmt:message key="cocktail.chooseAlcohol"/></label>
+                <label for="alcohol" class="form-label"><fmt:message key="cocktail.chooseAlcohol"/></label>
                 <select id="alcohol" class="form-select" name="alcohol" required>
                     <option value="VODKA"><fmt:message key="vodka"/></option>
                     <option value="WHISKEY"><fmt:message key="whiskey"/></option>

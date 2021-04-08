@@ -49,9 +49,6 @@
             <div class="card-body">
                 <form name="reviews" method="post" action="<c:url value="/rest"/>" class="needs-validation" novalidate>
                     <input type="hidden" name="command" value="add_review">
-                    <input type="hidden" name="user_id" value="${sessionScope.user.id}">
-                    <input type="hidden" name="cocktail_id" value="${cocktail.id}">
-                    <input type="hidden" name="author_id" value="${cocktail.author.id}">
                     <div class="form-group mt-2">
                         <h5><fmt:message key="review.rate"/></h5>
                         <div class="rate">
@@ -69,7 +66,10 @@
                     </div>
                     <textarea class="form-control w-100 mb-2" name="feedback"
                               placeholder="<fmt:message key="review.placeholder"/>" rows="5"
-                              maxlength="500" minlength="2"></textarea>
+                              maxlength="500" minlength="2" required></textarea>
+                    <div class="invalid-feedback">
+                        <fmt:message key="prescription.feedback"/>
+                    </div>
                     <div class="d-flex justify-content-between">
                         <a href="<c:url value="/controller?command=to_login"/>" class="text-decoration-none">
                             <fmt:message key="review.link"/>

@@ -1,6 +1,9 @@
 package com.epam.bar.controller.filter;
 
 import com.epam.bar.command.*;
+import com.epam.bar.command.marker.AdminCommandMarker;
+import com.epam.bar.command.marker.BarmanCommandMarker;
+import com.epam.bar.command.marker.UserCommandMarker;
 import com.epam.bar.entity.Role;
 import com.epam.bar.entity.User;
 import lombok.extern.log4j.Log4j2;
@@ -10,7 +13,14 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Optional;
 
+/**
+ * The class filters {@link RequestContext} and blocks users without access
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 @WebFilter(filterName = "PageAccessFilter", urlPatterns = {"/*"})
 public class PageAccessFilter implements Filter {
@@ -32,50 +42,35 @@ public class PageAccessFilter implements Filter {
         if (hasAccess(commandName, user)) {
             chain.doFilter(servletRequest, servletResponse);
         } else {
-            log.error("No access to the page");
+            log.warn("No access to " + commandName);
             request.getRequestDispatcher(PagePath.ERROR_PAGE).forward(servletRequest, servletResponse);
         }
     }
 
+
     private boolean hasAccess(String commandName, User user) {
-        if (commandName == null) {
-            return true;
+        boolean isHasAccess = true;
+        Optional<Command> commandOptional = CommandProvider.defineCommand(commandName);
+        if (commandOptional.isPresent()) {
+            Command command = commandOptional.get();
+            if (user != null && hasMarkerInterface(command)) {
+                Role role = user.getRole();
+                if (command instanceof AdminCommandMarker && role != Role.ADMIN) {
+                    isHasAccess = false;
+                }
+                if (command instanceof BarmanCommandMarker && role != Role.BARMAN) {
+                    isHasAccess = false;
+                }
+            }
+            if (user == null && hasMarkerInterface(command)) {
+                isHasAccess = false;
+            }
         }
-        CommandType commandType = CommandType.valueOf(commandName.toUpperCase());
-        Command command = commandType.getCommand();
-        if (AdminCommand.class.isAssignableFrom(command.getClass())) {
-            return adminCommandAccess(user);
-        }
-        if (BarmanCommand.class.isAssignableFrom(command.getClass())) {
-            return barmanCommandAccess(user);
-        }
-        if (UserCommand.class.isAssignableFrom(command.getClass())) {
-            return userCommandAccess(user);
-        }
-        return true;
+        return isHasAccess;
     }
 
-    private boolean adminCommandAccess(User user) {
-        boolean result = false;
-        if (user != null && user.getRole() == Role.ADMIN) {
-            result = true;
-        }
-        return result;
-    }
-
-    private boolean barmanCommandAccess(User user) {
-        boolean result = false;
-        if (user != null && user.getRole() == Role.BARMAN) {
-            result = true;
-        }
-        return result;
-    }
-
-    private boolean userCommandAccess(User user) {
-        boolean result = false;
-        if (user != null) {
-            result = true;
-        }
-        return result;
+    private boolean hasMarkerInterface(Command command) {
+        return (command instanceof AdminCommandMarker || command instanceof BarmanCommandMarker ||
+                command instanceof UserCommandMarker);
     }
 }

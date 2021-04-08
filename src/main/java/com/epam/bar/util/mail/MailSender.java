@@ -1,4 +1,4 @@
-package com.epam.bar.util;
+package com.epam.bar.util.mail;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -8,8 +8,17 @@ import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Sends an email to the given address
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public abstract class MailSender implements Runnable {
+    /**
+     * The constant ENCODING.
+     */
     public static final String ENCODING = "UTF-8";
     private static final String MAIL_PROPERTIES = "property/mail.properties";
     private static final String USER_NAME_PROPERTIES = "mail.user.name";
@@ -17,6 +26,11 @@ public abstract class MailSender implements Runnable {
     private final Properties properties;
     private final String email;
 
+    /**
+     * Instantiates a new Mail sender.
+     *
+     * @param email the email
+     */
     public MailSender(String email) {
         this.email = email;
         properties = new Properties();
@@ -29,6 +43,12 @@ public abstract class MailSender implements Runnable {
         }
     }
 
+    /**
+     * Send message.
+     *
+     * @param subject the subject
+     * @param body    the body
+     */
     public void sendMessage(String subject, String body) {
         String username = properties.getProperty(USER_NAME_PROPERTIES);
         String password = properties.getProperty(USER_PASSWORD_PROPERTIES);

@@ -10,6 +10,12 @@ import java.sql.SQLException;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
+/**
+ * The class create connection with database
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 final class ConnectorCreator {
     private static final Logger logger = LogManager.getLogger(ConnectorCreator.class);
     private static final String DB_PROPERTIES_PATH = "property/database.properties";
@@ -34,6 +40,12 @@ final class ConnectorCreator {
     private ConnectorCreator() {
     }
 
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     * @throws SQLException the sql exception
+     */
     protected static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DATABASE_URL, properties);
     }

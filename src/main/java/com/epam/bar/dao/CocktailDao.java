@@ -1,7 +1,5 @@
 package com.epam.bar.dao;
 
-import com.epam.bar.dao.field.CocktailField;
-import com.epam.bar.dao.field.UserField;
 import com.epam.bar.db.ConnectionPool;
 import com.epam.bar.entity.Alcohol;
 import com.epam.bar.entity.Cocktail;
@@ -18,9 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Provides CRUD operations for working with the {@link User}
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class CocktailDao extends AbstractCocktailDao {
-    private final UserDao userDao = new UserDao();
     @Language("SQL")
     private static final String SQL_DELETE_COCKTAIL = " DELETE FROM cocktail WHERE id = ?";
 
@@ -41,22 +44,19 @@ public class CocktailDao extends AbstractCocktailDao {
     @Language("SQL")
     private static final String SQL_SELECT_COCKTAIL =
             "SELECT cocktail.id, cocktail_name, author_id, alcohol_name, rate, composition, img_name, is_approved  " +
-                    "FROM cocktail INNER JOIN alcohol on cocktail.alcohol_id = alcohol.id";
+                    "FROM cocktail INNER JOIN alcohol ON cocktail.alcohol_id = alcohol.id";
     @Language("SQL")
     private static final String SQL_SELECT__BY_ID =
             "SELECT cocktail.id, cocktail_name, author_id, alcohol_name, rate, composition, img_name, is_approved  " +
-                    "FROM cocktail INNER JOIN alcohol on cocktail.alcohol_id = alcohol.id where cocktail.id = ?";
+                    "FROM cocktail INNER JOIN alcohol ON cocktail.alcohol_id = alcohol.id WHERE cocktail.id = ?";
 
     @Language("SQL")
     private static final String SQL_SELECT_BY_ALCOHOL =
             "SELECT cocktail.id, cocktail_name, author_id, alcohol_name, rate, composition, img_name, is_approved  " +
-                    "FROM cocktail INNER JOIN alcohol on cocktail.alcohol_id = alcohol.id " +
-                    "WHERE alcohol_id = ?";
+                    "FROM cocktail INNER JOIN alcohol ON cocktail.alcohol_id = alcohol.id WHERE alcohol_id = ?";
 
-    public CocktailDao() {
-    }
 
-    private String sqlSelectByField(CocktailField field) {
+    private String sqlSelectByField(CocktailField field) throws DaoException {
         String sql;
         switch (field) {
             case ALCOHOL:
@@ -66,8 +66,7 @@ public class CocktailDao extends AbstractCocktailDao {
                 sql = SQL_SELECT__BY_ID;
                 break;
             default:
-                sql = SQL_SELECT_COCKTAIL;
-                break;
+                throw new DaoException("This field does nor exist : " + field.name().toLowerCase());
         }
         return sql;
     }
@@ -131,21 +130,7 @@ public class CocktailDao extends AbstractCocktailDao {
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, key);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                User user = findUser(resultSet.getString("author_id"));
-                Cocktail cocktail = Cocktail.builder()
-                        .withId(resultSet.getInt("cocktail.id"))
-                        .withName(resultSet.getString("cocktail_name"))
-                        .withAuthor(user)
-                        .withAlcohol(Alcohol.valueOf(resultSet.getString("alcohol_name")))
-                        .withComposition(resultSet.getString("composition"))
-                        .withImgName(resultSet.getString("img_name"))
-                        .withRate(resultSet.getDouble("rate"))
-                        .withApproved(resultSet.getBoolean("is_approved"))
-                        .build();
-                cocktails.add(cocktail);
-            }
+            parseResultSet(cocktails, preparedStatement);
         } catch (SQLException e) {
             log.error(e);
             throw new DaoException(e);
@@ -154,10 +139,11 @@ public class CocktailDao extends AbstractCocktailDao {
     }
 
     private User findUser(String id) throws DaoException {
+        UserDao userDao = new UserDao();
         Optional<User> user = userDao.findByField(id, UserField.ID);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get();
-        }else{
+        } else {
             throw new DaoException("User is not found");
         }
     }
@@ -182,25 +168,29 @@ public class CocktailDao extends AbstractCocktailDao {
         List<Cocktail> cocktails = new ArrayList<>();
         try (Connection connection = ConnectionPool.INSTANCE.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COCKTAIL)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                User user = findUser(resultSet.getString("author_id"));
-                Cocktail cocktail = Cocktail.builder()
-                        .withId(resultSet.getInt("cocktail.id"))
-                        .withName(resultSet.getString("cocktail_name"))
-                        .withAuthor(user)
-                        .withAlcohol(Alcohol.valueOf(resultSet.getString("alcohol_name")))
-                        .withComposition(resultSet.getString("composition"))
-                        .withImgName(resultSet.getString("img_name"))
-                        .withRate(resultSet.getDouble("rate"))
-                        .withApproved(resultSet.getBoolean("is_approved"))
-                        .build();
-                cocktails.add(cocktail);
-            }
+            parseResultSet(cocktails, preparedStatement);
         } catch (SQLException e) {
             log.error(e);
             throw new DaoException(e);
         }
         return cocktails;
+    }
+
+    private void parseResultSet(List<Cocktail> cocktails, PreparedStatement preparedStatement) throws SQLException, DaoException {
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            User user = findUser(resultSet.getString("author_id"));
+            Cocktail cocktail = Cocktail.builder()
+                    .withId(resultSet.getInt("cocktail.id"))
+                    .withName(resultSet.getString("cocktail_name"))
+                    .withAuthor(user)
+                    .withAlcohol(Alcohol.valueOf(resultSet.getString("alcohol_name")))
+                    .withComposition(resultSet.getString("composition"))
+                    .withImgName(resultSet.getString("img_name"))
+                    .withRate(resultSet.getDouble("rate"))
+                    .withApproved(resultSet.getBoolean("is_approved"))
+                    .build();
+            cocktails.add(cocktail);
+        }
     }
 }

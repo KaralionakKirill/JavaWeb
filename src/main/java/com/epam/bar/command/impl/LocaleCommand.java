@@ -6,6 +6,12 @@ import lombok.extern.log4j.Log4j2;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Change locale
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class LocaleCommand implements Command {
 

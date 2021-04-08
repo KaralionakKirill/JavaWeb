@@ -6,11 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * Wrapper class for request used to strip parameters if xss attack detected
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 public class XssRequestWrapper extends HttpServletRequestWrapper {
     private static final String AVOID_SCRIPT_FRAGMENTS_PATTERN = "<script>(.*?)</script>";
     private static final String AVOID_SCRIPT_TAG_PATTERN = "</script>";
     private static final String AVOID_END_SCRIPT_PATTERN = "<script(.*?)>";
-    private static final String AVOID_SRC_PATTERN = "src[\r\n]*=[\r\n]*\'(.*?)\'";
+    private static final String AVOID_SRC_PATTERN = "src[\r\n]*=[\r\n]*'(.*?)'";
     private static final String AVOID_SRC_QUOTES_PATTERN = "src[\r\n]*=[\r\n]*\"(.*?)\"";
     private static final String AVOID_EVAL_PATTERN = "eval\\((.*?)\\)";
     private static final String AVOID_EXPRESSION_PATTERN = "expression\\((.*?)\\)";
@@ -31,6 +37,11 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
             Pattern.compile(AVOID_ONLOAD_PATTERN, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL)
     };
 
+    /**
+     * Instantiates a new Xss request wrapper.
+     *
+     * @param servletRequest the servlet request
+     */
     XssRequestWrapper(HttpServletRequest servletRequest) {
         super(servletRequest);
     }
@@ -68,6 +79,12 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         return stripXSS(value);
     }
 
+    /**
+     * Strip xss string.
+     *
+     * @param value the value
+     * @return the string
+     */
     String stripXSS(String value) {
         if (value != null) {
             value = value.replaceAll("\0", "");

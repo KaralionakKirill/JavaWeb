@@ -10,10 +10,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The class activates the user{@link com.epam.bar.entity.User} account
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class ActivateUserCommand implements Command {
     private final UserService service;
+    private final static String VERIFICATION_MESSAGE = "verificationMessage.verificationSuccess";
 
+    /**
+     * @param service the service
+     */
     public ActivateUserCommand(UserService service) {
         this.service = service;
     }
@@ -25,15 +35,13 @@ public class ActivateUserCommand implements Command {
         try {
             Optional<String> serverMessage = service.activateUser(activationCode);
             if (serverMessage.isEmpty()) {
-                commandResult = new CommandResult(
-                        new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.LOGIN),
+                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.LOGIN),
                         Map.of(RequestAttribute.VERIFICATION_MESSAGE, LocalizationMessage.localize(
-                                requestContext.getLocale(), "verificationMessage.verificationSuccess")),
-                        new HashMap<>());
-            }else {
+                                requestContext.getLocale(), VERIFICATION_MESSAGE)));
+            } else {
                 commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.LOGIN),
                         Map.of(RequestAttribute.SERVER_MESSAGE, LocalizationMessage.localize(
-                                        requestContext.getLocale(), serverMessage.get())), new HashMap<>());
+                                requestContext.getLocale(), serverMessage.get())));
             }
         } catch (ServiceException e) {
             log.error("Failed to activate user", e);

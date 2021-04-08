@@ -13,7 +13,16 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 
+/**
+ * The class create pool of connections with database
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 public enum ConnectionPool {
+    /**
+     * Instance connection pool.
+     */
     INSTANCE;
 
     private final Logger logger = LogManager.getLogger(ConnectionPool.class);
@@ -25,7 +34,7 @@ public enum ConnectionPool {
         freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         givenAwayConnection = new ArrayDeque<>();
         initPool();
-        if(freeConnection.size() != DEFAULT_POOL_SIZE){
+        if (freeConnection.size() != DEFAULT_POOL_SIZE) {
             int amount = DEFAULT_POOL_SIZE - freeConnection.size();
             for (int i = 0; i < amount; i++) {
                 try {
@@ -39,7 +48,7 @@ public enum ConnectionPool {
         }
     }
 
-    private void initPool(){
+    private void initPool() {
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
                 ProxyConnection connection = new ProxyConnection(ConnectorCreator.getConnection());
@@ -51,6 +60,11 @@ public enum ConnectionPool {
         }
     }
 
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
     public Connection getConnection() {
         ProxyConnection connection = null;
         try {
@@ -62,6 +76,12 @@ public enum ConnectionPool {
         return connection;
     }
 
+    /**
+     * Release connection.
+     *
+     * @param connection the connection
+     * @throws ConnectionException the connection exception
+     */
     public void releaseConnection(Connection connection) throws ConnectionException {
         if (connection instanceof ProxyConnection) {
             givenAwayConnection.remove(connection);
@@ -71,6 +91,9 @@ public enum ConnectionPool {
         }
     }
 
+    /**
+     * Destroy pool.
+     */
     public void destroyPool() {
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {

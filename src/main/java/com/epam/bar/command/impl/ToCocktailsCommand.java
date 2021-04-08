@@ -1,7 +1,7 @@
 package com.epam.bar.command.impl;
 
 import com.epam.bar.command.*;
-import com.epam.bar.dao.field.CocktailField;
+import com.epam.bar.dao.CocktailField;
 import com.epam.bar.entity.Alcohol;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.exception.ServiceException;
@@ -12,10 +12,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Moving the user to a page with cocktails with a certain alcohol
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class ToCocktailsCommand implements Command {
     private final CocktailService service;
 
+    /**
+     * @param service the service
+     */
     public ToCocktailsCommand(CocktailService service) {
         this.service = service;
     }
@@ -32,7 +41,7 @@ public class ToCocktailsCommand implements Command {
                 commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.COCKTAILS),
                         Map.of(RequestAttribute.COCKTAILS, cocktails));
             } else {
-                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.COCKTAILS));
+                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.MENU));
             }
         } catch (ServiceException e) {
             log.error(e);

@@ -8,10 +8,22 @@ import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
+/**
+ * The class provides a business logic of application connected with {@link Review}
+ *
+ * @author Kirill Karalionak
+ * @version 1.0.0
+ */
 @Log4j2
 public class ReviewService {
     private final ReviewDao reviewDao = new ReviewDao();
 
+    /**
+     * Add review.
+     *
+     * @param review the review
+     * @throws ServiceException the service exception
+     */
     public void addReview(Review review) throws ServiceException {
         try {
             reviewDao.add(review);
@@ -21,6 +33,13 @@ public class ReviewService {
         }
     }
 
+    /**
+     * Find reviews by cocktail id
+     *
+     * @param id the id
+     * @return the list
+     * @throws ServiceException the service exception
+     */
     public List<Review> findReviewsByCocktailId(String id) throws ServiceException {
         List<Review> reviews;
         try {

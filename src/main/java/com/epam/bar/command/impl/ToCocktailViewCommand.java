@@ -40,14 +40,14 @@ public class ToCocktailViewCommand implements Command {
             Optional<Cocktail> cocktailOptional = cocktailService.findCocktailById(id);
             List<Review> reviews = reviewService.findReviewsByCocktailId(id);
             commandResult = cocktailOptional
-                    .map(cocktail -> new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD,
+                    .map(cocktail -> new CommandResult(new ForwardResponse(
                             PagePath.COCKTAIL_VIEW), Map.of(RequestAttribute.REVIEWS, reviews),
                             Map.of(RequestAttribute.COCKTAIL, cocktail)))
-                    .orElseGet(() -> new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD,
+                    .orElseGet(() -> new CommandResult(new ForwardResponse(
                             PagePath.COCKTAILS)));
         } catch (ServiceException e) {
             log.error(e);
-            commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE));
+            commandResult = new CommandResult(new ForwardResponse(PagePath.ERROR_PAGE));
         }
         return commandResult;
     }

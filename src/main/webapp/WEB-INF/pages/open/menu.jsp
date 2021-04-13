@@ -13,6 +13,7 @@
 <body style="background-image: url(<c:url value="/images/menu.jpg"/>); background-size: cover">
 <c:import url="/WEB-INF/pages/parts/navbar.jsp"/>
 <div class="d-flex justify-content-center flex-wrap">
+
     <c:if test="${isAuthorized}">
         <a class="m-5" href="<c:url value="/controller?command=to_add_cocktail"/>">
             <img src="<c:url value='/images/add.png'/>" class="mt-3" style="height: 18rem; width: 18rem" alt="">

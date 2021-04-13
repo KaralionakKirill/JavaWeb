@@ -12,11 +12,10 @@ public class ForwardResponse extends ResponseContext {
     /**
      * Instantiates a new Forward response.
      *
-     * @param type the type
      * @param page the page
      */
-    public ForwardResponse(ResponseType type, String page) {
-        super(type);
+    public ForwardResponse(String page) {
+        super(ResponseType.FORWARD);
         this.page = page;
     }
 

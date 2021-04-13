@@ -1,6 +1,9 @@
 package com.epam.bar.command;
 
 import com.epam.bar.command.impl.*;
+import com.epam.bar.dao.CocktailDao;
+import com.epam.bar.dao.ReviewDao;
+import com.epam.bar.dao.UserDao;
 import com.epam.bar.service.CocktailService;
 import com.epam.bar.service.ReviewService;
 import com.epam.bar.service.UserService;
@@ -15,11 +18,11 @@ public enum CommandType {
     /**
      * The Verification.
      */
-    VERIFICATION(new ActivateUserCommand(new UserService()), "verification"),
+    VERIFICATION(new ActivateUserCommand(new UserService(new UserDao())), "verification"),
     /**
      * The Login.
      */
-    LOGIN(new RestLoginCommand(new UserService()), "login"),
+    LOGIN(new RestLoginCommand(new UserService(new UserDao())), "login"),
     /**
      * The Locale.
      */
@@ -27,11 +30,11 @@ public enum CommandType {
     /**
      * The Registration.
      */
-    REGISTRATION(new RestRegistrationCommand(new UserService()), "registration"),
+    REGISTRATION(new RestRegistrationCommand(new UserService(new UserDao())), "registration"),
     /**
      * The Add cocktail.
      */
-    ADD_COCKTAIL(new RestAddCocktailCommand(new CocktailService()), "add_cocktail"),
+    ADD_COCKTAIL(new RestAddCocktailCommand(new CocktailService(new CocktailDao())), "add_cocktail"),
     /**
      * The Error.
      */
@@ -39,31 +42,32 @@ public enum CommandType {
     /**
      * The Update user.
      */
-    UPDATE_USER(new RestUpdateUserCommand(new UserService()), "update_user"),
+    UPDATE_USER(new RestUpdateUserCommand(new UserService(new UserDao())), "update_user"),
     /**
      * The Add review.
      */
-    ADD_REVIEW(new RestAddReviewCommand(new ReviewService()), "add_review"),
+    ADD_REVIEW(new RestAddReviewCommand(new ReviewService(new ReviewDao())), "add_review"),
     /**
      * The User edit profile.
      */
-    USER_EDIT_PROFILE(new RestEditUserProfileCommand(new UserService()), "user_edit_profile"),
+    USER_EDIT_PROFILE(new RestEditUserProfileCommand(new UserService(new UserDao())), "user_edit_profile"),
     /**
      * The Edit cocktail.
      */
-    EDIT_COCKTAIL(new RestEditCocktailCommand(new CocktailService()), "edit_cocktail"),
+    EDIT_COCKTAIL(new RestEditCocktailCommand(new CocktailService(new CocktailDao())), "edit_cocktail"),
     /**
      * The Endorse cocktail.
      */
-    ENDORSE_COCKTAIL(new RestEndorseCocktailCommand(new CocktailService()), "endorse_cocktail"),
+    ENDORSE_COCKTAIL(new RestEndorseCocktailCommand(new CocktailService(new CocktailDao())), "endorse_cocktail"),
     /**
      * The Delete cocktail.
      */
-    DELETE_COCKTAIL(new RestDeleteCocktailCommand(new CocktailService()), "delete_cocktail"),
+    DELETE_COCKTAIL(new RestDeleteCocktailCommand(new CocktailService(new CocktailDao())), "delete_cocktail"),
     /**
      * The To cocktail view.
      */
-    TO_COCKTAIL_VIEW(new ToCocktailViewCommand(new CocktailService(), new ReviewService()), "to_cocktail_view"),
+    TO_COCKTAIL_VIEW(new ToCocktailViewCommand(new CocktailService(new CocktailDao()),
+            new ReviewService(new ReviewDao())), "to_cocktail_view"),
     /**
      * The To login.
      */
@@ -95,11 +99,11 @@ public enum CommandType {
     /**
      * The To cocktails.
      */
-    TO_COCKTAILS(new ToCocktailsCommand(new CocktailService()), "to_cocktails"),
+    TO_COCKTAILS(new ToCocktailsCommand(new CocktailService(new CocktailDao())), "to_cocktails"),
     /**
      * The To all cocktails.
      */
-    TO_ALL_COCKTAILS(new ToAllCocktailsCommand(new CocktailService()), "to_all_cocktails"),
+    TO_ALL_COCKTAILS(new ToAllCocktailsCommand(new CocktailService(new CocktailDao())), "to_all_cocktails"),
     /**
      * The To menu.
      */
@@ -107,7 +111,7 @@ public enum CommandType {
     /**
      * The To users.
      */
-    TO_USERS(new ToUsersCommand(new UserService()), "to_users");
+    TO_USERS(new ToUsersCommand(new UserService(new UserDao())), "to_users");
 
     private final Command command;
     private final String commandName;

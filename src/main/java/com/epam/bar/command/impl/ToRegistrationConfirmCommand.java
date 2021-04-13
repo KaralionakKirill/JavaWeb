@@ -12,6 +12,6 @@ public class ToRegistrationConfirmCommand implements Command {
 
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.REGISTRATION_CONFIRM));
+        return new CommandResult(new ForwardResponse(PagePath.REGISTRATION_CONFIRM));
     }
 }

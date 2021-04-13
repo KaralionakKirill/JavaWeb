@@ -28,7 +28,7 @@ public class UserDao extends AbstractUserDao {
 
     @Language("SQL")
     private static final String SQL_DELETE_USER =
-            "DELETE FROM base_user WHERE id = ?;";
+            "DELETE FROM base_user WHERE login = ?;";
 
     @Language("SQL")
     private static final String SQL_SELECT_PASSWORD =
@@ -63,12 +63,6 @@ public class UserDao extends AbstractUserDao {
     private static final String SQL_SELECT_BY_LOGIN =
             "SELECT bu.id, login, email, role_name, first_name, last_name, is_activate, loyalty_points, " +
                     "is_blocked FROM base_user AS bu INNER JOIN user_role AS ur on bu.role_id = ur.id WHERE login = ?;";
-
-    /**
-     * Instantiates a new User dao.
-     */
-    public UserDao() {
-    }
 
     private String sqlSelectByField(UserField field) throws DaoException {
         String sql;

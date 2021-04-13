@@ -11,6 +11,6 @@ import com.epam.bar.command.*;
 public class ToRegistrationCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.REGISTRATION));
+        return new CommandResult(new ForwardResponse(PagePath.REGISTRATION));
     }
 }

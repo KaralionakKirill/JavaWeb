@@ -13,6 +13,6 @@ public class ToProfileCommand implements Command, UserCommandMarker {
 
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.PROFILE));
+        return new CommandResult(new ForwardResponse(PagePath.PROFILE));
     }
 }

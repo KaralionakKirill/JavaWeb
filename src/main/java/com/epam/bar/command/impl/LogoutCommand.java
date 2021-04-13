@@ -13,7 +13,7 @@ import java.util.Map;
 public class LogoutCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.MAIN),
+        return new CommandResult(new ForwardResponse(PagePath.MAIN),
                 Map.of(RequestAttribute.REMOVE, RequestAttribute.USER));
     }
 }

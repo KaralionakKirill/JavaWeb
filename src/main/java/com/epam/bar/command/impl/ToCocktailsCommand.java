@@ -38,14 +38,14 @@ public class ToCocktailsCommand implements Command {
             List<Cocktail> cocktails = service.findByField(alcoholId, CocktailField.ALCOHOL);
             cocktails = cocktails.stream().filter(Cocktail::isApproved).collect(Collectors.toList());
             if (cocktails.size() != 0) {
-                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.COCKTAILS),
+                commandResult = new CommandResult(new ForwardResponse(PagePath.COCKTAILS),
                         Map.of(RequestAttribute.COCKTAILS, cocktails));
             } else {
-                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.MENU));
+                commandResult = new CommandResult(new ForwardResponse(PagePath.MENU));
             }
         } catch (ServiceException e) {
             log.error(e);
-            commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE));
+            commandResult = new CommandResult(new ForwardResponse(PagePath.ERROR_PAGE));
         }
         return commandResult;
     }

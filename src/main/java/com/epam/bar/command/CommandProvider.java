@@ -12,6 +12,7 @@ import java.util.Optional;
  */
 @Log4j2
 public class CommandProvider {
+    private CommandProvider() { }
 
     /**
      * Define command optional.

@@ -38,7 +38,7 @@ public enum ConnectionPool {
             int amount = DEFAULT_POOL_SIZE - freeConnection.size();
             for (int i = 0; i < amount; i++) {
                 try {
-                    ProxyConnection connection = new ProxyConnection(ConnectorCreator.getConnection());
+                    ProxyConnection connection = new ProxyConnection(ConnectionCreator.getConnection());
                     freeConnection.offer(connection);
                 } catch (SQLException e) {
                     logger.error(e);
@@ -51,7 +51,7 @@ public enum ConnectionPool {
     private void initPool() {
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
-                ProxyConnection connection = new ProxyConnection(ConnectorCreator.getConnection());
+                ProxyConnection connection = new ProxyConnection(ConnectionCreator.getConnection());
                 freeConnection.offer(connection);
             } catch (SQLException e) {
                 logger.error(e);

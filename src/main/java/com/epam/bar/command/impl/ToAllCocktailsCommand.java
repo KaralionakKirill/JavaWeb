@@ -43,20 +43,20 @@ public class ToAllCocktailsCommand implements Command, BarmanCommandMarker {
                 if (cocktails.size() != 0) {
                     PageContent<Cocktail> pageContent = new PageContent<>(cocktails, Integer.parseInt(page));
                     commandResult = new CommandResult(new ForwardResponse(
-                            ResponseContext.ResponseType.FORWARD, PagePath.COCKTAILS_LIST),
+                            PagePath.COCKTAILS_LIST),
                             Map.of(RequestAttribute.PAGE_CONTENT, pageContent));
                 } else {
                     commandResult = new CommandResult(new ForwardResponse(
-                            ResponseContext.ResponseType.FORWARD, PagePath.COCKTAILS_LIST));
+                            PagePath.COCKTAILS_LIST));
                 }
             } catch (ServiceException e) {
                 log.error(e);
                 commandResult = new CommandResult(new ForwardResponse(
-                        ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE));
+                        PagePath.ERROR_PAGE));
             }
         } else {
             commandResult = new CommandResult(new ForwardResponse(
-                    ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE));
+                    PagePath.ERROR_PAGE));
         }
         return commandResult;
     }

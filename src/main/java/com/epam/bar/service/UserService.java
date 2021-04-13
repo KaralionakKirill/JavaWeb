@@ -22,7 +22,11 @@ import java.util.concurrent.Executors;
  */
 @Log4j2
 public class UserService {
-    private final UserDao userDao = new UserDao();
+    private final UserDao userDao;
+
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     /**
      * Login user
@@ -38,8 +42,9 @@ public class UserService {
         password = PasswordEncoder.encryption(password);
         try {
             String dbPassword = userDao.findPassword(email);
-            if (password.equals(dbPassword)) {
-                User dbUser = findByField(email, UserField.EMAIL).get();
+            Optional<User> userOptional = findByField(email, UserField.EMAIL);
+            if (password.equals(dbPassword) && userOptional.isPresent()) {
+                User dbUser = userOptional.get();
                 if (!dbUser.isBlocked()) {
                     if (dbUser.isActivated()) {
                         user.setId(dbUser.getId());

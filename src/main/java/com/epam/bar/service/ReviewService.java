@@ -16,7 +16,11 @@ import java.util.List;
  */
 @Log4j2
 public class ReviewService {
-    private final ReviewDao reviewDao = new ReviewDao();
+    private final ReviewDao reviewDao;
+
+    public ReviewService(ReviewDao reviewDao) {
+        this.reviewDao = reviewDao;
+    }
 
     /**
      * Add review.

@@ -12,6 +12,6 @@ import com.epam.bar.command.marker.UserCommandMarker;
 public class ToAddCocktailCommand implements Command, UserCommandMarker {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.ADD_COCKTAIL));
+        return new CommandResult(new ForwardResponse(PagePath.ADD_COCKTAIL));
     }
 }

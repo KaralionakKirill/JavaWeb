@@ -16,8 +16,8 @@ import java.util.Properties;
  * @author Kirill Karalionak
  * @version 1.0.0
  */
-final class ConnectorCreator {
-    private static final Logger logger = LogManager.getLogger(ConnectorCreator.class);
+final class ConnectionCreator {
+    private static final Logger logger = LogManager.getLogger(ConnectionCreator.class);
     private static final String DB_PROPERTIES_PATH = "property/database.properties";
     private static final String DB_URL = "db.url";
     private static final String DB_DRIVER = "db.driver";
@@ -26,7 +26,7 @@ final class ConnectorCreator {
 
     static {
         try {
-            ClassLoader classLoader = ConnectorCreator.class.getClassLoader();
+            ClassLoader classLoader = ConnectionCreator.class.getClassLoader();
             properties.load(classLoader.getResourceAsStream(DB_PROPERTIES_PATH));
             String driverName = (String) properties.get(DB_DRIVER);
             Class.forName(driverName);
@@ -37,7 +37,7 @@ final class ConnectorCreator {
         }
     }
 
-    private ConnectorCreator() {
+    private ConnectionCreator() {
     }
 
     /**

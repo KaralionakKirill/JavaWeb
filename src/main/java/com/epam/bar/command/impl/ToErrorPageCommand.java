@@ -12,6 +12,6 @@ public class ToErrorPageCommand implements Command {
 
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE));
+        return new CommandResult(new ForwardResponse(PagePath.ERROR_PAGE));
     }
 }

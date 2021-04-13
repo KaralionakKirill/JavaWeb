@@ -11,6 +11,6 @@ import com.epam.bar.command.*;
 public class ToLoginCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.LOGIN));
+        return new CommandResult(new ForwardResponse(PagePath.LOGIN));
     }
 }

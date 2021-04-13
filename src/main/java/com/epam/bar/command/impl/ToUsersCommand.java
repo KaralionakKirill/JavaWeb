@@ -42,17 +42,17 @@ public class ToUsersCommand implements Command, AdminCommandMarker {
                 List<User> users = service.findAllUsers();
                 if (users.size() != 0) {
                     PageContent<User> pageContent = new PageContent<>(users, Integer.parseInt(page));
-                    commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.USERS),
+                    commandResult = new CommandResult(new ForwardResponse(PagePath.USERS),
                             Map.of(RequestAttribute.PAGE_CONTENT, pageContent));
                 } else {
-                    commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.USERS));
+                    commandResult = new CommandResult(new ForwardResponse(PagePath.USERS));
                 }
             } catch (ServiceException e) {
                 log.error(e);
-                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE));
+                commandResult = new CommandResult(new ForwardResponse(PagePath.ERROR_PAGE));
             }
         } else {
-            commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.ERROR_PAGE));
+            commandResult = new CommandResult(new ForwardResponse(PagePath.ERROR_PAGE));
         }
         return commandResult;
     }

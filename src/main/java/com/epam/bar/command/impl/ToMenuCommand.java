@@ -13,7 +13,7 @@ import java.util.Map;
 public class ToMenuCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.MENU),
+        return new CommandResult(new ForwardResponse(PagePath.MENU),
                 Map.of(RequestAttribute.REMOVE, RequestAttribute.COCKTAIL));
     }
 }

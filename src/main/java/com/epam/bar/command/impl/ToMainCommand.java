@@ -11,6 +11,6 @@ import com.epam.bar.command.*;
 public class ToMainCommand implements Command {
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        return new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.MAIN));
+        return new CommandResult(new ForwardResponse(PagePath.MAIN));
     }
 }

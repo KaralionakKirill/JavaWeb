@@ -18,7 +18,11 @@ import java.util.Optional;
  */
 @Log4j2
 public class CocktailService {
-    private final CocktailDao cocktailDao = new CocktailDao();
+    private final CocktailDao cocktailDao;
+
+    public CocktailService(CocktailDao cocktailDao) {
+        this.cocktailDao = cocktailDao;
+    }
 
     /**
      * Add cocktail

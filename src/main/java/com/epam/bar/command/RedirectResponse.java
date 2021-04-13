@@ -12,11 +12,10 @@ public class RedirectResponse extends ResponseContext {
     /**
      * Instantiates a new Redirect response.
      *
-     * @param type    the type
      * @param command the command
      */
-    public RedirectResponse(ResponseType type, String command) {
-        super(type);
+    public RedirectResponse(String command) {
+        super(ResponseType.REDIRECT);
         this.command = command;
     }
 

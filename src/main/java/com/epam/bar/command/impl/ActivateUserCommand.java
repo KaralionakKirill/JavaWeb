@@ -35,11 +35,11 @@ public class ActivateUserCommand implements Command {
         try {
             Optional<String> serverMessage = service.activateUser(activationCode);
             if (serverMessage.isEmpty()) {
-                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.LOGIN),
+                commandResult = new CommandResult(new ForwardResponse(PagePath.LOGIN),
                         Map.of(RequestAttribute.VERIFICATION_MESSAGE, LocalizationMessage.localize(
                                 requestContext.getLocale(), VERIFICATION_MESSAGE)));
             } else {
-                commandResult = new CommandResult(new ForwardResponse(ResponseContext.ResponseType.FORWARD, PagePath.LOGIN),
+                commandResult = new CommandResult(new ForwardResponse(PagePath.LOGIN),
                         Map.of(RequestAttribute.SERVER_MESSAGE, LocalizationMessage.localize(
                                 requestContext.getLocale(), serverMessage.get())));
             }

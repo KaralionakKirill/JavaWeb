@@ -19,7 +19,7 @@ public class LocaleCommand implements Command {
     public CommandResult execute(RequestContext requestContext) {
         String locale = requestContext.getRequestParameters().get(RequestParameter.LOCALE);
         String url = requestContext.getRequestParameters().get(RequestParameter.CURRENT_URL);
-        return new CommandResult(new RedirectResponse(ResponseContext.ResponseType.REDIRECT, url),
+        return new CommandResult(new RedirectResponse(url),
                 new HashMap<>(), Map.of(RequestParameter.LOCALE, locale));
     }
 }

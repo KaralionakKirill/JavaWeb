@@ -50,8 +50,8 @@
         </div>
         <div class="form-group mt-4">
             <label for='composition' class="form-label"><fmt:message key="cocktail.composition"/></label>
-            <textarea id="composition" class="form-control" type="text" name="composition"
-                      maxlength="255" minlength="10" required></textarea>
+            <textarea id="composition" class="form-control" rows="15" type="text" name="composition"
+                      maxlength="1000" minlength="10" required></textarea>
             <div class="invalid-feedback">
                 <fmt:message key="prescription.composition"/>
             </div>

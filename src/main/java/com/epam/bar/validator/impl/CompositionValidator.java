@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public class CompositionValidator implements ChainValidator {
     private static final int MIN_LENGTH = 10;
-    private static final int MAX_LENGTH = 500;
+    private static final int MAX_LENGTH = 1000;
     private ChainValidator validator;
     private final String composition;
 

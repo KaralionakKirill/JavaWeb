@@ -37,7 +37,7 @@
                         <td>${user.email}</td>
                         <td>${user.loyaltyPoints}</td>
                         <td>
-                            <select id="role-${user.id}" onchange="changeRole(${user.id})" class="form-select">
+                            <select id="role-${user.id}" class="form-select">
                                 <option value="${user.role}">${user.role}</option>
                                 <option value="ADMIN">ADMIN</option>
                                 <option value="USER">USER</option>

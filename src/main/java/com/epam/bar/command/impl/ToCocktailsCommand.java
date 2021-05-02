@@ -6,10 +6,13 @@ import com.epam.bar.entity.Alcohol;
 import com.epam.bar.entity.Cocktail;
 import com.epam.bar.exception.ServiceException;
 import com.epam.bar.service.CocktailService;
+import com.epam.bar.validator.ChainValidator;
+import com.epam.bar.validator.impl.AlcoholValidator;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -31,20 +34,27 @@ public class ToCocktailsCommand implements Command {
 
     @Override
     public CommandResult execute(RequestContext requestContext) {
-        Alcohol alcohol = Alcohol.valueOf(requestContext.getRequestParameters().get(RequestParameter.ALCOHOL));
         CommandResult commandResult;
-        try {
-            String alcoholId = Integer.toString(alcohol.getId());
-            List<Cocktail> cocktails = service.findByField(alcoholId, CocktailField.ALCOHOL);
-            cocktails = cocktails.stream().filter(Cocktail::isApproved).collect(Collectors.toList());
-            if (cocktails.size() != 0) {
-                commandResult = new CommandResult(new ForwardResponse(PagePath.COCKTAILS),
-                        Map.of(RequestAttribute.COCKTAILS, cocktails));
-            } else {
-                commandResult = new CommandResult(new ForwardResponse(PagePath.MENU));
+        String alcoholName = requestContext.getRequestParameters().get(RequestParameter.ALCOHOL);
+        ChainValidator validator = new AlcoholValidator(alcoholName);
+        Optional<String> serverMessage = validator.validate();
+        if (serverMessage.isEmpty()) {
+            Alcohol alcohol = Alcohol.valueOf(alcoholName);
+            try {
+                String alcoholId = Integer.toString(alcohol.getId());
+                List<Cocktail> cocktails = service.findByField(alcoholId, CocktailField.ALCOHOL);
+                cocktails = cocktails.stream().filter(Cocktail::isApproved).collect(Collectors.toList());
+                if (cocktails.size() != 0) {
+                    commandResult = new CommandResult(new ForwardResponse(PagePath.COCKTAILS),
+                            Map.of(RequestAttribute.COCKTAILS, cocktails));
+                } else {
+                    commandResult = new CommandResult(new ForwardResponse(PagePath.MENU));
+                }
+            } catch (ServiceException e) {
+                log.error(e);
+                commandResult = new CommandResult(new ForwardResponse(PagePath.ERROR_PAGE));
             }
-        } catch (ServiceException e) {
-            log.error(e);
+        } else {
             commandResult = new CommandResult(new ForwardResponse(PagePath.ERROR_PAGE));
         }
         return commandResult;
